@@ -448,3 +448,125 @@ setInterval(()=>{
 </script>
 </body>
 </html>
+<script>
+// ===============================
+// 👦 نظام محادثة تفاعلي مع الولد
+// ===============================
+
+let creepyMemory = {};
+
+const creepyQA = [
+  {
+    q: "👦 وين ساكن؟",
+    options: ["العراق 🇮🇶", "الكويت 🇰🇼", "السعودية 🇸🇦", "مصر 🇪🇬", "غير ذلك"],
+    key: "country"
+  },
+  {
+    q: "👦 تحب تكون لوحدك؟",
+    options: ["نعم", "لا", "أحيانًا"],
+    key: "alone"
+  },
+  {
+    q: "👦 تحس في أحد يراقبك؟",
+    options: ["نعم", "لا", "ما أدري"],
+    key: "watching"
+  },
+  {
+    q: "👦 لو سمعت صوت وراك الآن؟",
+    options: ["ألتفت", "أتجاهل", "أخاف"],
+    key: "behind"
+  },
+  {
+    q: "👦 تحب الظلام؟",
+    options: ["أحبه", "أكرهه", "أتحمله"],
+    key: "dark"
+  },
+  {
+    q: "👦 الساعة كم عندك الآن؟",
+    options: ["ليل", "نهار", "ما أعرف"],
+    key: "time"
+  },
+  {
+    q: "👦 لو قلت اسمك بصوت عالي؟",
+    options: ["أسمعه", "ما يصير شيء", "أخاف"],
+    key: "nameFear"
+  }
+];
+
+// ===============================
+// 🧠 نافذة السؤال
+// ===============================
+function showCreepyQuestion(){
+  const data = creepyQA[Math.floor(Math.random()*creepyQA.length)];
+
+  const overlay = document.createElement("div");
+  overlay.style.position = "fixed";
+  overlay.style.inset = "0";
+  overlay.style.background = "rgba(0,0,0,0.85)";
+  overlay.style.zIndex = "999";
+  overlay.style.display = "flex";
+  overlay.style.flexDirection = "column";
+  overlay.style.justifyContent = "center";
+  overlay.style.alignItems = "center";
+  overlay.style.color = "white";
+  overlay.style.fontSize = "20px";
+
+  const q = document.createElement("div");
+  q.innerText = data.q;
+  q.style.marginBottom = "20px";
+
+  overlay.appendChild(q);
+
+  data.options.forEach(opt=>{
+    const btn = document.createElement("button");
+    btn.innerText = opt;
+    btn.style.padding = "10px 20px";
+    btn.style.margin = "5px";
+    btn.style.fontSize = "16px";
+    btn.onclick = ()=>{
+      creepyMemory[data.key] = opt;
+      overlay.remove();
+      creepyReact(opt);
+    };
+    overlay.appendChild(btn);
+  });
+
+  document.body.appendChild(overlay);
+}
+
+// ===============================
+// 😈 ردود الولد حسب جوابك
+// ===============================
+function creepyReact(answer){
+  const reactions = [
+    "👦 همم... توقعت هذا",
+    "👦 جوابك مثير",
+    "👦 لا تكذب علي",
+    "👦 أنا أعرف أكثر",
+    "👦 هذا يخيفك صح؟"
+  ];
+  setTimeout(()=>{
+    alert(reactions[Math.floor(Math.random()*reactions.length)] + "\n👉 " + answer);
+  }, 500);
+}
+
+// ===============================
+// 🔁 يظهر السؤال عشوائيًا
+// ===============================
+setInterval(()=>{
+  if(Math.random() < 0.35){
+    showCreepyQuestion();
+  }
+}, 20000);
+
+// ===============================
+// 🧠 الولد يتذكر إجاباتك
+// ===============================
+setInterval(()=>{
+  if(creepyMemory.country){
+    document.getElementById("ai").innerText =
+      "👦 أنت من " + creepyMemory.country + " صح؟";
+  }
+}, 30000);
+
+</script>
