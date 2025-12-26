@@ -1,36 +1,125 @@
 <!DOCTYPE html>
-<html>
+<html lang="ar">
 <head>
 <meta charset="UTF-8">
-<title>Quiz Game</title>
+<title>تحدي المعرفة الذكية</title>
+
 <style>
-body{
-  background:#111;
-  color:white;
-  font-family:Arial;
-  text-align:center;
+body {
+    margin: 0;
+    font-family: Tahoma, Arial;
+    background: linear-gradient(270deg, #0f2027, #203a43, #2c5364);
+    background-size: 600% 600%;
+    animation: bg 15s ease infinite;
+    color: white;
+    text-align: center;
 }
-button{
-  padding:15px;
-  margin:10px;
-  font-size:18px;
+
+@keyframes bg {
+    0% {background-position:0% 50%}
+    50% {background-position:100% 50%}
+    100% {background-position:0% 50%}
+}
+
+.container {
+    max-width: 500px;
+    margin: 80px auto;
+    background: rgba(0,0,0,0.6);
+    padding: 20px;
+    border-radius: 15px;
+}
+
+button {
+    width: 100%;
+    padding: 12px;
+    margin: 8px 0;
+    border: none;
+    border-radius: 10px;
+    font-size: 16px;
+    cursor: pointer;
+}
+
+button:hover {
+    background: #00c6ff;
+    color: black;
+}
+
+#level {
+    font-size: 14px;
+    color: #00ffcc;
 }
 </style>
 </head>
 
 <body>
 
-<h1>🎮 لعبة الأسئلة</h1>
-<p id="q">هل تحب البرمجة؟</p>
-
-<button onclick="a(1)">نعم</button>
-<button onclick="a(0)">لا</button>
+<div class="container">
+    <h1>🧠 تحدي المعرفة الذكية</h1>
+    <p id="level">المستوى: سهل</p>
+    <h2 id="question"></h2>
+    <div id="answers"></div>
+    <p>⭐ النقاط: <span id="score">0</span></p>
+    <p style="font-size:12px;">موقع مصنوع من حسن كاظم علي</p>
+</div>
 
 <script>
-function a(x){
- document.getElementById("q").innerText =
- x ? "🔥 ممتاز!" : "😅 جرّب مرة ثانية";
+const quiz = [
+    {q:"ما هو لون السماء؟", a:["أزرق","أخضر","أحمر"], c:0, level:"سهل"},
+    {q:"كم عدد أيام الأسبوع؟", a:["5","7","10"], c:1, level:"سهل"},
+    {q:"ما هو عاصمة ألمانيا؟", a:["برلين","روما","مدريد"], c:0, level:"متوسط"},
+    {q:"ما معنى HTML؟", a:["لغة برمجة","لغة ترميز","نظام تشغيل"], c:1, level:"متوسط"},
+    {q:"ما هو أقوى نوع تشفير؟", a:["MD5","SHA-256","Base64"], c:1, level:"صعب"},
+    {q:"ما هو الهجوم الذي يعتمد على خداع المستخدم؟", a:["DDoS","Phishing","Brute Force"], c:1, level:"صعب"}
+];
+
+let index = 0;
+let score = 0;
+
+function loadQuestion() {
+    const q = quiz[index];
+    document.getElementById("question").innerText = q.q;
+    document.getElementById("level").innerText = "المستوى: " + q.level;
+
+    const answersDiv = document.getElementById("answers");
+    answersDiv.innerHTML = "";
+
+    q.a.forEach((ans,i)=>{
+        const btn = document.createElement("button");
+        btn.innerText = ans;
+        btn.onclick = ()=>checkAnswer(i);
+        answersDiv.appendChild(btn);
+    });
 }
+
+function checkAnswer(choice) {
+    if(choice === quiz[index].c){
+        score += 10;
+        document.getElementById("score").innerText = score;
+    }
+    index++;
+    if(index < quiz.length){
+        loadQuestion();
+    } else {
+        endGame();
+    }
+}
+
+function endGame() {
+    let level;
+    if(score <= 20) level = "مبتدئ";
+    else if(score <= 40) level = "متوسط";
+    else level = "خبير";
+
+    document.querySelector(".container").innerHTML = `
+        <h1>🎉 انتهت اللعبة</h1>
+        <p>⭐ نقاطك: ${score}</p>
+        <h2>مستواك: ${level}</h2>
+        <button onclick="location.reload()">🔄 إعادة اللعب</button>
+        <p style="font-size:12px;">موقع مصنوع من حسن كاظم علي</p>
+    `;
+}
+
+loadQuestion();
 </script>
 
 </body>
