@@ -351,5 +351,100 @@ answer = function(i,c){
  originalAnswer(i,c);
 };
      </script>
+<script>
+// ===============================
+// 🔊 صوت خسارة (نبض قلب + ضربة)
+// ===============================
+const heartSound = new Audio("https://www.soundjay.com/human/sounds/heartbeat-01.mp3");
+const hitSound = new Audio("https://www.soundjay.com/human/sounds/punch-01.mp3");
+
+const oldLose = lose;
+lose = function(){
+  heartSound.play();
+  setTimeout(()=>hitSound.play(), 600);
+  oldLose();
+};
+
+// ===============================
+// 📈 مستويات من 1 إلى 100
+// ===============================
+let maxLevel = 100;
+
+const oldLoadQuestion = loadQuestion;
+loadQuestion = function(){
+  if(stage > maxLevel){
+    document.body.innerHTML = "<h1>😨 انتهت اللعبة... لكنك لم تنجُ</h1>";
+    return;
+  }
+  oldLoadQuestion();
+};
+
+// ===============================
+// 👦 الولد الثنائي الأبعاد المرعب
+// ===============================
+const boy = document.createElement("div");
+boy.innerText = "👦";
+boy.style.position = "fixed";
+boy.style.bottom = "10px";
+boy.style.right = "10px";
+boy.style.fontSize = "60px";
+boy.style.filter = "drop-shadow(0 0 10px red)";
+boy.style.zIndex = 99;
+boy.style.animation = "floatBoy 2s infinite alternate";
+document.body.appendChild(boy);
+
+const style = document.createElement("style");
+style.innerHTML = `
+@keyframes floatBoy {
+  from { transform: translateY(0); }
+  to { transform: translateY(-15px); }
+}`;
+document.head.appendChild(style);
+
+// ===============================
+// ❓ أسئلة الولد الغريبة
+// ===============================
+const creepyQuestions = [
+  "ما اسمك الحقيقي؟",
+  "أين أنت الآن؟",
+  "هل أنت وحدك؟",
+  "هل تشعر أن أحد يراقبك؟",
+  "لماذا قلبك سريع؟",
+  "هل تثق بالموقع؟",
+  "هل تحب الظلام؟",
+  "لو ناداك أحد خلفك، تلتفت؟"
+];
+
+function creepyTalk(){
+  const q = creepyQuestions[Math.floor(Math.random()*creepyQuestions.length)];
+  setTimeout(()=>{
+    alert("👦: " + q);
+  }, 500);
+}
+
+// ===============================
+// 👦 يسألك بكل مرحلة
+// ===============================
+const oldAiTalk = aiTalk;
+aiTalk = function(){
+  oldAiTalk();
+  creepyTalk();
+};
+
+// ===============================
+// 😈 الولد يصير أخطر مع التقدم
+// ===============================
+setInterval(()=>{
+  if(stage > 10){
+    boy.innerText = "😈";
+  }
+  if(stage > 30){
+    boy.style.fontSize = "80px";
+  }
+  if(stage > 60){
+    boy.style.filter = "drop-shadow(0 0 25px crimson)";
+  }
+}, 3000);
+</script>
 </body>
 </html>
