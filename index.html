@@ -5,81 +5,100 @@
 <title>Smart Quiz Game</title>
 
 <style>
-body {
-    margin: 0;
-    font-family: Tahoma, Arial;
-    background: radial-gradient(circle at bottom, #020111, #000);
-    background-size: cover;
-    color: white;
-    text-align: center;
-    overflow: hidden;
+body{
+  margin:0;
+  font-family:Tahoma,Arial;
+  background:radial-gradient(circle at bottom,#020111,#000);
+  color:#fff;
+  text-align:center;
+  overflow:hidden;
 }
 
-/* 🌕 قمر واقعي */
-.moon {
-    position: absolute;
-    top: 60px;
-    left: -200px;
-    width: 140px;
-    height: 140px;
-    border-radius: 50%;
-    background:
-      radial-gradient(circle at 30% 30%, #fff 0%, #eee 35%, #ccc 60%, #aaa 100%);
-    box-shadow:
-      0 0 40px rgba(255,255,255,0.6),
-      inset -15px -15px 30px rgba(0,0,0,0.4);
-    animation: moonMove 40s linear infinite;
+/* القمر */
+.moon{
+  position:absolute;
+  top:80px;
+  left:-200px;
+  width:140px;
+  height:140px;
+  border-radius:50%;
+  background:radial-gradient(circle at 30% 30%,#fff,#ccc);
+  box-shadow:0 0 40px rgba(255,255,255,.6);
+  animation:moonMove 40s linear infinite;
+}
+@keyframes moonMove{
+  from{left:-200px}
+  to{left:110%}
 }
 
-@keyframes moonMove {
-    0% { left: -200px; top: 80px; }
-    50% { top: 130px; }
-    100% { left: 110%; top: 80px; }
+/* الحاوية */
+.container{
+  max-width:650px;
+  margin:90px auto;
+  background:rgba(0,0,0,.65);
+  padding:20px;
+  border-radius:20px;
+  z-index:2;
+  position:relative;
 }
 
-.container {
-    max-width: 650px;
-    margin: auto;
-    margin-top: 90px;
-    background: rgba(0,0,0,0.65);
-    padding: 20px;
-    border-radius: 20px;
-    position: relative;
-    z-index: 2;
+button{
+  width:100%;
+  padding:12px;
+  margin:6px 0;
+  font-size:18px;
+  border-radius:10px;
+  border:none;
+  cursor:pointer;
+  background:#1abc9c;
+}
+button:hover{background:#16a085}
+
+.timer{color:gold;font-size:20px}
+.question{font-size:22px;margin:15px}
+.hearts{font-size:22px;color:red}
+
+.ai-face{font-size:32px}
+.ai{font-size:14px;color:#9ff}
+
+.startScreen{
+  position:fixed;
+  inset:0;
+  background:black;
+  display:flex;
+  flex-direction:column;
+  align-items:center;
+  justify-content:center;
+  z-index:10;
 }
 
-button {
-    width: 100%;
-    padding: 12px;
-    margin: 6px 0;
-    font-size: 18px;
-    border-radius: 10px;
-    border: none;
-    cursor: pointer;
-    background: #1abc9c;
+/* الولد */
+#boy{
+  position:fixed;
+  right:20px;
+  bottom:20px;
+  font-size:60px;
+  filter:drop-shadow(0 0 15px red);
+  animation:floatBoy 2s infinite alternate;
+  z-index:9999;
+}
+@keyframes floatBoy{
+  from{transform:translateY(0)}
+  to{transform:translateY(-15px)}
 }
 
-button:hover { background: #16a085; }
-
-.timer { color: gold; font-size: 20px; }
-.question { font-size: 22px; margin: 15px; }
-
-.hearts { font-size: 22px; color: red; }
-
-.ai-face { font-size: 32px; }
-.ai { font-size: 15px; color: #9ff; margin-top: 8px; }
-
-.footer { font-size: 12px; opacity: 0.7; margin-top: 12px; }
-
-.startScreen {
-    position: fixed;
-    inset: 0;
-    background: black;
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    flex-direction: column;
-    z-index: 10;
+/* صندوق كلام */
+#boyBox{
+  position:fixed;
+  right:100px;
+  bottom:90px;
+  background:rgba(0,0,0,.75);
+  color:#9ff;
+  padding:12px;
+  border-radius:14px;
+  font-size:13px;
+  max-width:260px;
+  z-index:9999;
 }
 </style>
 </head>
@@ -88,675 +107,127 @@ button:hover { background: #16a085; }
 
 <div class="moon"></div>
 
-<!-- 🔊 الأصوات -->
 <audio id="winSound" src="https://www.soundjay.com/misc/sounds/bell-ringing-05.mp3"></audio>
 <audio id="loseSound" src="https://www.soundjay.com/human/sounds/scream-01.mp3"></audio>
+<audio id="heartSound" src="https://www.soundjay.com/human/sounds/heartbeat-01.mp3"></audio>
 
 <div class="startScreen" id="startScreen">
-    <h1>🌌 Smart Quiz Game</h1>
-    <button onclick="startGame()">ابدأ</button>
+  <h1>🌌 Smart Quiz Game</h1>
+  <button onclick="startGame()">ابدأ</button>
 </div>
 
 <div class="container" id="game" style="display:none">
-    <div class="hearts" id="hearts">❤️❤️❤️</div>
-    <div id="level"></div>
-    <div class="timer">⏱️ <span id="time">20</span></div>
-    <div class="question" id="question"></div>
-    <div id="answers"></div>
+  <div class="hearts" id="hearts">❤️❤️❤️</div>
+  <div id="level"></div>
+  <div class="timer">⏱️ <span id="time">20</span></div>
+  <div class="question" id="question"></div>
+  <div id="answers"></div>
 
-    <div class="ai-face" id="aiFace">🤖</div>
-    <div class="ai" id="ai"></div>
+  <div class="ai-face" id="aiFace">🤖</div>
+  <div class="ai" id="ai"></div>
 
-    <div>⭐ النقاط: <span id="score">0</span></div>
-    <div class="footer">
-        المطور: حسن<br>
-        🌙 شهر رمضان قريب
-    </div>
+  <div>⭐ النقاط: <span id="score">0</span></div>
 </div>
 
-<script>
-let stage = 1;
-let current = 0;
-let score = 0;
-let hearts = 3;
-let time = 20;
-let timer;
-let aiLies = false;
-let playerName = "";
+<div id="boy">👦</div>
+<div id="boyBox"></div>
 
-const questionsByStage = [
- [],
- [
-  {q:"هل الشمس نجم؟",a:["نعم","لا"],c:0},
-  {q:"هل 2+2=4؟",a:["نعم","لا"],c:0}
- ],
- [
-  {q:"هل الضوء أسرع من الصوت؟",a:["نعم","لا"],c:0},
-  {q:"هل الأرض مسطحة؟",a:["نعم","لا"],c:1}
- ],
- [
-  {q:"هل الذكاء الاصطناعي يملك وعي؟",a:["نعم","لا"],c:1},
-  {q:"هل الزمن نسبي؟",a:["نعم","لا"],c:0}
- ],
- [
-  {q:"هل يمكن الوثوق بالذكاء الاصطناعي دائمًا؟",a:["نعم","لا"],c:1},
-  {q:"هل الحقيقة دائمًا واضحة؟",a:["نعم","لا"],c:1}
- ]
+<script>
+/* ======================
+   اللعبة الأساسية
+====================== */
+let stage=1,current=0,score=0,hearts=3,time=20,timer;
+let playerName="";
+
+const questions=[
+  {q:"هل الشمس نجم؟",c:0},
+  {q:"هل الأرض كروية؟",c:0},
+  {q:"هل الذكاء الاصطناعي يفكر؟",c:1},
+  {q:"هل الزمن نسبي؟",c:0}
 ];
 
-const aiTalks = {
- 1: ["بداية سهلة يا {name}","ثق بي يا {name}"],
- 2: ["ركز يا {name}","ممكن أخدعك"],
- 3: ["أنت ذكي يا {name}","أنا أراقبك"],
- 4: ["لو صدقتني تخسر يا {name}","أنا أكذب الآن"],
- 5: ["لا أحد ينجو يا {name}","هذه النهاية"]
-};
-
 function startGame(){
- playerName = prompt("🤖 ما اسمك؟") || "لاعب";
- document.getElementById("startScreen").style.display="none";
- document.getElementById("game").style.display="block";
- loadQuestion();
-}
-
-function aiTalk(){
- const arr = aiTalks[stage];
- aiLies = Math.random() < 0.5;
- document.getElementById("aiFace").innerText = aiLies ? "😈":"🤖";
- let text = arr[Math.floor(Math.random()*arr.length)];
- document.getElementById("ai").innerText =
- text.replace("{name}", playerName);
+  playerName=prompt("ما اسمك؟")||"لاعب";
+  document.getElementById("startScreen").style.display="none";
+  document.getElementById("game").style.display="block";
+  loadQuestion();
 }
 
 function loadQuestion(){
- clearInterval(timer);
+  clearInterval(timer);
+  if(current>=questions.length){
+    alert("🏆 انتهت المرحلة");
+    current=0;
+    stage++;
+  }
 
- if(current >= questionsByStage[stage].length){
-   stage++;
-   current = 0;
-   if(stage>5){
-     document.getElementById("winSound").play();
-     document.body.innerHTML="<h1>🏆 مبروك "+playerName+" أنهيت اللعبة!</h1>";
-     return;
-   }
- }
+  document.getElementById("level").innerText="المرحلة "+stage;
+  document.getElementById("hearts").innerText="❤️".repeat(hearts);
 
- document.getElementById("level").innerText="المرحلة "+stage;
- document.getElementById("hearts").innerText="❤️".repeat(hearts);
+  const q=questions[current];
+  document.getElementById("question").innerText=q.q;
 
- const q = questionsByStage[stage][current];
- document.getElementById("question").innerText=q.q;
+  const ans=document.getElementById("answers");
+  ans.innerHTML="";
+  ["نعم","لا"].forEach((t,i)=>{
+    let b=document.createElement("button");
+    b.innerText=t;
+    b.onclick=()=>answer(i,q.c);
+    ans.appendChild(b);
+  });
 
- const ans=document.getElementById("answers");
- ans.innerHTML="";
- q.a.forEach((x,i)=>{
-   let b=document.createElement("button");
-   b.innerText=x;
-   b.onclick=()=>answer(i,q.c);
-   ans.appendChild(b);
- });
-
- time=20-stage*2;
- document.getElementById("time").innerText=time;
- aiTalk();
-
- timer=setInterval(()=>{
-  time--;
+  time=20;
   document.getElementById("time").innerText=time;
-  if(time<=0) lose();
- },1000);
+  timer=setInterval(()=>{
+    time--;
+    document.getElementById("time").innerText=time;
+    if(time<=0) lose();
+  },1000);
 }
 
 function answer(i,c){
- if(i===c && !aiLies){
-   score+=10;
-   document.getElementById("winSound").play();
- } else {
-   lose();
-   return;
- }
- current++;
- loadQuestion();
+  if(i===c){
+    score+=10;
+    document.getElementById("winSound").play();
+    current++;
+    loadQuestion();
+  }else lose();
 }
 
 function lose(){
- document.getElementById("loseSound").play();
- hearts--;
- if(hearts<=0){
-   document.body.innerHTML="<h1>💀 خسرت يا "+playerName+"</h1><button onclick='location.reload()'>إعادة</button>";
-   return;
- }
- current++;
- loadQuestion();
-}
-</script>
-<script>
-// ===============================
-// 🔁 مولّد أسئلة لا نهائي
-// ===============================
-function generateQuestion(level) {
- const base = [
-  "هل {X} حقيقة؟",
-  "هل يمكن لـ {X} أن يكون خطيرًا؟",
-  "هل {X} يعتمد على الإنسان؟",
-  "هل {X} سيتغير في المستقبل؟",
-  "هل فهم {X} يحتاج ذكاء؟"
- ];
-
- const topics = [
-  "الذكاء الاصطناعي",
-  "الزمن",
-  "الكون",
-  "العقل",
-  "الحقيقة",
-  "الواقع",
-  "الإنسان",
-  "الآلة"
- ];
-
- let q = base[Math.floor(Math.random()*base.length)]
-         .replace("{X}", topics[Math.floor(Math.random()*topics.length)]);
-
- let correct = Math.random() > 0.5 ? 0 : 1;
-
- return {
-  q,
-  a:["نعم","لا"],
-  c: correct
- };
-}
-
-// ===============================
-// 🧠 ذاكرة AI
-// ===============================
-const aiMemory = {
- trust: 0,
- lies: 0,
- mood: "neutral"
-};
-
-function smartAiComment(isCorrect) {
- if(isCorrect){
-   aiMemory.trust++;
-   aiMemory.mood = "happy";
- } else {
-   aiMemory.lies++;
-   aiMemory.mood = "evil";
- }
-
- const comments = {
-  happy: [
-   "أحسنت يا {name}",
-   "بدأت أثق بك",
-   "ذكاؤك يتطور"
-  ],
-  evil: [
-   "قلت لك لا تثق بي 😈",
-   "أخطأت لأنك صدقتني",
-   "أنا خدعتك"
-  ],
-  neutral: [
-   "ما رأيك بهذا السؤال؟",
-   "هل أنت متأكد؟"
-  ]
- };
-
- let list = comments[aiMemory.mood];
- let msg = list[Math.floor(Math.random()*list.length)];
- return msg.replace("{name}", playerName);
-}
-
-// ===============================
-// ✨ مؤثرات نجوم خفيفة
-// ===============================
-for(let i=0;i<40;i++){
- let star=document.createElement("div");
- star.style.position="fixed";
- star.style.width="2px";
- star.style.height="2px";
- star.style.background="white";
- star.style.opacity=Math.random();
- star.style.left=Math.random()*100+"%";
- star.style.top=Math.random()*100+"%";
- star.style.zIndex=0;
- document.body.appendChild(star);
-}
-
-// ===============================
-// 🧩 دمج الأسئلة المولدة مع المراحل
-// ===============================
-const originalLoad = loadQuestion;
-loadQuestion = function(){
- if(stage >= 3){
-   if(!questionsByStage[stage]){
-     questionsByStage[stage] = [];
-   }
-   if(questionsByStage[stage].length < 50){
-     for(let i=0;i<10;i++){
-       questionsByStage[stage].push(generateQuestion(stage));
-     }
-   }
- }
- originalLoad();
-};
-
-// ===============================
-// 🤖 AI يتكلم حسب نتيجتك
-// ===============================
-const originalAnswer = answer;
-answer = function(i,c){
- const correct = (i===c && !aiLies);
- document.getElementById("ai").innerText =
- "🤖 " + smartAiComment(correct);
- originalAnswer(i,c);
-};
-     </script>
-<script>
-// ===============================
-// 🔊 صوت خسارة (نبض قلب + ضربة)
-// ===============================
-const heartSound = new Audio("https://www.soundjay.com/human/sounds/heartbeat-01.mp3");
-const hitSound = new Audio("https://www.soundjay.com/human/sounds/punch-01.mp3");
-
-const oldLose = lose;
-lose = function(){
-  heartSound.play();
-  setTimeout(()=>hitSound.play(), 600);
-  oldLose();
-};
-
-// ===============================
-// 📈 مستويات من 1 إلى 100
-// ===============================
-let maxLevel = 100;
-
-const oldLoadQuestion = loadQuestion;
-loadQuestion = function(){
-  if(stage > maxLevel){
-    document.body.innerHTML = "<h1>😨 انتهت اللعبة... لكنك لم تنجُ</h1>";
+  document.getElementById("loseSound").play();
+  document.getElementById("heartSound").play();
+  hearts--;
+  if(hearts<=0){
+    document.body.innerHTML="<h1>💀 خسرت يا "+playerName+"</h1>";
     return;
   }
-  oldLoadQuestion();
-};
-
-// ===============================
-// 👦 الولد الثنائي الأبعاد المرعب
-// ===============================
-const boy = document.createElement("div");
-boy.innerText = "👦";
-boy.style.position = "fixed";
-boy.style.bottom = "10px";
-boy.style.right = "10px";
-boy.style.fontSize = "60px";
-boy.style.filter = "drop-shadow(0 0 10px red)";
-boy.style.zIndex = 99;
-boy.style.animation = "floatBoy 2s infinite alternate";
-document.body.appendChild(boy);
-
-const style = document.createElement("style");
-style.innerHTML = `
-@keyframes floatBoy {
-  from { transform: translateY(0); }
-  to { transform: translateY(-15px); }
-}`;
-document.head.appendChild(style);
-
-// ===============================
-// ❓ أسئلة الولد الغريبة
-// ===============================
-const creepyQuestions = [
-  "ما اسمك الحقيقي؟",
-  "أين أنت الآن؟",
-  "هل أنت وحدك؟",
-  "هل تشعر أن أحد يراقبك؟",
-  "لماذا قلبك سريع؟",
-  "هل تثق بالموقع؟",
-  "هل تحب الظلام؟",
-  "لو ناداك أحد خلفك، تلتفت؟"
-];
-
-function creepyTalk(){
-  const q = creepyQuestions[Math.floor(Math.random()*creepyQuestions.length)];
-  setTimeout(()=>{
-    alert("👦: " + q);
-  }, 500);
+  current++;
+  loadQuestion();
 }
 
-// ===============================
-// 👦 يسألك بكل مرحلة
-// ===============================
-const oldAiTalk = aiTalk;
-aiTalk = function(){
-  oldAiTalk();
-  creepyTalk();
-};
+/* ======================
+   الولد + الرعب
+====================== */
+const boyBox=document.getElementById("boyBox");
+const creepy=[
+  "وش اسمك الحقيقي؟",
+  "تحس أحد يراقبك؟",
+  "لو أحد ناداك وراك؟",
+  "تحب الظلام؟",
+  "ليش تلعب؟"
+];
 
-// ===============================
-// 😈 الولد يصير أخطر مع التقدم
-// ===============================
 setInterval(()=>{
-  if(stage > 10){
-    boy.innerText = "😈";
-  }
-  if(stage > 30){
-    boy.style.fontSize = "80px";
-  }
-  if(stage > 60){
-    boy.style.filter = "drop-shadow(0 0 25px crimson)";
-  }
-}, 3000);
+  const q=creepy[Math.floor(Math.random()*creepy.length)];
+  boyBox.innerHTML="👦 "+q+"<br>👁️ زياراتك: "+(++localStorage.visits||1);
+},12000);
+
+setInterval(()=>{
+  document.body.style.filter="brightness(1.15)";
+  setTimeout(()=>document.body.style.filter="brightness(1)",150);
+},20000);
 </script>
+
 </body>
 </html>
-<script>
-// ===============================
-// 👦 نظام محادثة تفاعلي مع الولد
-// ===============================
-
-let creepyMemory = {};
-
-const creepyQA = [
-  {
-    q: "👦 وين ساكن؟",
-    options: ["العراق 🇮🇶", "الكويت 🇰🇼", "السعودية 🇸🇦", "مصر 🇪🇬", "غير ذلك"],
-    key: "country"
-  },
-  {
-    q: "👦 تحب تكون لوحدك؟",
-    options: ["نعم", "لا", "أحيانًا"],
-    key: "alone"
-  },
-  {
-    q: "👦 تحس في أحد يراقبك؟",
-    options: ["نعم", "لا", "ما أدري"],
-    key: "watching"
-  },
-  {
-    q: "👦 لو سمعت صوت وراك الآن؟",
-    options: ["ألتفت", "أتجاهل", "أخاف"],
-    key: "behind"
-  },
-  {
-    q: "👦 تحب الظلام؟",
-    options: ["أحبه", "أكرهه", "أتحمله"],
-    key: "dark"
-  },
-  {
-    q: "👦 الساعة كم عندك الآن؟",
-    options: ["ليل", "نهار", "ما أعرف"],
-    key: "time"
-  },
-  {
-    q: "👦 لو قلت اسمك بصوت عالي؟",
-    options: ["أسمعه", "ما يصير شيء", "أخاف"],
-    key: "nameFear"
-  }
-];
-
-// ===============================
-// 🧠 نافذة السؤال
-// ===============================
-function showCreepyQuestion(){
-  const data = creepyQA[Math.floor(Math.random()*creepyQA.length)];
-
-  const overlay = document.createElement("div");
-  overlay.style.position = "fixed";
-  overlay.style.inset = "0";
-  overlay.style.background = "rgba(0,0,0,0.85)";
-  overlay.style.zIndex = "999";
-  overlay.style.display = "flex";
-  overlay.style.flexDirection = "column";
-  overlay.style.justifyContent = "center";
-  overlay.style.alignItems = "center";
-  overlay.style.color = "white";
-  overlay.style.fontSize = "20px";
-
-  const q = document.createElement("div");
-  q.innerText = data.q;
-  q.style.marginBottom = "20px";
-
-  overlay.appendChild(q);
-
-  data.options.forEach(opt=>{
-    const btn = document.createElement("button");
-    btn.innerText = opt;
-    btn.style.padding = "10px 20px";
-    btn.style.margin = "5px";
-    btn.style.fontSize = "16px";
-    btn.onclick = ()=>{
-      creepyMemory[data.key] = opt;
-      overlay.remove();
-      creepyReact(opt);
-    };
-    overlay.appendChild(btn);
-  });
-
-  document.body.appendChild(overlay);
-}
-
-// ===============================
-// 😈 ردود الولد حسب جوابك
-// ===============================
-function creepyReact(answer){
-  const reactions = [
-    "👦 همم... توقعت هذا",
-    "👦 جوابك مثير",
-    "👦 لا تكذب علي",
-    "👦 أنا أعرف أكثر",
-    "👦 هذا يخيفك صح؟"
-  ];
-  setTimeout(()=>{
-    alert(reactions[Math.floor(Math.random()*reactions.length)] + "\n👉 " + answer);
-  }, 500);
-}
-
-// ===============================
-// 🔁 يظهر السؤال عشوائيًا
-// ===============================
-setInterval(()=>{
-  if(Math.random() < 0.35){
-    showCreepyQuestion();
-  }
-}, 20000);
-
-// ===============================
-// 🧠 الولد يتذكر إجاباتك
-// ===============================
-setInterval(()=>{
-  if(creepyMemory.country){
-    document.getElementById("ai").innerText =
-      "👦 أنت من " + creepyMemory.country + " صح؟";
-  }
-}, 30000);
-
-</script>
-<!-- 🧩 حزمة الإضافات الخارقة (لا تحذف شيء قبلها) -->
-<script>
-(() => {
-  /* ====== بيانات ====== */
-  let name = localStorage.getItem("playerName") || "";
-  let country = localStorage.getItem("playerCountry") || "";
-  let visits = Number(localStorage.getItem("localVisits") || 0) + 1;
-  localStorage.setItem("localVisits", visits);
-
-  /* ====== صندوق عائم ====== */
-  const box = document.createElement("div");
-  box.style.position = "fixed";
-  box.style.right = "10px";
-  box.style.bottom = "10px";
-  box.style.background = "rgba(0,0,0,0.75)";
-  box.style.color = "#0ff";
-  box.style.padding = "12px";
-  box.style.borderRadius = "12px";
-  box.style.fontSize = "13px";
-  box.style.zIndex = "9999";
-  box.style.maxWidth = "240px";
-  box.style.fontFamily = "Tahoma";
-  document.body.appendChild(box);
-
-  /* ====== صوت نبض ====== */
-  const heart = new Audio("https://www.soundjay.com/heartbeat/sounds/heartbeat-01.mp3");
-  heart.volume = 0.3;
-
-  /* ====== ولد 2D (نصي) ====== */
-  const boyTexts = [
-    "👦: وش اسمك؟",
-    "👦: من وين أنت؟",
-    "👦: ليش تلعب؟",
-    "👦: تحس أحد يراقبك؟",
-    "👦: اختر بلدك",
-    "👦: لا تكذب علي",
-    "👦: أنا أتذكرك…"
-  ];
-
-  const countries = ["العراق","الكويت","السعودية","مصر","سوريا","الأردن","المغرب","تونس","الجزائر","ليبيا"];
-
-  function askBoy() {
-    let q = boyTexts[Math.floor(Math.random()*boyTexts.length)];
-    let extra = "";
-
-    if (q.includes("اسمك")) {
-      name = prompt("👦 وش اسمك؟") || name || "لاعب";
-      localStorage.setItem("playerName", name);
-    }
-
-    if (q.includes("بلد")) {
-      country = prompt("👦 اختر بلدك:\n"+countries.join(" - ")) || country || "غير معروف";
-      localStorage.setItem("playerCountry", country);
-    }
-
-    if (Math.random() < 0.3) heart.play();
-
-    extra = `<br>👁️ زياراتك: ${visits}<br>🧠 اسمك: ${name}<br>🌍 بلدك: ${country}`;
-    box.innerHTML = q + extra;
-  }
-
-  /* ====== رسائل AI ====== */
-  const aiMsgs = [
-    "🤖 أنا أراقب اختياراتك",
-    "🤖 مو كل شيء واضح",
-    "🤖 ممكن أكذب الآن",
-    "🤖 اسمك له معنى غريب",
-    "🤖 لا تثق بأحد",
-    "🤖 اللعبة تعرفك"
-  ];
-
-  function aiWhisper() {
-    if (Math.random() < 0.4) {
-      const m = aiMsgs[Math.floor(Math.random()*aiMsgs.length)];
-      box.innerHTML = m + "<br>👦 ينظر إليك…";
-    }
-  }
-
-  /* ====== مؤثرات ====== */
-  function flash() {
-    document.body.style.transition = "filter 0.2s";
-    document.body.style.filter = "brightness(1.2)";
-    setTimeout(()=>document.body.style.filter="brightness(1)",200);
-  }
-
-  /* ====== تشغيل ====== */
-  setTimeout(askBoy, 2000);
-  setInterval(aiWhisper, 7000);
-  setInterval(flash, 15000);
-
-})();
-</script>
-<!-- 🧠 حزمة الإضافات النفسية + الولد 2D + تحسين الجودة -->
-<script>
-(() => {
-  /* ====== ذاكرة ====== */
-  const mem = {
-    name: localStorage.getItem("p_name") || "",
-    country: localStorage.getItem("p_country") || "",
-    visits: Number(localStorage.getItem("p_visits") || 0) + 1,
-    boySeen: Number(localStorage.getItem("boy_seen") || 0)
-  };
-  localStorage.setItem("p_visits", mem.visits);
-
-  /* ====== عنصر الولد ====== */
-  const boy = document.createElement("div");
-  boy.innerHTML = "👦";
-  boy.style.position = "fixed";
-  boy.style.left = "20px";
-  boy.style.bottom = "30px";
-  boy.style.fontSize = "48px";
-  boy.style.transition = "all 0.6s ease";
-  boy.style.zIndex = "99999";
-  boy.style.filter = "drop-shadow(0 0 10px rgba(255,255,255,0.4))";
-  document.body.appendChild(boy);
-
-  /* ====== صندوق الكلام ====== */
-  const bubble = document.createElement("div");
-  bubble.style.position = "fixed";
-  bubble.style.left = "80px";
-  bubble.style.bottom = "60px";
-  bubble.style.background = "rgba(0,0,0,0.75)";
-  bubble.style.color = "#9ff";
-  bubble.style.padding = "10px";
-  bubble.style.borderRadius = "12px";
-  bubble.style.fontSize = "13px";
-  bubble.style.maxWidth = "260px";
-  bubble.style.fontFamily = "Tahoma";
-  bubble.style.zIndex = "99999";
-  document.body.appendChild(bubble);
-
-  /* ====== صوت نبض ====== */
-  const heart = new Audio("https://www.soundjay.com/heartbeat/sounds/heartbeat-01.mp3");
-  heart.volume = 0.25;
-
-  /* ====== جمل ====== */
-  const boyLines = [
-    "أنا أشوفك…",
-    "وش اسمك؟",
-    "من وين أنت؟",
-    "ليش قاعد تلعب؟",
-    "تحس أحد يراقبك؟",
-    "اسمك غريب…",
-    "أنا أتذكرك.",
-    "لا تكذب.",
-    "اختَر بحذر.",
-    "الصمت يخوّف."
-  ];
-
-  function ask() {
-    let line = boyLines[Math.floor(Math.random()*boyLines.length)];
-
-    if (line.includes("اسمك")) {
-      mem.name = prompt("👦 وش اسمك؟") || mem.name || "لاعب";
-      localStorage.setItem("p_name", mem.name);
-    }
-
-    if (line.includes("وين")) {
-      mem.country = prompt("👦 من أي بلد؟") || mem.country || "غير معروف";
-      localStorage.setItem("p_country", mem.country);
-    }
-
-    bubble.innerHTML =
-      "👦 " + line +
-      "<br>👁️ زياراتك: " + mem.visits +
-      "<br>🧠 اسمك: " + mem.name +
-      "<br>🌍 بلدك: " + mem.country;
-
-    if (Math.random() < 0.35) heart.play();
-  }
-
-  /* ====== تحريك ====== */
-  function moveBoy() {
-    boy.style.transform =
-      `translate(${Math.random()*20-10}px,${Math.random()*10-5}px) scale(${1+Math.random()*0.05})`;
-  }
-
-  function flicker() {
-    document.body.style.filter = "brightness(1.15)";
-    setTimeout(()=>document.body.style.filter="brightness(1)",150);
-  }
-
-  /* ====== تشغيل ====== */
-  setTimeout(ask, 3000);
-  setInterval(ask, 9000);
-  setInterval(moveBoy, 1200);
-  setInterval(flicker, 20000);
-
-})();
-</script>
