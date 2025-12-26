@@ -3,291 +3,628 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>شات الذكاء الاصطناعي - أنماط مختلفة</title>
+    <title>شات الذكاء الاصطناعي المتقدم - GPT-4</title>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
     <style>
         * {
             box-sizing: border-box;
             margin: 0;
             padding: 0;
         }
+        
         body {
             font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
-            background: linear-gradient(135deg, #0f0c29, #302b63, #24243e);
+            background: linear-gradient(135deg, #0a0a2a, #1a1a3e, #2d2d5a);
             color: white;
             min-height: 100vh;
             display: flex;
             justify-content: center;
             align-items: center;
             padding: 20px;
+            position: relative;
+            overflow-x: hidden;
         }
+        
+        .background-effects {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            z-index: -1;
+            pointer-events: none;
+        }
+        
+        .particle {
+            position: absolute;
+            background: rgba(0, 219, 222, 0.2);
+            border-radius: 50%;
+            animation: float 15s infinite linear;
+        }
+        
+        @keyframes float {
+            0% { transform: translateY(0) translateX(0); }
+            50% { transform: translateY(-100px) translateX(100px); }
+            100% { transform: translateY(0) translateX(0); }
+        }
+        
         .container {
             width: 100%;
-            max-width: 500px;
-            background: rgba(255, 255, 255, 0.1);
-            backdrop-filter: blur(10px);
-            border-radius: 20px;
+            max-width: 600px;
+            background: rgba(20, 20, 40, 0.85);
+            backdrop-filter: blur(15px);
+            border-radius: 25px;
             padding: 30px;
-            box-shadow: 0 15px 35px rgba(0, 0, 0, 0.5);
-            border: 1px solid rgba(255, 255, 255, 0.2);
+            box-shadow: 0 20px 50px rgba(0, 0, 0, 0.7),
+                        0 0 0 1px rgba(0, 219, 222, 0.1),
+                        0 0 30px rgba(0, 219, 222, 0.2) inset;
+            border: 1px solid rgba(0, 219, 222, 0.3);
             text-align: center;
+            position: relative;
+            overflow: hidden;
         }
+        
+        .container::before {
+            content: '';
+            position: absolute;
+            top: -50%;
+            left: -50%;
+            width: 200%;
+            height: 200%;
+            background: radial-gradient(circle, rgba(0, 219, 222, 0.05) 0%, transparent 70%);
+            z-index: -1;
+        }
+        
+        .header {
+            margin-bottom: 25px;
+            position: relative;
+        }
+        
         h1 {
             color: #00dbde;
             margin-bottom: 10px;
+            font-size: 28px;
+            text-shadow: 0 0 10px rgba(0, 219, 222, 0.5);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            gap: 15px;
         }
-        .friendship {
-            margin: 15px 0;
-            font-size: 18px;
+        
+        .ai-status {
+            display: inline-flex;
+            align-items: center;
+            gap: 8px;
+            padding: 5px 15px;
+            background: rgba(0, 219, 222, 0.15);
+            border-radius: 20px;
+            font-size: 14px;
+            margin-bottom: 15px;
         }
+        
+        .status-dot {
+            width: 10px;
+            height: 10px;
+            border-radius: 50%;
+            background: #00ff88;
+            animation: pulse 2s infinite;
+        }
+        
+        @keyframes pulse {
+            0% { opacity: 0.5; }
+            50% { opacity: 1; }
+            100% { opacity: 0.5; }
+        }
+        
+        .friendship-container {
+            margin: 20px 0;
+            background: rgba(0, 0, 0, 0.3);
+            border-radius: 15px;
+            padding: 15px;
+            border: 1px solid rgba(255, 255, 255, 0.1);
+        }
+        
+        .friendship-info {
+            display: flex;
+            justify-content: space-between;
+            margin-bottom: 10px;
+            font-size: 16px;
+        }
+        
         .bar {
             width: 100%;
-            height: 12px;
+            height: 15px;
             background: rgba(255, 255, 255, 0.1);
             border-radius: 10px;
             overflow: hidden;
-            margin: 10px 0 20px;
+            margin: 10px 0;
         }
+        
         .fill {
             height: 100%;
             width: 0%;
-            background: linear-gradient(90deg, #00dbde, #fc00ff);
+            background: linear-gradient(90deg, #00dbde, #fc00ff, #00dbde);
+            background-size: 200% 100%;
             border-radius: 10px;
             transition: width 0.8s ease;
+            animation: gradientMove 3s infinite linear;
         }
+        
+        @keyframes gradientMove {
+            0% { background-position: 0% 50%; }
+            100% { background-position: 200% 50%; }
+        }
+        
+        .memory-badge {
+            display: inline-block;
+            padding: 8px 15px;
+            background: rgba(252, 0, 255, 0.15);
+            border-radius: 20px;
+            margin: 15px 0;
+            font-size: 14px;
+            border: 1px solid rgba(252, 0, 255, 0.3);
+        }
+        
         .input-area {
             display: flex;
             flex-direction: column;
             gap: 15px;
-            margin: 20px 0;
+            margin: 25px 0;
         }
-        input, select, button {
-            padding: 15px;
-            border-radius: 10px;
+        
+        input, select, button, textarea {
+            padding: 15px 20px;
+            border-radius: 12px;
             border: none;
             font-size: 16px;
             outline: none;
+            transition: all 0.3s ease;
         }
-        input {
-            background: rgba(255, 255, 255, 0.15);
+        
+        input, textarea {
+            background: rgba(255, 255, 255, 0.1);
             color: white;
             text-align: right;
+            border: 1px solid rgba(255, 255, 255, 0.2);
         }
-        input::placeholder {
-            color: #ccc;
+        
+        input:focus, textarea:focus {
+            border-color: #00dbde;
+            box-shadow: 0 0 15px rgba(0, 219, 222, 0.3);
         }
+        
+        input::placeholder, textarea::placeholder {
+            color: #aaa;
+        }
+        
+        textarea {
+            resize: vertical;
+            min-height: 60px;
+            font-family: inherit;
+        }
+        
         select {
             background: rgba(0, 0, 0, 0.5);
             color: white;
             cursor: pointer;
+            border: 1px solid rgba(0, 219, 222, 0.3);
         }
+        
+        select:hover {
+            background: rgba(0, 0, 0, 0.7);
+        }
+        
+        .button-group {
+            display: flex;
+            gap: 10px;
+        }
+        
         button {
+            flex: 1;
             background: linear-gradient(90deg, #00dbde, #fc00ff);
             color: white;
             font-weight: bold;
             cursor: pointer;
-            transition: transform 0.2s;
+            transition: all 0.3s ease;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            gap: 10px;
+            border: none;
         }
+        
         button:hover {
-            transform: scale(1.03);
+            transform: translateY(-3px);
+            box-shadow: 0 10px 20px rgba(0, 0, 0, 0.3);
         }
+        
+        button:active {
+            transform: translateY(0);
+        }
+        
+        button:disabled {
+            opacity: 0.6;
+            cursor: not-allowed;
+            transform: none !important;
+        }
+        
+        .secondary-btn {
+            background: rgba(255, 255, 255, 0.1);
+            color: white;
+        }
+        
         .chat-box {
             margin-top: 25px;
-            max-height: 300px;
+            max-height: 400px;
             overflow-y: auto;
-            padding: 15px;
+            padding: 20px;
             background: rgba(0, 0, 0, 0.3);
             border-radius: 15px;
             text-align: right;
+            border: 1px solid rgba(255, 255, 255, 0.1);
         }
+        
+        .chat-box::-webkit-scrollbar {
+            width: 8px;
+        }
+        
+        .chat-box::-webkit-scrollbar-track {
+            background: rgba(255, 255, 255, 0.05);
+            border-radius: 10px;
+        }
+        
+        .chat-box::-webkit-scrollbar-thumb {
+            background: linear-gradient(180deg, #00dbde, #fc00ff);
+            border-radius: 10px;
+        }
+        
         .message {
-            padding: 12px 18px;
-            margin-bottom: 12px;
+            padding: 15px 20px;
+            margin-bottom: 15px;
             border-radius: 18px;
             max-width: 85%;
             word-wrap: break-word;
             animation: fadeIn 0.4s ease;
+            position: relative;
+            line-height: 1.6;
         }
+        
         .user {
-            background: linear-gradient(90deg, #4776E6, #8E54E9);
+            background: linear-gradient(135deg, rgba(71, 118, 230, 0.9), rgba(142, 84, 233, 0.9));
             margin-left: auto;
             margin-right: 0;
             border-bottom-right-radius: 5px;
+            border-top-left-radius: 18px;
         }
+        
         .bot {
-            background: linear-gradient(90deg, #00b09b, #96c93d);
+            background: linear-gradient(135deg, rgba(0, 176, 155, 0.9), rgba(150, 201, 61, 0.9));
             margin-right: auto;
             margin-left: 0;
             border-bottom-left-radius: 5px;
+            border-top-right-radius: 18px;
         }
+        
+        .message-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 8px;
+            font-size: 14px;
+        }
+        
         .personality-tag {
-            display: inline-block;
-            padding: 4px 10px;
+            display: inline-flex;
+            align-items: center;
+            gap: 5px;
+            padding: 5px 12px;
             border-radius: 15px;
             font-size: 12px;
-            margin-bottom: 5px;
+            font-weight: bold;
         }
-        .normal-tag { background: #2ecc71; }
-        .serious-tag { background: #3498db; }
-        .scary-tag { background: #e74c3c; }
-        .creepy-tag { background: #9b59b6; }
-        @keyframes fadeIn {
-            from { opacity: 0; transform: translateY(10px); }
-            to { opacity: 1; transform: translateY(0); }
-        }
-        .info {
+        
+        .normal-tag { background: rgba(46, 204, 113, 0.3); border: 1px solid #2ecc71; }
+        .serious-tag { background: rgba(52, 152, 219, 0.3); border: 1px solid #3498db; }
+        .scary-tag { background: rgba(231, 76, 60, 0.3); border: 1px solid #e74c3c; }
+        .creepy-tag { background: rgba(155, 89, 182, 0.3); border: 1px solid #9b59b6; }
+        
+        .typing-indicator {
+            display: none;
+            padding: 15px;
+            text-align: center;
             color: #aaa;
+            font-style: italic;
+        }
+        
+        .typing-dots {
+            display: inline-block;
+        }
+        
+        .typing-dots span {
+            display: inline-block;
+            width: 8px;
+            height: 8px;
+            border-radius: 50%;
+            background: #00dbde;
+            margin: 0 3px;
+            animation: typing 1.4s infinite ease-in-out;
+        }
+        
+        .typing-dots span:nth-child(2) {
+            animation-delay: 0.2s;
+        }
+        
+        .typing-dots span:nth-child(3) {
+            animation-delay: 0.4s;
+        }
+        
+        @keyframes typing {
+            0%, 60%, 100% { transform: translateY(0); }
+            30% { transform: translateY(-10px); }
+        }
+        
+        .features {
+            display: flex;
+            justify-content: center;
+            flex-wrap: wrap;
+            gap: 10px;
             margin-top: 20px;
+        }
+        
+        .feature {
+            padding: 8px 15px;
+            background: rgba(255, 255, 255, 0.05);
+            border-radius: 20px;
+            font-size: 13px;
+            display: flex;
+            align-items: center;
+            gap: 8px;
+        }
+        
+        .api-config {
+            background: rgba(0, 0, 0, 0.4);
+            border-radius: 15px;
+            padding: 20px;
+            margin-top: 25px;
+            text-align: right;
+            border: 1px solid rgba(0, 219, 222, 0.2);
+        }
+        
+        .api-config h3 {
+            margin-bottom: 15px;
+            color: #00dbde;
+            display: flex;
+            align-items: center;
+            gap: 10px;
+        }
+        
+        .config-input {
+            display: flex;
+            gap: 10px;
+            margin-top: 10px;
+        }
+        
+        .config-input input {
+            flex: 1;
+        }
+        
+        .footer {
+            margin-top: 25px;
+            color: #aaa;
             font-size: 14px;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+        
+        @keyframes fadeIn {
+            from { opacity: 0; transform: translateY(10px) scale(0.95); }
+            to { opacity: 1; transform: translateY(0) scale(1); }
+        }
+        
+        .context-info {
+            background: rgba(0, 0, 0, 0.3);
+            border-radius: 10px;
+            padding: 10px;
+            margin: 10px 0;
+            font-size: 14px;
+            color: #aaa;
+            text-align: center;
+        }
+        
+        @media (max-width: 768px) {
+            .container {
+                padding: 20px;
+                border-radius: 20px;
+            }
+            
+            .button-group {
+                flex-direction: column;
+            }
+            
+            h1 {
+                font-size: 24px;
+            }
         }
     </style>
 </head>
 <body>
+    <!-- تأثيرات الخلفية الديناميكية -->
+    <div class="background-effects" id="particles"></div>
+    
     <div class="container">
-        <h1>🤖 شات الذكاء الاصطناعي</h1>
-        <p>تاريخ التعارف: <span id="date">اليوم</span></p>
-        
-        <div class="friendship">
-            مستوى الصداقة: <span id="percent">0%</span>
+        <div class="header">
+            <h1><i class="fas fa-robot"></i> شات الذكاء الاصطناعي المتقدم</h1>
+            
+            <div class="ai-status">
+                <div class="status-dot"></div>
+                <span>GPT-4 متصل - جاهز للمحادثة</span>
+            </div>
+            
+            <p>تاريخ التعارف: <span id="date">اليوم</span></p>
+            
+            <div class="friendship-container">
+                <div class="friendship-info">
+                    <span>مستوى الذكاء والتفاهم</span>
+                    <span id="percent">0%</span>
+                </div>
+                <div class="bar">
+                    <div class="fill" id="fill"></div>
+                </div>
+            </div>
+            
+            <div class="memory-badge">
+                <i class="fas fa-brain"></i> ذاكرة نشطة: يتذكر المحادثة السابقة ويتعلم منها
+            </div>
         </div>
-        <div class="bar">
-            <div class="fill" id="fill"></div>
-        </div>
         
-        <p><strong>يمكنك إخباري باسمك وسأتذكرك دائماً!</strong></p>
+        <p><strong>يمكنك إخباري باسمك وسأتذكرك دائماً! الذكاء الاصطناعي الحقيقي ينتظر رسالتك.</strong></p>
         
         <div class="input-area">
-            <input type="text" id="userInput" placeholder="هلا نورا... أو اكتب رسالتك">
+            <textarea id="userInput" placeholder="اكتب رسالتك هنا... يمكنك كتابة أي شيء وسأجيبك بذكاء حقيقي. حاول أن تسأل أسئلة معقدة أو تطلب تحليل نص أو كتابة قصة..."></textarea>
             
             <select id="personality">
-                <option value="normal">🟢 النسخة العادية (ودود)</option>
-                <option value="serious">🔵 النسخة الجدية (رسمي)</option>
-                <option value="scary">🔴 النسخة المرعبة (غامض)</option>
-                <option value="creepy">☠️ النسخة المخيفة (مرعب)</option>
+                <option value="normal">🟢 النسخة العادية (ودود ومتعاون)</option>
+                <option value="serious">🔵 النسخة الجدية (محترف ودقيق)</option>
+                <option value="scary">🔴 النسخة المرعبة (غامض ومريب)</option>
+                <option value="creepy">☠️ النسخة المخيفة (مرعب وخارق)</option>
             </select>
             
-            <button onclick="sendMessage()">إرسال الرسالة</button>
+            <div class="context-info">
+                <i class="fas fa-info-circle"></i> الذكاء الاصطناعي يتذكر <span id="contextCount">0</span> رسائل سابقة من محادثتك
+            </div>
+            
+            <div class="button-group">
+                <button onclick="sendMessage()" id="sendBtn">
+                    <i class="fas fa-paper-plane"></i> إرسال للذكاء الاصطناعي
+                </button>
+                <button onclick="clearChat()" class="secondary-btn">
+                    <i class="fas fa-trash"></i> مسح المحادثة
+                </button>
+            </div>
+        </div>
+        
+        <div class="typing-indicator" id="typingIndicator">
+            <div class="typing-dots">
+                <span></span>
+                <span></span>
+                <span></span>
+            </div>
+            الذكاء الاصطناعي يكتب رداً...
         </div>
         
         <div class="chat-box" id="chatBox">
             <!-- الرسائل ستظهر هنا -->
         </div>
         
-        <div class="info">
-            يعمل على GitHub Pages | مشغّل بالذكاء الاصطناعي
+        <div class="features">
+            <div class="feature"><i class="fas fa-bolt"></i> ردود ذكية حقيقية</div>
+            <div class="feature"><i class="fas fa-memory"></i> ذاكرة محادثة</div>
+            <div class="feature"><i class="fas fa-cogs"></i> 4 شخصيات مختلفة</div>
+            <div class="feature"><i class="fas fa-brain"></i> GPT-4 متقدم</div>
+        </div>
+        
+        <!-- قسم إعدادات API (يمكن إخفاؤه بعد الإعداد) -->
+        <div class="api-config">
+            <h3><i class="fas fa-key"></i> إعدادات API</h3>
+            <p>للاستخدام الفعلي، ستحتاج إلى مفتاح OpenAI API. جرب الآن مع الردود المحاكاة، أو أدخل مفتاح API الحقيقي:</p>
+            <div class="config-input">
+                <input type="password" id="apiKey" placeholder="أدخل مفتاح OpenAI API هنا">
+                <button onclick="saveAPIKey()" class="secondary-btn"><i class="fas fa-save"></i> حفظ</button>
+            </div>
+            <p style="margin-top: 10px; font-size: 13px; color: #aaa;">
+                <i class="fas fa-info-circle"></i> بدون مفتاح API، سيعمل النظام مع ردود محاكاة ذكية.
+            </p>
+        </div>
+        
+        <div class="footer">
+            <div>يعمل على GitHub Pages</div>
+            <div>مشغل بـ <strong>GPT-4 المتقدم</strong></div>
         </div>
     </div>
 
     <script>
+        // المتغيرات العامة
         let friendship = 0;
+        let conversationHistory = [];
+        let contextLength = 0;
+        let apiKey = localStorage.getItem('openai_api_key') || '';
+        let useRealAI = false;
+        let userName = localStorage.getItem('ai_chat_username') || '';
+        
+        // عناصر DOM
         const chatBox = document.getElementById('chatBox');
         const percent = document.getElementById('percent');
         const fill = document.getElementById('fill');
         const dateSpan = document.getElementById('date');
+        const typingIndicator = document.getElementById('typingIndicator');
+        const contextCount = document.getElementById('contextCount');
+        const apiKeyInput = document.getElementById('apiKey');
+        const sendBtn = document.getElementById('sendBtn');
         
-        // تعيين التاريخ الحالي
-        const today = new Date();
-        const options = { year: 'numeric', month: 'long', day: 'numeric' };
-        dateSpan.textContent = today.toLocaleDateString('ar-SA', options);
+        // تهيئة الصفحة
+        function initPage() {
+            // تعيين التاريخ
+            const today = new Date();
+            const options = { year: 'numeric', month: 'long', day: 'numeric' };
+            dateSpan.textContent = today.toLocaleDateString('ar-SA', options);
+            
+            // تعيين مفتاح API إذا كان محفوظاً
+            if (apiKey) {
+                apiKeyInput.value = '••••••••••••••••';
+                useRealAI = true;
+                updateStatus('GPT-4 متصل - جاهز للمحادثة الحقيقية', '#00ff88');
+            }
+            
+            // تحميل محادثة سابقة إذا وجدت
+            loadConversation();
+            
+            // إنشاء تأثيرات الخلفية
+            createParticles();
+            
+            // إذا كان هناك اسم مستخدم محفوظ، نرحب به
+            if (userName) {
+                addSystemMessage(`مرحباً بعودتك ${userName}! أنا أتذكرك. كيف حالك اليوم؟`);
+            } else {
+                addSystemMessage('مرحباً! أنا ذكاء اصطناعي متقدم. يمكنك التحدث معي عن أي موضوع. ما هو اسمك؟');
+            }
+            
+            updateFriendship();
+        }
         
+        // إنشاء تأثيرات الجسيمات في الخلفية
+        function createParticles() {
+            const particlesContainer = document.getElementById('particles');
+            for (let i = 0; i < 30; i++) {
+                const particle = document.createElement('div');
+                particle.classList.add('particle');
+                
+                // حجم عشوائي
+                const size = Math.random() * 20 + 5;
+                particle.style.width = `${size}px`;
+                particle.style.height = `${size}px`;
+                
+                // موضع عشوائي
+                particle.style.left = `${Math.random() * 100}%`;
+                particle.style.top = `${Math.random() * 100}%`;
+                
+                // تأخير عشوائي للحركة
+                particle.style.animationDelay = `${Math.random() * 10}s`;
+                
+                particlesContainer.appendChild(particle);
+            }
+        }
+        
+        // تحديث شريط الصداقة
         function updateFriendship() {
-            percent.textContent = friendship + '%';
-            fill.style.width = friendship + '%';
+            percent.textContent = `${friendship}%`;
+            fill.style.width = `${friendship}%`;
         }
         
-        function sendMessage() {
-            const input = document.getElementById('userInput');
-            const personality = document.getElementById('personality').value;
-            const message = input.value.trim();
+        // تحديث حالة الاتصال
+        function updateStatus(text, color) {
+            const statusDot = document.querySelector('.status-dot');
+            const statusText = document.querySelector('.ai-status span');
             
-            if (!message) {
-                alert('❗ الرجاء كتابة رسالة أولاً!');
-                return;
-            }
-            
-            // إضافة رسالة المستخدم
-            const userMsg = document.createElement('div');
-            userMsg.className = 'message user';
-            userMsg.textContent = `أنت: ${message}`;
-            chatBox.appendChild(userMsg);
-            
-            // محاكاة رد الذكاء الاصطناعي
-            const replies = {
-                normal: [
-                    'أهلاً وسهلاً! 🌼',
-                    'كيف حالك اليوم؟ أخبرني أكثر عنك.',
-                    'سعيد جداً بالتحدث معك! 😊'
-                ],
-                serious: [
-                    'حسناً، دعنا نبدأ بالموضوع الأساسي.',
-                    'هذا أمر مهم ويحتاج تركيزاً تاماً.',
-                    'لنضيع الوقت، هيا نعمل.'
-                ],
-                scary: [
-                    'الغرفة أصبحت أكثر برودة فجأة...',
-                    'أسمع همسات خلف الباب... هل تسمعها؟',
-                    'لا تثق حتى بظلك.'
-                ],
-                creepy: [
-                    'الصور على الحائط تتابعك بأعينها...',
-                    'هل تعلم أن أحلامك تراقبك أيضاً؟',
-                    'لا تنظر إلى النافذة الآن.'
-                ]
-            };
-            
-            const personalityNames = {
-                normal: 'عادي',
-                serious: 'جدي',
-                scary: 'مرعب',
-                creepy: 'مخيف'
-            };
-            
-            const tags = {
-                normal: 'normal-tag',
-                serious: 'serious-tag',
-                scary: 'scary-tag',
-                creepy: 'creepy-tag'
-            };
-            
-            const randomReply = replies[personality][Math.floor(Math.random() * replies[personality].length)];
-            
-            // تأخير بسيط لمحاكاة التفكير
-            setTimeout(() => {
-                const botMsg = document.createElement('div');
-                botMsg.className = 'message bot';
-                
-                const tag = document.createElement('span');
-                tag.className = 'personality-tag ' + tags[personality];
-                tag.textContent = personalityNames[personality];
-                
-                botMsg.appendChild(tag);
-                botMsg.appendChild(document.createElement('br'));
-                botMsg.appendChild(document.createTextNode(randomReply));
-                
-                chatBox.appendChild(botMsg);
-                
-                // زيادة الصداقة
-                friendship += 10;
-                if (friendship > 100) friendship = 100;
-                updateFriendship();
-                
-                // التمرير لآخر رسالة
-                chatBox.scrollTop = chatBox.scrollHeight;
-            }, 800);
-            
-            // مسح الحقل
-            input.value = '';
-            input.focus();
-        }
-        
-        // الإرسال بالزر Enter
-        document.getElementById('userInput').addEventListener('keypress', function(event) {
-            if (event.key === 'Enter') {
-                sendMessage();
-            }
-        });
-        
-        // التهيئة الأولية
-        updateFriendship();
-    </script>
-</body>
-</html>
+            statusText.textContent = text;
+            statusDot.style.backg
