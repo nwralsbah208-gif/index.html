@@ -620,5 +620,84 @@ let FEATURES = {
 
 console.log("🎮 ULTRA BOOST ACTIVE", Object.keys(FEATURES).length, "features enabled");
   </script>
+<script>
+/* ===============================
+   FIX LOSE SCREEN + RESTART PATCH
+   =============================== */
+
+(function(){
+
+  // نحفظ دالة الخسارة الأصلية مهما كانت
+  const _oldLose = window.lose;
+
+  window.lose = function(){
+    try{
+      if(typeof _oldLose === "function"){
+        _oldLose();
+      }
+    }catch(e){
+      console.warn("Old lose error fixed", e);
+    }
+
+    // تأخير بسيط عشان ما تتعارض السكربتات
+    setTimeout(()=>{
+      document.body.innerHTML = `
+        <div style="
+          position:fixed;
+          inset:0;
+          background:black;
+          color:white;
+          display:flex;
+          flex-direction:column;
+          align-items:center;
+          justify-content:center;
+          font-family:Tahoma;
+          text-align:center;
+        ">
+          <h1 style="color:red;font-size:40px">💀 خسرت</h1>
+          <p style="opacity:.7">لا تحاول الهروب… اللعبة تراك</p>
+          <button id="restartBtn" style="
+            margin-top:20px;
+            padding:15px 30px;
+            font-size:18px;
+            border:none;
+            border-radius:12px;
+            cursor:pointer;
+            background:#1abc9c;
+            color:black;
+          ">🔁 إعادة اللعب</button>
+        </div>
+      `;
+
+      document.getElementById("restartBtn").onclick = ()=>{
+        location.reload();
+      };
+    },300);
+  };
+
+  /* 🔧 إصلاح التوقف بعد أول اختيار */
+  const _oldAnswer = window.answer;
+  window.answer = function(i,c){
+    try{
+      if(typeof _oldAnswer === "function"){
+        _oldAnswer(i,c);
+      }
+    }catch(err){
+      console.warn("Answer error fixed", err);
+      setTimeout(()=>{
+        location.reload();
+      },500);
+    }
+  };
+
+  /* 🔧 حماية من شاشة سوداء مفاجئة */
+  window.addEventListener("error",()=>{
+    document.body.style.background = "black";
+  });
+
+  console.log("✅ LOSE + RESTART FIX LOADED");
+
+})();
+</script>
 </body>
 </html>
