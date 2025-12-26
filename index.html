@@ -2,7 +2,7 @@
 <html lang="ar">
 <head>
 <meta charset="UTF-8">
-<title>تحدي المعرفة الذكية</title>
+<title>Smart Quiz Game</title>
 
 <style>
 body {
@@ -10,149 +10,269 @@ body {
     font-family: Tahoma, Arial;
     background: linear-gradient(270deg, #0f2027, #203a43, #2c5364);
     background-size: 600% 600%;
-    animation: bg 15s ease infinite;
+    animation: bgMove 15s ease infinite;
     color: white;
     text-align: center;
+    overflow: hidden;
 }
 
-@keyframes bg {
-    0% {background-position:0% 50%}
-    50% {background-position:100% 50%}
-    100% {background-position:0% 50%}
+@keyframes bgMove {
+    0% { background-position: 0% 50%; }
+    50% { background-position: 100% 50%; }
+    100% { background-position: 0% 50%; }
+}
+
+/* 🌙 القمر */
+.moon {
+    position: absolute;
+    top: 50px;
+    left: -120px;
+    width: 100px;
+    height: 100px;
+    background: radial-gradient(circle, #fff, #ddd);
+    border-radius: 50%;
+    animation: moonMove 30s linear infinite;
+    opacity: 0.8;
+}
+
+@keyframes moonMove {
+    0% { left: -120px; top: 60px; }
+    50% { top: 120px; }
+    100% { left: 110%; top: 60px; }
 }
 
 .container {
-    max-width: 500px;
-    margin: 80px auto;
-    background: rgba(0,0,0,0.6);
+    max-width: 600px;
+    margin: auto;
+    margin-top: 80px;
+    background: rgba(0,0,0,0.55);
     padding: 20px;
     border-radius: 15px;
+    position: relative;
+    z-index: 2;
 }
+
+.level { font-size: 18px; }
+.timer { font-size: 20px; color: #ffd700; margin: 10px; }
+.question { font-size: 22px; margin: 20px 0; }
 
 button {
+    display: block;
     width: 100%;
-    padding: 12px;
     margin: 8px 0;
+    padding: 12px;
+    font-size: 18px;
     border: none;
     border-radius: 10px;
-    font-size: 16px;
     cursor: pointer;
+    background: #1abc9c;
 }
 
-button:hover {
-    background: #00c6ff;
-    color: black;
+button:hover { background: #16a085; }
+
+.score { margin-top: 10px; }
+
+.ai {
+    margin-top: 15px;
+    font-size: 15px;
+    color: #aef;
 }
 
-#level {
-    font-size: 14px;
-    color: #00ffcc;
+.ai-face {
+    font-size: 30px;
+    margin-bottom: 5px;
+}
+
+.hearts {
+    font-size: 22px;
+    margin: 10px;
+    color: red;
+}
+
+.progress {
+    height: 6px;
+    background: rgba(255,255,255,0.2);
+    border-radius: 10px;
+    overflow: hidden;
+    margin: 10px 0;
+}
+
+.progress-bar {
+    height: 100%;
+    width: 0%;
+    background: #1abc9c;
+    transition: width 0.4s;
+}
+
+.shake {
+    animation: shake 0.4s;
+}
+
+@keyframes shake {
+    0% { transform: translateX(0); }
+    25% { transform: translateX(-5px); }
+    50% { transform: translateX(5px); }
+    75% { transform: translateX(-5px); }
+    100% { transform: translateX(0); }
+}
+
+.footer {
+    margin-top: 20px;
+    font-size: 12px;
+    opacity: 0.7;
 }
 </style>
 </head>
-<!-- قمر متحرك -->
+
+<body>
+
 <div class="moon"></div>
 
-<style>
-.moon {
-  position: fixed;
-  top: 60px;
-  right: 40px;
-  width: 80px;
-  height: 80px;
-  background: radial-gradient(circle at 30% 30%, #fff, #ddd);
-  border-radius: 50%;
-  box-shadow: 0 0 20px rgba(255,255,255,0.8);
-  animation: moonFloat 6s ease-in-out infinite;
-  z-index: 1000;
-}
+<audio id="loseSound">
+  <source src="https://www.soundjay.com/buttons/sounds/button-10.mp3">
+</audio>
 
-@keyframes moonFloat {
-  0%   { transform: translateY(0); }
-  50%  { transform: translateY(-15px); }
-  100% { transform: translateY(0); }
-}
-</style>
-<body>
-<button onclick="startGame()">ابدأ</button>
-<script>
-function startGame() {
-  alert("الزر اشتغل ✅");
-}
-</script>
-<div class="container">
-    <h1>🧠 تحدي المعرفة الذكية</h1>
-    <p id="level">المستوى: سهل</p>
-    <h2 id="question"></h2>
+<div class="container" id="game">
+    <h1>🎮 Smart Quiz Game</h1>
+
+    <div class="hearts" id="hearts">❤️❤️❤️</div>
+
+    <div class="progress">
+        <div class="progress-bar" id="progress"></div>
+    </div>
+
+    <div class="level" id="level"></div>
+    <div class="timer">⏱️ <span id="time">20</span></div>
+
+    <div class="question" id="question"></div>
     <div id="answers"></div>
-    <p>⭐ النقاط: <span id="score">0</span></p>
-    <p style="font-size:12px;">موقع مصنوع من حسن كاظم علي</p>
+
+    <div class="ai-face" id="aiFace">🤖</div>
+    <div class="ai" id="ai"></div>
+
+    <div class="score">⭐ النقاط: <span id="score">0</span></div>
+    <div class="footer">موقع مصنوع من حسن كاظم علي</div>
 </div>
 
 <script>
-const quiz = [
-    {q:"ما هو لون السماء؟", a:["أزرق","أخضر","أحمر"], c:0, level:"سهل"},
-    {q:"كم عدد أيام الأسبوع؟", a:["5","7","10"], c:1, level:"سهل"},
-    {q:"ما هو عاصمة ألمانيا؟", a:["برلين","روما","مدريد"], c:0, level:"متوسط"},
-    {q:"ما معنى HTML؟", a:["لغة برمجة","لغة ترميز","نظام تشغيل"], c:1, level:"متوسط"},
-    {q:"ما هو أقوى نوع تشفير؟", a:["MD5","SHA-256","Base64"], c:1, level:"صعب"},
-    {q:"ما هو الهجوم الذي يعتمد على خداع المستخدم؟", a:["DDoS","Phishing","Brute Force"], c:1, level:"صعب"}
+const levels = [
+ {name:"سهل جدًا",points:10},
+ {name:"سهل",points:20},
+ {name:"متوسط",points:30},
+ {name:"صعب",points:40},
+ {name:"خبير",points:50}
 ];
 
-let index = 0;
+let questions = [
+ {q:"هل الشمس نجم؟",a:["نعم","لا"],c:0},
+ {q:"هل القمر كوكب؟",a:["نعم","لا"],c:1},
+ {q:"هل الذكاء الاصطناعي يفكر؟",a:["نعم","لا"],c:0},
+ {q:"هل 5×5 = 30؟",a:["نعم","لا"],c:1},
+ {q:"هل الضوء أسرع من الصوت؟",a:["نعم","لا"],c:0},
+ {q:"هل الأرض تدور حول الشمس؟",a:["نعم","لا"],c:0}
+];
+
+questions.sort(() => Math.random() - 0.5);
+
+let current = 0;
 let score = 0;
+let time = 20;
+let timer;
+let hearts = 3;
 
-function loadQuestion(). const q = quiz[Math.floor(Math.random() * quiz.length)];
-    document.getElementById("question").innerText = q.q;
-    document.getElementById("level").innerText = "المستوى: " + q.level;
+const aiData = [
+ {face:"😇", text:["أنا واثق منك","الإجابة واضحة"]},
+ {face:"🤖", text:["حلّل السؤال","فكّر بهدوء"]},
+ {face:"😈", text:["يمكن أكذب 😏","جرب حظك"]},
+ {face:"🧠", text:["ركّز بالتفاصيل","الإجابة ذكية"]}
+];
 
-    const answersDiv = document.getElementById("answers");
-    answersDiv.innerHTML = "";
-
-    q.a.forEach((ans,i)=>{
-        const btn = document.createElement("button");
-        btn.innerText = ans;
-        btn.onclick = ()=>checkAnswer(i);
-        answersDiv.appendChild(btn);
-    });
+function aiTalk() {
+ const ai = aiData[Math.floor(Math.random()*aiData.length)];
+ document.getElementById("aiFace").innerText = ai.face;
+ document.getElementById("ai").innerText =
+ "الذكاء الاصطناعي: " + ai.text[Math.floor(Math.random()*ai.text.length)];
 }
 
-function checkAnswer(choice) {
-    if(choice === quiz[index].c){
-        score += 10;
-        document.getElementById("score").innerText = score;
-    }
-    index++;
-    if(index < quiz.length){
-        loadQuestion();
-    } else {
-        endGame();
-    }
+function updateHearts() {
+ document.getElementById("hearts").innerText = "❤️".repeat(hearts);
 }
 
-function endGame() {
-    let level;
-    if(score <= 20) level = "مبتدئ";
-    else if(score <= 40) level = "متوسط";
-    else level = "خبير";
+function loadQuestion() {
+ clearInterval(timer);
 
-    document.querySelector(".container").innerHTML = `
-        <h1>🎉 انتهت اللعبة</h1>
-        <p>⭐ نقاطك: ${score}</p>
-        <h2>مستواك: ${level}</h2>
-        <button onclick="location.reload()">🔄 إعادة اللعب</button>
-        <p style="font-size:12px; <p style="font-size:12px;">
-  موقع مصنوع من حسن كاظم علي <span style="color:#00ffcc;">– v1.0</span>
-</p>
-    `;
+ if (current >= questions.length) {
+  document.body.innerHTML = `<div class="container">
+  <h1>🏆 انتهت اللعبة</h1>
+  <p>نقاطك: ${score}</p>
+  </div>`;
+  return;
+ }
+
+ let lvl = Math.min(Math.floor(current/2), levels.length-1);
+ document.getElementById("level").innerText = "المستوى: " + levels[lvl].name;
+ document.getElementById("question").innerText = questions[current].q;
+
+ document.getElementById("progress").style.width =
+ ((current / questions.length) * 100) + "%";
+
+ const ansDiv = document.getElementById("answers");
+ ansDiv.innerHTML = "";
+
+ questions[current].a.forEach((x,i)=>{
+  let b=document.createElement("button");
+  b.innerText=x;
+  b.onclick=()=>answer(i,lvl);
+  ansDiv.appendChild(b);
+ });
+
+ time = 20;
+ document.getElementById("time").innerText=time;
+ aiTalk();
+
+ timer=setInterval(()=>{
+  time--;
+  document.getElementById("time").innerText=time;
+  if(time<=0){
+   loseLife();
+  }
+ },1000);
 }
 
+function loseLife() {
+ document.getElementById("loseSound").play();
+ hearts--;
+ updateHearts();
+ document.getElementById("game").classList.add("shake");
+ setTimeout(()=>document.getElementById("game").classList.remove("shake"),400);
 
+ if (hearts <= 0) {
+  document.body.innerHTML = `<div class="container">
+  <h1>💀 خسرت</h1>
+  <p>نقاطك: ${score}</p>
+  <button onclick="location.reload()">إعادة اللعب</button>
+  </div>`;
+  return;
+ }
+ current++;
+ loadQuestion();
+}
+
+function answer(i,lvl){
+ if(i===questions[current].c){
+  score+=levels[lvl].points;
+  document.getElementById("score").innerText=score;
+ } else {
+  loseLife();
+  return;
+ }
+ current++;
+ loadQuestion();
+}
+
+updateHearts();
+loadQuestion();
 </script>
-<script>
-function startGame() {
-  document.getElementById("question").innerText = "🎯 بدأ التحدي!";
-}
-</script>
+
 </body>
 </html>
