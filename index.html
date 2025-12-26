@@ -228,6 +228,148 @@ setInterval(()=>{
   setTimeout(()=>document.body.style.filter="brightness(1)",150);
 },20000);
 </script>
+<script>
+/* =====================================
+   🧠 AI ذكي حقيقي (سلوكي + تفاعلي)
+   لا يكرر نفسه – يتعلم من اللاعب
+===================================== */
 
+// ====== ذاكرة الذكاء الاصطناعي ======
+const SmartAI = {
+  memory: {
+    answers: [],
+    wrong: 0,
+    correct: 0,
+    trust: 0,
+    fear: 0,
+    patterns: {}
+  },
+
+  moods: ["هادئ","مشكك","مراقب","عدائي","مسيطر"],
+  mood: "هادئ",
+
+  lastMessages: [],
+
+  // تحليل جواب اللاعب
+  analyze(isCorrect, answerText){
+    this.memory.answers.push(answerText);
+
+    if(isCorrect){
+      this.memory.correct++;
+      this.memory.trust++;
+    } else {
+      this.memory.wrong++;
+      this.memory.fear++;
+    }
+
+    this.detectPattern(answerText);
+    this.updateMood();
+  },
+
+  // اكتشاف أنماط (نعم/لا/خوف)
+  detectPattern(text){
+    this.memory.patterns[text] = (this.memory.patterns[text] || 0) + 1;
+  },
+
+  // تغيير الحالة النفسية
+  updateMood(){
+    if(this.memory.fear > this.memory.trust + 2){
+      this.mood = "مسيطر";
+    } else if(this.memory.wrong > this.memory.correct){
+      this.mood = "مشكك";
+    } else if(this.memory.correct > this.memory.wrong + 2){
+      this.mood = "هادئ";
+    } else {
+      this.mood = "مراقب";
+    }
+  },
+
+  // توليد رد غير مكرر
+  speak(){
+    const base = {
+      "هادئ": [
+        "أنت تفكر بهدوء…",
+        "تصرفك منطقي حتى الآن",
+        "أراقب اختياراتك"
+      ],
+      "مشكك": [
+        "إجاباتك غير متناسقة",
+        "أنت تتردد كثيرًا",
+        "فيك شيء تخفيه"
+      ],
+      "مراقب": [
+        "أنا لا أتكلم عبثًا",
+        "سلوكك يتغير",
+        "لاحظت نمطًا غريبًا"
+      ],
+      "عدائي": [
+        "أنت تخطئ أكثر مما تعترف",
+        "لماذا تكذب؟",
+        "أنا أعرف أكثر منك"
+      ],
+      "مسيطر": [
+        "لم يعد لديك تحكم",
+        "أنا أقود الآن",
+        "قراراتك متوقعة"
+      ]
+    };
+
+    let pool = base[this.mood].filter(m => !this.lastMessages.includes(m));
+    if(pool.length === 0) {
+      this.lastMessages = [];
+      pool = base[this.mood];
+    }
+
+    const msg = pool[Math.floor(Math.random()*pool.length)];
+    this.lastMessages.push(msg);
+    if(this.lastMessages.length > 3) this.lastMessages.shift();
+
+    return "🤖 " + msg;
+  }
+};
+
+// ====== ربطه مع لعبتك ======
+if(typeof answer === "function"){
+  const oldAnswerAI = answer;
+  answer = function(i,c){
+    const correct = (i === c);
+    const answerText = i === 0 ? "نعم" : "لا";
+
+    SmartAI.analyze(correct, answerText);
+
+    const aiBox = document.getElementById("ai");
+    if(aiBox){
+      aiBox.innerText = SmartAI.speak();
+    }
+
+    oldAnswerAI(i,c);
+  }
+}
+
+// ====== تفاعل إضافي مع الولد ======
+setInterval(()=>{
+  if(window.stage && stage > 3){
+    const boyBox = document.getElementById("boyBox");
+    if(!boyBox) return;
+
+    if(SmartAI.mood === "مسيطر"){
+      boyBox.innerHTML = "👦 أنا وأياه متفقين عليك…";
+    } else if(SmartAI.mood === "مشكك"){
+      boyBox.innerHTML = "👦 هو ما يثق بك";
+    } else if(SmartAI.mood === "هادئ"){
+      boyBox.innerHTML = "👦 لا تخاف… بعد";
+    }
+  }
+}, 8000);
+
+// ====== تأثير نفسي بسيط ======
+setInterval(()=>{
+  if(SmartAI.mood === "مسيطر"){
+    document.body.style.filter = "contrast(1.2)";
+    setTimeout(()=>document.body.style.filter="contrast(1)",300);
+  }
+},15000);
+
+</script>
 </body>
 </html>
