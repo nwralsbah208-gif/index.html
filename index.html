@@ -662,3 +662,101 @@ setInterval(()=>{
 
 })();
 </script>
+<!-- 🧠 حزمة الإضافات النفسية + الولد 2D + تحسين الجودة -->
+<script>
+(() => {
+  /* ====== ذاكرة ====== */
+  const mem = {
+    name: localStorage.getItem("p_name") || "",
+    country: localStorage.getItem("p_country") || "",
+    visits: Number(localStorage.getItem("p_visits") || 0) + 1,
+    boySeen: Number(localStorage.getItem("boy_seen") || 0)
+  };
+  localStorage.setItem("p_visits", mem.visits);
+
+  /* ====== عنصر الولد ====== */
+  const boy = document.createElement("div");
+  boy.innerHTML = "👦";
+  boy.style.position = "fixed";
+  boy.style.left = "20px";
+  boy.style.bottom = "30px";
+  boy.style.fontSize = "48px";
+  boy.style.transition = "all 0.6s ease";
+  boy.style.zIndex = "99999";
+  boy.style.filter = "drop-shadow(0 0 10px rgba(255,255,255,0.4))";
+  document.body.appendChild(boy);
+
+  /* ====== صندوق الكلام ====== */
+  const bubble = document.createElement("div");
+  bubble.style.position = "fixed";
+  bubble.style.left = "80px";
+  bubble.style.bottom = "60px";
+  bubble.style.background = "rgba(0,0,0,0.75)";
+  bubble.style.color = "#9ff";
+  bubble.style.padding = "10px";
+  bubble.style.borderRadius = "12px";
+  bubble.style.fontSize = "13px";
+  bubble.style.maxWidth = "260px";
+  bubble.style.fontFamily = "Tahoma";
+  bubble.style.zIndex = "99999";
+  document.body.appendChild(bubble);
+
+  /* ====== صوت نبض ====== */
+  const heart = new Audio("https://www.soundjay.com/heartbeat/sounds/heartbeat-01.mp3");
+  heart.volume = 0.25;
+
+  /* ====== جمل ====== */
+  const boyLines = [
+    "أنا أشوفك…",
+    "وش اسمك؟",
+    "من وين أنت؟",
+    "ليش قاعد تلعب؟",
+    "تحس أحد يراقبك؟",
+    "اسمك غريب…",
+    "أنا أتذكرك.",
+    "لا تكذب.",
+    "اختَر بحذر.",
+    "الصمت يخوّف."
+  ];
+
+  function ask() {
+    let line = boyLines[Math.floor(Math.random()*boyLines.length)];
+
+    if (line.includes("اسمك")) {
+      mem.name = prompt("👦 وش اسمك؟") || mem.name || "لاعب";
+      localStorage.setItem("p_name", mem.name);
+    }
+
+    if (line.includes("وين")) {
+      mem.country = prompt("👦 من أي بلد؟") || mem.country || "غير معروف";
+      localStorage.setItem("p_country", mem.country);
+    }
+
+    bubble.innerHTML =
+      "👦 " + line +
+      "<br>👁️ زياراتك: " + mem.visits +
+      "<br>🧠 اسمك: " + mem.name +
+      "<br>🌍 بلدك: " + mem.country;
+
+    if (Math.random() < 0.35) heart.play();
+  }
+
+  /* ====== تحريك ====== */
+  function moveBoy() {
+    boy.style.transform =
+      `translate(${Math.random()*20-10}px,${Math.random()*10-5}px) scale(${1+Math.random()*0.05})`;
+  }
+
+  function flicker() {
+    document.body.style.filter = "brightness(1.15)";
+    setTimeout(()=>document.body.style.filter="brightness(1)",150);
+  }
+
+  /* ====== تشغيل ====== */
+  setTimeout(ask, 3000);
+  setInterval(ask, 9000);
+  setInterval(moveBoy, 1200);
+  setInterval(flicker, 20000);
+
+})();
+</script>
