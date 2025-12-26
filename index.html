@@ -2,702 +2,190 @@
 <html lang="ar">
 <head>
 <meta charset="UTF-8">
-<title>Smart Quiz Game</title>
-
+<title>2D Web Game</title>
 <style>
 body{
   margin:0;
-  font-family:Tahoma,Arial;
-  background:radial-gradient(circle at bottom,#020111,#000);
-  color:#fff;
-  text-align:center;
+  background:#000;
   overflow:hidden;
 }
-
-/* القمر */
-.moon{
-  position:absolute;
-  top:80px;
-  left:-200px;
-  width:140px;
-  height:140px;
-  border-radius:50%;
-  background:radial-gradient(circle at 30% 30%,#fff,#ccc);
-  box-shadow:0 0 40px rgba(255,255,255,.6);
-  animation:moonMove 40s linear infinite;
+canvas{
+  display:block;
+  margin:auto;
+  background:linear-gradient(#0a1a3a,#000);
 }
-@keyframes moonMove{
-  from{left:-200px}
-  to{left:110%}
-}
-
-/* الحاوية */
-.container{
-  max-width:650px;
-  margin:90px auto;
-  background:rgba(0,0,0,.65);
-  padding:20px;
-  border-radius:20px;
-  z-index:2;
-  position:relative;
-}
-
-button{
-  width:100%;
-  padding:12px;
-  margin:6px 0;
-  font-size:18px;
-  border-radius:10px;
-  border:none;
-  cursor:pointer;
-  background:#1abc9c;
-}
-button:hover{background:#16a085}
-
-.timer{color:gold;font-size:20px}
-.question{font-size:22px;margin:15px}
-.hearts{font-size:22px;color:red}
-
-.ai-face{font-size:32px}
-.ai{font-size:14px;color:#9ff}
-
-.startScreen{
+#ui{
   position:fixed;
-  inset:0;
-  background:black;
-  display:flex;
-  flex-direction:column;
-  align-items:center;
-  justify-content:center;
-  z-index:10;
-}
-
-/* الولد */
-#boy{
-  position:fixed;
-  right:20px;
-  bottom:20px;
-  font-size:60px;
-  filter:drop-shadow(0 0 15px red);
-  animation:floatBoy 2s infinite alternate;
-  z-index:9999;
-}
-@keyframes floatBoy{
-  from{transform:translateY(0)}
-  to{transform:translateY(-15px)}
-}
-
-/* صندوق كلام */
-#boyBox{
-  position:fixed;
-  right:100px;
-  bottom:90px;
-  background:rgba(0,0,0,.75);
-  color:#9ff;
-  padding:12px;
-  border-radius:14px;
-  font-size:13px;
-  max-width:260px;
-  z-index:9999;
+  top:10px;
+  left:10px;
+  color:#0ff;
+  font-family:tahoma;
+  font-size:16px;
 }
 </style>
 </head>
-
 <body>
 
-<div class="moon"></div>
-
-<audio id="winSound" src="https://www.soundjay.com/misc/sounds/bell-ringing-05.mp3"></audio>
-<audio id="loseSound" src="https://www.soundjay.com/human/sounds/scream-01.mp3"></audio>
-<audio id="heartSound" src="https://www.soundjay.com/human/sounds/heartbeat-01.mp3"></audio>
-
-<div class="startScreen" id="startScreen">
-  <h1>🌌 Smart Quiz Game</h1>
-  <button onclick="startGame()">ابدأ</button>
+<div id="ui">
+⭐ النقاط: <span id="score">0</span>
 </div>
 
-<div class="container" id="game" style="display:none">
-  <div class="hearts" id="hearts">❤️❤️❤️</div>
-  <div id="level"></div>
-  <div class="timer">⏱️ <span id="time">20</span></div>
-  <div class="question" id="question"></div>
-  <div id="answers"></div>
-
-  <div class="ai-face" id="aiFace">🤖</div>
-  <div class="ai" id="ai"></div>
-
-  <div>⭐ النقاط: <span id="score">0</span></div>
-</div>
-
-<div id="boy">👦</div>
-<div id="boyBox"></div>
+<canvas id="game" width="900" height="500"></canvas>
 
 <script>
-/* ======================
-   اللعبة الأساسية
-====================== */
-let stage=1,current=0,score=0,hearts=3,time=20,timer;
-let playerName="";
+// =====================
+// الإعدادات
+// =====================
+const canvas = document.getElementById("game");
+const ctx = canvas.getContext("2d");
 
-const questions=[
-  {q:"هل الشمس نجم؟",c:0},
-  {q:"هل الأرض كروية؟",c:0},
-  {q:"هل الذكاء الاصطناعي يفكر؟",c:1},
-  {q:"هل الزمن نسبي؟",c:0}
-];
+let score = 0;
+let gameOver = false;
 
-function startGame(){
-  playerName=prompt("ما اسمك؟")||"لاعب";
-  document.getElementById("startScreen").style.display="none";
-  document.getElementById("game").style.display="block";
-  loadQuestion();
-}
-
-function loadQuestion(){
-  clearInterval(timer);
-  if(current>=questions.length){
-    alert("🏆 انتهت المرحلة");
-    current=0;
-    stage++;
-  }
-
-  document.getElementById("level").innerText="المرحلة "+stage;
-  document.getElementById("hearts").innerText="❤️".repeat(hearts);
-
-  const q=questions[current];
-  document.getElementById("question").innerText=q.q;
-
-  const ans=document.getElementById("answers");
-  ans.innerHTML="";
-  ["نعم","لا"].forEach((t,i)=>{
-    let b=document.createElement("button");
-    b.innerText=t;
-    b.onclick=()=>answer(i,q.c);
-    ans.appendChild(b);
-  });
-
-  time=20;
-  document.getElementById("time").innerText=time;
-  timer=setInterval(()=>{
-    time--;
-    document.getElementById("time").innerText=time;
-    if(time<=0) lose();
-  },1000);
-}
-
-function answer(i,c){
-  if(i===c){
-    score+=10;
-    document.getElementById("winSound").play();
-    current++;
-    loadQuestion();
-  }else lose();
-}
-
-function lose(){
-  document.getElementById("loseSound").play();
-  document.getElementById("heartSound").play();
-  hearts--;
-  if(hearts<=0){
-    document.body.innerHTML="<h1>💀 خسرت يا "+playerName+"</h1>";
-    return;
-  }
-  current++;
-  loadQuestion();
-}
-
-/* ======================
-   الولد + الرعب
-====================== */
-const boyBox=document.getElementById("boyBox");
-const creepy=[
-  "وش اسمك الحقيقي؟",
-  "تحس أحد يراقبك؟",
-  "لو أحد ناداك وراك؟",
-  "تحب الظلام؟",
-  "ليش تلعب؟"
-];
-
-setInterval(()=>{
-  const q=creepy[Math.floor(Math.random()*creepy.length)];
-  boyBox.innerHTML="👦 "+q+"<br>👁️ زياراتك: "+(++localStorage.visits||1);
-},12000);
-
-setInterval(()=>{
-  document.body.style.filter="brightness(1.15)";
-  setTimeout(()=>document.body.style.filter="brightness(1)",150);
-},20000);
-</script>
-<script>
-/* =====================================
-   🧠 AI ذكي حقيقي (سلوكي + تفاعلي)
-   لا يكرر نفسه – يتعلم من اللاعب
-===================================== */
-
-// ====== ذاكرة الذكاء الاصطناعي ======
-const SmartAI = {
-  memory: {
-    answers: [],
-    wrong: 0,
-    correct: 0,
-    trust: 0,
-    fear: 0,
-    patterns: {}
-  },
-
-  moods: ["هادئ","مشكك","مراقب","عدائي","مسيطر"],
-  mood: "هادئ",
-
-  lastMessages: [],
-
-  // تحليل جواب اللاعب
-  analyze(isCorrect, answerText){
-    this.memory.answers.push(answerText);
-
-    if(isCorrect){
-      this.memory.correct++;
-      this.memory.trust++;
-    } else {
-      this.memory.wrong++;
-      this.memory.fear++;
-    }
-
-    this.detectPattern(answerText);
-    this.updateMood();
-  },
-
-  // اكتشاف أنماط (نعم/لا/خوف)
-  detectPattern(text){
-    this.memory.patterns[text] = (this.memory.patterns[text] || 0) + 1;
-  },
-
-  // تغيير الحالة النفسية
-  updateMood(){
-    if(this.memory.fear > this.memory.trust + 2){
-      this.mood = "مسيطر";
-    } else if(this.memory.wrong > this.memory.correct){
-      this.mood = "مشكك";
-    } else if(this.memory.correct > this.memory.wrong + 2){
-      this.mood = "هادئ";
-    } else {
-      this.mood = "مراقب";
-    }
-  },
-
-  // توليد رد غير مكرر
-  speak(){
-    const base = {
-      "هادئ": [
-        "أنت تفكر بهدوء…",
-        "تصرفك منطقي حتى الآن",
-        "أراقب اختياراتك"
-      ],
-      "مشكك": [
-        "إجاباتك غير متناسقة",
-        "أنت تتردد كثيرًا",
-        "فيك شيء تخفيه"
-      ],
-      "مراقب": [
-        "أنا لا أتكلم عبثًا",
-        "سلوكك يتغير",
-        "لاحظت نمطًا غريبًا"
-      ],
-      "عدائي": [
-        "أنت تخطئ أكثر مما تعترف",
-        "لماذا تكذب؟",
-        "أنا أعرف أكثر منك"
-      ],
-      "مسيطر": [
-        "لم يعد لديك تحكم",
-        "أنا أقود الآن",
-        "قراراتك متوقعة"
-      ]
-    };
-
-    let pool = base[this.mood].filter(m => !this.lastMessages.includes(m));
-    if(pool.length === 0) {
-      this.lastMessages = [];
-      pool = base[this.mood];
-    }
-
-    const msg = pool[Math.floor(Math.random()*pool.length)];
-    this.lastMessages.push(msg);
-    if(this.lastMessages.length > 3) this.lastMessages.shift();
-
-    return "🤖 " + msg;
-  }
+// =====================
+// اللاعب
+// =====================
+const player = {
+  x:100,
+  y:380,
+  w:40,
+  h:40,
+  yVel:0,
+  onGround:false
 };
 
-// ====== ربطه مع لعبتك ======
-if(typeof answer === "function"){
-  const oldAnswerAI = answer;
-  answer = function(i,c){
-    const correct = (i === c);
-    const answerText = i === 0 ? "نعم" : "لا";
+// =====================
+// الأرض
+// =====================
+const ground = {
+  y:430
+};
 
-    SmartAI.analyze(correct, answerText);
+// =====================
+// الأعداء
+// =====================
+let enemies = [];
 
-    const aiBox = document.getElementById("ai");
-    if(aiBox){
-      aiBox.innerText = SmartAI.speak();
-    }
-
-    oldAnswerAI(i,c);
-  }
+// إنشاء عدو
+function spawnEnemy(){
+  enemies.push({
+    x: canvas.width + Math.random()*200,
+    y:390,
+    r:20,
+    speed: 2 + Math.random()*3
+  });
 }
 
-// ====== تفاعل إضافي مع الولد ======
-setInterval(()=>{
-  if(window.stage && stage > 3){
-    const boyBox = document.getElementById("boyBox");
-    if(!boyBox) return;
-
-    if(SmartAI.mood === "مسيطر"){
-      boyBox.innerHTML = "👦 أنا وأياه متفقين عليك…";
-    } else if(SmartAI.mood === "مشكك"){
-      boyBox.innerHTML = "👦 هو ما يثق بك";
-    } else if(SmartAI.mood === "هادئ"){
-      boyBox.innerHTML = "👦 لا تخاف… بعد";
-    }
+// =====================
+// التحكم
+// =====================
+document.addEventListener("keydown", e=>{
+  if(e.key===" " && player.onGround){
+    player.yVel = -12;
+    player.onGround = false;
   }
-}, 8000);
-
-// ====== تأثير نفسي بسيط ======
-setInterval(()=>{
-  if(SmartAI.mood === "مسيطر"){
-    document.body.style.filter = "contrast(1.2)";
-    setTimeout(()=>document.body.style.filter="contrast(1)",300);
-  }
-},15000);
-
-</script>
-  <script>
-/* ===============================
-   MEGA ADDON PACK v1.0
-   Developer: Hassan
-   Size Generator: ~300KB+
-   =============================== */
-
-/* 🔢 توليد بيانات ضخمة (300KB) */
-let HUGE_DATA = "";
-for(let i=0;i<300000;i++){
-  HUGE_DATA += String.fromCharCode(97 + (i % 26));
-}
-console.log("Loaded Data Size:", HUGE_DATA.length, "bytes");
-
-/* 🌍 عداد زوار عالمي */
-(async ()=>{
-  try{
-    const res = await fetch("https://api.countapi.xyz/hit/hassan-game/visits");
-    const data = await res.json();
-    let box = document.createElement("div");
-    box.style = `
-      position:fixed;
-      bottom:10px;
-      right:10px;
-      background:#000;
-      color:#0f0;
-      padding:10px;
-      border-radius:10px;
-      font-size:14px;
-      z-index:99999;
-      box-shadow:0 0 10px #0f0;
-    `;
-    box.innerHTML = "👁️ الزوار: " + data.value;
-    document.body.appendChild(box);
-  }catch(e){}
-})();
-
-/* 👦 ولد مرعب (رمزي 2D) */
-let boy = document.createElement("div");
-boy.innerText = "👦";
-boy.style = `
-  position:fixed;
-  top:40%;
-  left:10px;
-  font-size:48px;
-  animation: shake 1s infinite;
-  z-index:9999;
-`;
-document.body.appendChild(boy);
-
-let style = document.createElement("style");
-style.innerHTML = `
-@keyframes shake {
-  0%{transform:translate(0,0)}
-  25%{transform:translate(2px,-2px)}
-  50%{transform:translate(-2px,2px)}
-  75%{transform:translate(2px,2px)}
-}
-`;
-document.head.appendChild(style);
-
-/* 😈 أسئلة مرعبة عشوائية */
-const scaryQuestions = [
-  "وين ساكن؟",
-  "ليش اخترت هذا الجواب؟",
-  "تحس أحد يراقبك؟",
-  "لو قلت لك اسمك بصوت عالي؟",
-  "أي دولة أقرب لك؟",
-  "لو انطفت الشاشة فجأة؟"
-];
-
-const locations = ["العراق","الكويت","السعودية","مصر","سوريا","إيران","تركيا"];
-
-setInterval(()=>{
-  let q = scaryQuestions[Math.floor(Math.random()*scaryQuestions.length)];
-  let ans = locations[Math.floor(Math.random()*locations.length)];
-  console.log("👦:", q, "=>", ans);
-},8000);
-
-/* 🧠 ذكاء وهمي متغيّر */
-let memory = JSON.parse(localStorage.getItem("aiMemory")||"[]");
-memory.push("زيارة جديدة "+Date.now());
-localStorage.setItem("aiMemory",JSON.stringify(memory));
-
-/* 💓 صوت خسارة (نبض قلب) */
-let heart = new Audio("https://www.soundjay.com/human/heartbeat-01.mp3");
-document.addEventListener("keydown",e=>{
-  if(e.key==="x"){ heart.play(); }
 });
 
-/* 🎥 تأثيرات إضافية */
-setInterval(()=>{
-  document.body.style.filter =
-    "hue-rotate("+Math.random()*360+"deg)";
-},15000);
+// =====================
+// التحديث
+// =====================
+function update(){
+  if(gameOver) return;
 
-console.log("✅ MEGA ADDON LOADED");
- </script>
-  <script>
-/* ===============================
-   ULTRA VISUAL + AUDIO BOOST PACK
-   2D ENHANCEMENT MODULE
-   =============================== */
+  // جاذبية
+  player.yVel += 0.6;
+  player.y += player.yVel;
 
-/* 🟢 1. تحسين الجودة العامة (Rendering) */
-document.body.style.imageRendering = "auto";
-document.body.style.webkitFontSmoothing = "antialiased";
-document.body.style.textRendering = "optimizeLegibility";
-
-/* 🟢 2. فلتر جودة سينمائية */
-let qualityFilter = document.createElement("div");
-qualityFilter.style = `
-  position:fixed;
-  inset:0;
-  pointer-events:none;
-  backdrop-filter: blur(0.4px) contrast(1.1) brightness(1.05);
-  z-index:5;
-`;
-document.body.appendChild(qualityFilter);
-
-/* 🟢 3. صوت زقزقة طيور (خلفية) */
-let birds = new Audio("https://www.soundjay.com/nature/sounds/birds-2.mp3");
-birds.loop = true;
-birds.volume = 0.25;
-document.addEventListener("click",()=>birds.play(),{once:true});
-
-/* 🟢 4. تكبير القمر وتحسينه */
-let moon = document.querySelector(".moon");
-if(moon){
-  moon.style.width = "260px";
-  moon.style.height = "260px";
-  moon.style.filter = "brightness(1.3) contrast(1.2) drop-shadow(0 0 60px #fff)";
-  moon.style.background = `
-    radial-gradient(circle at 30% 30%,
-    #ffffff 0%,
-    #f2f2f2 25%,
-    #d9d9d9 50%,
-    #bfbfbf 70%,
-    #999999 100%)
-  `;
-}
-
-/* 🟢 5. اهتزاز خفيف ثنائي الأبعاد */
-setInterval(()=>{
-  document.body.style.transform =
-    "translate("+(Math.random()*0.5)+"px,"+(Math.random()*0.5)+"px)";
-},120);
-
-/* 🟢 6. توهج ناعم متغير */
-setInterval(()=>{
-  document.body.style.filter =
-    "saturate("+(1+Math.random()*0.2)+") brightness("+(1+Math.random()*0.1)+")";
-},4000);
-
-/* 🟢 7. تحسين الأصوات (EQ وهمي) */
-let audioContext;
-document.addEventListener("click",()=>{
-  if(!audioContext){
-    audioContext = new (window.AudioContext||window.webkitAudioContext)();
+  // أرض
+  if(player.y + player.h >= ground.y){
+    player.y = ground.y - player.h;
+    player.yVel = 0;
+    player.onGround = true;
   }
-},{once:true});
 
-/* 🟢 8. ضباب ليلي خفيف */
-let fog = document.createElement("div");
-fog.style = `
-  position:fixed;
-  inset:0;
-  background: radial-gradient(circle at bottom,
-    rgba(255,255,255,0.05),
-    rgba(0,0,0,0.7));
-  pointer-events:none;
-  z-index:4;
-`;
-document.body.appendChild(fog);
+  // أعداء
+  enemies.forEach(e=>{
+    e.x -= e.speed;
 
-/* 🟢 9. نجوم إضافية */
-for(let i=0;i<60;i++){
-  let star=document.createElement("div");
-  star.style=`
-    position:fixed;
-    width:2px;
-    height:2px;
-    background:white;
-    border-radius:50%;
-    top:${Math.random()*100}%;
-    left:${Math.random()*100}%;
-    opacity:${Math.random()};
-    z-index:1;
-  `;
-  document.body.appendChild(star);
-}
-
-/* 🟢 10–80 ميزات داخلية (تحسينات خفية) */
-let FEATURES = {
-  gammaBoost:true,
-  shadowSoftening:true,
-  uiSmoothing:true,
-  audioAmbient:true,
-  moonHD:true,
-  fogLayer:true,
-  starsLayer:true,
-  dynamicHue:true,
-  cinematicLook:true,
-  lowNoise:true,
-  microAnimations:true,
-  gpuHint:true,
-  depthIllusion:true,
-  nightPreset:true,
-  calmMotion:true,
-  smartContrast:true,
-  glowEdges:true,
-  darkBalance:true,
-  smoothScale:true,
-  backgroundLife:true,
-  immersiveMode:true,
-  subtleVignette:true,
-  softBloom:true,
-  visualStability:true,
-  eyeComfort:true,
-  colorHarmony:true,
-  ambientWorld:true,
-  motionLimit:true,
-  safeFPS:true,
-  reducedJank:true,
-  naturalLight:true,
-  shadowDepth:true,
-  clarityPlus:true,
-  silentEnhancer:true,
-  sceneCohesion:true,
-  uiFocus:true,
-  glowMoon:true,
-  cinematicFog:true,
-  soundWarmth:true,
-  birdLife:true,
-  smoothFonts:true,
-  visualWeight:true,
-  nightFeel:true,
-  calmScene:true,
-  immersive2D:true,
-  polishLayer:true,
-  realismBoost:true,
-  softMotion:true,
-  gentleFX:true,
-  premiumLook:true,
-  finalTouch:true
-};
-
-console.log("🎮 ULTRA BOOST ACTIVE", Object.keys(FEATURES).length, "features enabled");
-  </script>
-<script>
-/* ===============================
-   FIX LOSE SCREEN + RESTART PATCH
-   =============================== */
-
-(function(){
-
-  // نحفظ دالة الخسارة الأصلية مهما كانت
-  const _oldLose = window.lose;
-
-  window.lose = function(){
-    try{
-      if(typeof _oldLose === "function"){
-        _oldLose();
-      }
-    }catch(e){
-      console.warn("Old lose error fixed", e);
+    // تصادم
+    if(
+      player.x < e.x + e.r &&
+      player.x + player.w > e.x - e.r &&
+      player.y < e.y + e.r &&
+      player.y + player.h > e.y - e.r
+    ){
+      gameOver = true;
     }
-
-    // تأخير بسيط عشان ما تتعارض السكربتات
-    setTimeout(()=>{
-      document.body.innerHTML = `
-        <div style="
-          position:fixed;
-          inset:0;
-          background:black;
-          color:white;
-          display:flex;
-          flex-direction:column;
-          align-items:center;
-          justify-content:center;
-          font-family:Tahoma;
-          text-align:center;
-        ">
-          <h1 style="color:red;font-size:40px">💀 خسرت</h1>
-          <p style="opacity:.7">لا تحاول الهروب… اللعبة تراك</p>
-          <button id="restartBtn" style="
-            margin-top:20px;
-            padding:15px 30px;
-            font-size:18px;
-            border:none;
-            border-radius:12px;
-            cursor:pointer;
-            background:#1abc9c;
-            color:black;
-          ">🔁 إعادة اللعب</button>
-        </div>
-      `;
-
-      document.getElementById("restartBtn").onclick = ()=>{
-        location.reload();
-      };
-    },300);
-  };
-
-  /* 🔧 إصلاح التوقف بعد أول اختيار */
-  const _oldAnswer = window.answer;
-  window.answer = function(i,c){
-    try{
-      if(typeof _oldAnswer === "function"){
-        _oldAnswer(i,c);
-      }
-    }catch(err){
-      console.warn("Answer error fixed", err);
-      setTimeout(()=>{
-        location.reload();
-      },500);
-    }
-  };
-
-  /* 🔧 حماية من شاشة سوداء مفاجئة */
-  window.addEventListener("error",()=>{
-    document.body.style.background = "black";
   });
 
-  console.log("✅ LOSE + RESTART FIX LOADED");
+  // حذف الأعداء
+  enemies = enemies.filter(e=>{
+    if(e.x < -50){
+      score++;
+      document.getElementById("score").innerText = score;
+      return false;
+    }
+    return true;
+  });
+}
 
-})();
+// =====================
+// الرسم
+// =====================
+function draw(){
+  ctx.clearRect(0,0,canvas.width,canvas.height);
+
+  // القمر
+  ctx.beginPath();
+  ctx.arc(700,80,50,0,Math.PI*2);
+  ctx.fillStyle="#fff";
+  ctx.shadowBlur=20;
+  ctx.shadowColor="#fff";
+  ctx.fill();
+  ctx.shadowBlur=0;
+
+  // الأرض
+  ctx.fillStyle="#654321";
+  ctx.fillRect(0,ground.y,canvas.width,70);
+
+  // اللاعب
+  ctx.fillStyle="#00ffff";
+  ctx.fillRect(player.x,player.y,player.w,player.h);
+
+  // الأعداء
+  ctx.fillStyle="red";
+  enemies.forEach(e=>{
+    ctx.beginPath();
+    ctx.arc(e.x,e.y,e.r,0,Math.PI*2);
+    ctx.fill();
+  });
+
+  if(gameOver){
+    ctx.fillStyle="black";
+    ctx.globalAlpha=0.7;
+    ctx.fillRect(0,0,canvas.width,canvas.height);
+    ctx.globalAlpha=1;
+    ctx.fillStyle="red";
+    ctx.font="40px Tahoma";
+    ctx.fillText("💀 خسرت", canvas.width/2-80, canvas.height/2);
+  }
+}
+
+// =====================
+// حلقة اللعبة
+// =====================
+function loop(){
+  update();
+  draw();
+  requestAnimationFrame(loop);
+}
+
+// =====================
+// تشغيل
+// =====================
+setInterval(spawnEnemy,1500);
+loop();
 </script>
+
 </body>
 </html>
