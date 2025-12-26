@@ -2,188 +2,187 @@
 <html lang="ar">
 <head>
 <meta charset="UTF-8">
-<title>2D Web Game</title>
+<title>Shooter 2D</title>
 <style>
 body{
   margin:0;
-  background:#000;
+  background:black;
   overflow:hidden;
+  touch-action:none;
 }
 canvas{
   display:block;
   margin:auto;
-  background:linear-gradient(#0a1a3a,#000);
+  background:#111;
 }
-#ui{
+.btn{
   position:fixed;
-  top:10px;
-  left:10px;
-  color:#0ff;
-  font-family:tahoma;
-  font-size:16px;
+  width:70px;
+  height:70px;
+  border-radius:50%;
+  background:rgba(255,255,255,0.15);
+  color:white;
+  font-size:24px;
+  text-align:center;
+  line-height:70px;
+  user-select:none;
 }
+#left{bottom:20px;left:20px;}
+#right{bottom:20px;left:110px;}
+#up{bottom:110px;left:65px;}
+#shoot{bottom:40px;right:30px;background:rgba(255,0,0,0.5);}
 </style>
 </head>
 <body>
 
-<div id="ui">
-⭐ النقاط: <span id="score">0</span>
-</div>
-
 <canvas id="game" width="900" height="500"></canvas>
 
+<div class="btn" id="left">◀</div>
+<div class="btn" id="right">▶</div>
+<div class="btn" id="up">▲</div>
+<div class="btn" id="shoot">🔥</div>
+
 <script>
-// =====================
-// الإعدادات
-// =====================
 const canvas = document.getElementById("game");
 const ctx = canvas.getContext("2d");
 
-let score = 0;
-let gameOver = false;
-
-// =====================
-// اللاعب
-// =====================
+// ===== اللاعب =====
 const player = {
   x:100,
-  y:380,
+  y:350,
   w:40,
   h:40,
+  speed:4,
   yVel:0,
   onGround:false
 };
 
-// =====================
-// الأرض
-// =====================
-const ground = {
-  y:430
-};
+// ===== الأرض =====
+const groundY = 420;
 
-// =====================
-// الأعداء
-// =====================
+// ===== الرصاص =====
+let bullets = [];
+
+// ===== الوحوش =====
 let enemies = [];
 
-// إنشاء عدو
+// ===== تحكم =====
+let controls = {left:false,right:false,up:false,shoot:false};
+
+// ===== أزرار الجوال =====
+function bindBtn(id,key){
+  const b=document.getElementById(id);
+  b.addEventListener("touchstart",()=>controls[key]=true);
+  b.addEventListener("touchend",()=>controls[key]=false);
+}
+bindBtn("left","left");
+bindBtn("right","right");
+bindBtn("up","up");
+bindBtn("shoot","shoot");
+
+// ===== إطلاق نار =====
+let shootDelay=0;
+function shoot(){
+  if(shootDelay<=0){
+    bullets.push({
+      x:player.x+player.w,
+      y:player.y+player.h/2,
+      speed:8
+    });
+    shootDelay=10;
+  }
+}
+
+// ===== وحش =====
 function spawnEnemy(){
   enemies.push({
-    x: canvas.width + Math.random()*200,
-    y:390,
-    r:20,
-    speed: 2 + Math.random()*3
+    x:canvas.width+50,
+    y:groundY-40,
+    w:40,
+    h:40,
+    speed:2+Math.random()*2
   });
 }
+setInterval(spawnEnemy,1200);
 
-// =====================
-// التحكم
-// =====================
-document.addEventListener("keydown", e=>{
-  if(e.key===" " && player.onGround){
-    player.yVel = -12;
-    player.onGround = false;
-  }
-});
-
-// =====================
-// التحديث
-// =====================
+// ===== تحديث =====
 function update(){
-  if(gameOver) return;
+  // حركة
+  if(controls.left) player.x-=player.speed;
+  if(controls.right) player.x+=player.speed;
 
-  // جاذبية
-  player.yVel += 0.6;
-  player.y += player.yVel;
-
-  // أرض
-  if(player.y + player.h >= ground.y){
-    player.y = ground.y - player.h;
-    player.yVel = 0;
-    player.onGround = true;
+  if(controls.up && player.onGround){
+    player.yVel=-12;
+    player.onGround=false;
   }
 
-  // أعداء
-  enemies.forEach(e=>{
-    e.x -= e.speed;
+  player.yVel+=0.6;
+  player.y+=player.yVel;
 
-    // تصادم
-    if(
-      player.x < e.x + e.r &&
-      player.x + player.w > e.x - e.r &&
-      player.y < e.y + e.r &&
-      player.y + player.h > e.y - e.r
-    ){
-      gameOver = true;
-    }
-  });
+  if(player.y+player.h>=groundY){
+    player.y=groundY-player.h;
+    player.yVel=0;
+    player.onGround=true;
+  }
 
-  // حذف الأعداء
-  enemies = enemies.filter(e=>{
-    if(e.x < -50){
-      score++;
-      document.getElementById("score").innerText = score;
-      return false;
+  // إطلاق
+  if(controls.shoot) shoot();
+  if(shootDelay>0) shootDelay--;
+
+  bullets.forEach(b=>b.x+=b.speed);
+  bullets=bullets.filter(b=>b.x<canvas.width);
+
+  enemies.forEach(e=>e.x-=e.speed);
+
+  // تصادم رصاص
+  enemies=enemies.filter(e=>{
+    for(let b of bullets){
+      if(
+        b.x>e.x && b.x<e.x+e.w &&
+        b.y>e.y && b.y<e.y+e.h
+      ){
+        return false;
+      }
     }
-    return true;
+    return e.x>-50;
   });
 }
 
-// =====================
-// الرسم
-// =====================
+// ===== رسم =====
 function draw(){
   ctx.clearRect(0,0,canvas.width,canvas.height);
 
-  // القمر
-  ctx.beginPath();
-  ctx.arc(700,80,50,0,Math.PI*2);
-  ctx.fillStyle="#fff";
-  ctx.shadowBlur=20;
-  ctx.shadowColor="#fff";
-  ctx.fill();
-  ctx.shadowBlur=0;
+  // أرض
+  ctx.fillStyle="#333";
+  ctx.fillRect(0,groundY,canvas.width,80);
 
-  // الأرض
-  ctx.fillStyle="#654321";
-  ctx.fillRect(0,ground.y,canvas.width,70);
-
-  // اللاعب
-  ctx.fillStyle="#00ffff";
+  // لاعب
+  ctx.fillStyle="red";
   ctx.fillRect(player.x,player.y,player.w,player.h);
 
-  // الأعداء
-  ctx.fillStyle="red";
-  enemies.forEach(e=>{
-    ctx.beginPath();
-    ctx.arc(e.x,e.y,e.r,0,Math.PI*2);
-    ctx.fill();
+  // رشاش
+  ctx.fillStyle="#aaa";
+  ctx.fillRect(player.x+player.w,player.y+15,15,6);
+
+  // رصاص
+  ctx.fillStyle="yellow";
+  bullets.forEach(b=>{
+    ctx.fillRect(b.x,b.y,8,3);
   });
 
-  if(gameOver){
-    ctx.fillStyle="black";
-    ctx.globalAlpha=0.7;
-    ctx.fillRect(0,0,canvas.width,canvas.height);
-    ctx.globalAlpha=1;
-    ctx.fillStyle="red";
-    ctx.font="40px Tahoma";
-    ctx.fillText("💀 خسرت", canvas.width/2-80, canvas.height/2);
-  }
+  // وحوش
+  ctx.fillStyle="green";
+  enemies.forEach(e=>{
+    ctx.fillRect(e.x,e.y,e.w,e.h);
+  });
 }
 
-// =====================
-// حلقة اللعبة
-// =====================
+// ===== حلقة =====
 function loop(){
   update();
   draw();
   requestAnimationFrame(loop);
 }
-
-// =====================
-// تشغيل
-// =====================
-setInterval(spawnEnemy,1500);
 loop();
 </script>
 
