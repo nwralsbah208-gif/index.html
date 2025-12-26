@@ -570,3 +570,95 @@ setInterval(()=>{
 }, 30000);
 
 </script>
+<!-- 🧩 حزمة الإضافات الخارقة (لا تحذف شيء قبلها) -->
+<script>
+(() => {
+  /* ====== بيانات ====== */
+  let name = localStorage.getItem("playerName") || "";
+  let country = localStorage.getItem("playerCountry") || "";
+  let visits = Number(localStorage.getItem("localVisits") || 0) + 1;
+  localStorage.setItem("localVisits", visits);
+
+  /* ====== صندوق عائم ====== */
+  const box = document.createElement("div");
+  box.style.position = "fixed";
+  box.style.right = "10px";
+  box.style.bottom = "10px";
+  box.style.background = "rgba(0,0,0,0.75)";
+  box.style.color = "#0ff";
+  box.style.padding = "12px";
+  box.style.borderRadius = "12px";
+  box.style.fontSize = "13px";
+  box.style.zIndex = "9999";
+  box.style.maxWidth = "240px";
+  box.style.fontFamily = "Tahoma";
+  document.body.appendChild(box);
+
+  /* ====== صوت نبض ====== */
+  const heart = new Audio("https://www.soundjay.com/heartbeat/sounds/heartbeat-01.mp3");
+  heart.volume = 0.3;
+
+  /* ====== ولد 2D (نصي) ====== */
+  const boyTexts = [
+    "👦: وش اسمك؟",
+    "👦: من وين أنت؟",
+    "👦: ليش تلعب؟",
+    "👦: تحس أحد يراقبك؟",
+    "👦: اختر بلدك",
+    "👦: لا تكذب علي",
+    "👦: أنا أتذكرك…"
+  ];
+
+  const countries = ["العراق","الكويت","السعودية","مصر","سوريا","الأردن","المغرب","تونس","الجزائر","ليبيا"];
+
+  function askBoy() {
+    let q = boyTexts[Math.floor(Math.random()*boyTexts.length)];
+    let extra = "";
+
+    if (q.includes("اسمك")) {
+      name = prompt("👦 وش اسمك؟") || name || "لاعب";
+      localStorage.setItem("playerName", name);
+    }
+
+    if (q.includes("بلد")) {
+      country = prompt("👦 اختر بلدك:\n"+countries.join(" - ")) || country || "غير معروف";
+      localStorage.setItem("playerCountry", country);
+    }
+
+    if (Math.random() < 0.3) heart.play();
+
+    extra = `<br>👁️ زياراتك: ${visits}<br>🧠 اسمك: ${name}<br>🌍 بلدك: ${country}`;
+    box.innerHTML = q + extra;
+  }
+
+  /* ====== رسائل AI ====== */
+  const aiMsgs = [
+    "🤖 أنا أراقب اختياراتك",
+    "🤖 مو كل شيء واضح",
+    "🤖 ممكن أكذب الآن",
+    "🤖 اسمك له معنى غريب",
+    "🤖 لا تثق بأحد",
+    "🤖 اللعبة تعرفك"
+  ];
+
+  function aiWhisper() {
+    if (Math.random() < 0.4) {
+      const m = aiMsgs[Math.floor(Math.random()*aiMsgs.length)];
+      box.innerHTML = m + "<br>👦 ينظر إليك…";
+    }
+  }
+
+  /* ====== مؤثرات ====== */
+  function flash() {
+    document.body.style.transition = "filter 0.2s";
+    document.body.style.filter = "brightness(1.2)";
+    setTimeout(()=>document.body.style.filter="brightness(1)",200);
+  }
+
+  /* ====== تشغيل ====== */
+  setTimeout(askBoy, 2000);
+  setInterval(aiWhisper, 7000);
+  setInterval(flash, 15000);
+
+})();
+</script>
