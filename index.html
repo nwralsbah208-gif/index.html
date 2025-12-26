@@ -97,8 +97,7 @@ const quiz = [
 let index = 0;
 let score = 0;
 
-function loadQuestion() {
-    const q = quiz[index];
+function loadQuestion(). const q = quiz[Math.floor(Math.random() * quiz.length)];
     document.getElementById("question").innerText = q.q;
     document.getElementById("level").innerText = "المستوى: " + q.level;
 
