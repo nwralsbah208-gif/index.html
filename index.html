@@ -211,4 +211,49 @@ function loop(){
 loop();
 </script>
 </body>
+  <div id="controls">
+  <button ontouchstart="keys['ArrowLeft']=true" ontouchend="keys['ArrowLeft']=false">⬅️</button>
+  <button ontouchstart="keys['ArrowUp']=true" ontouchend="keys['ArrowUp']=false">⬆️</button>
+  <button ontouchstart="keys['ArrowDown']=true" ontouchend="keys['ArrowDown']=false">⬇️</button>
+  <button ontouchstart="keys['ArrowRight']=true" ontouchend="keys['ArrowRight']=false">➡️</button>
+  </div>
+  <style>
+#controls{
+  position:fixed;
+  bottom:20px;
+  left:20px;
+  z-index:999;
+}
+#controls button{
+  width:60px;
+  height:60px;
+  font-size:24px;
+  margin:5px;
+  border-radius:12px;
+  border:none;
+  background:#222;
+  color:white;
+}
+  </style>
+  <button id="fireBtn">🔥</button>
+  <style>
+#fireBtn{
+  position:fixed;
+  bottom:30px;
+  right:30px;
+  width:80px;
+  height:80px;
+  border-radius:50%;
+  font-size:30px;
+  background:red;
+  color:white;
+  border:none;
+  z-index:999;
+}
+  </style>
+  <script>
+document.getElementById("fireBtn").addEventListener("touchstart", ()=>{
+  shoot();
+});
+  </script>
 </html>
