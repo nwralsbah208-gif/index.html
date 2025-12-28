@@ -745,4 +745,487 @@ function update(deltaTime) {
             powerups.splice(i, 1);
         }
         
-                //
+                // إزالة القوى خارج الشاشة
+        if (powerups[i].x < -100 - cameraOffset) {
+            powerups.splice(i, 1);
+        }
+    }
+    
+    // تحديث الجسيمات
+    for (let i = particles.length - 1; i >= 0; i--) {
+        particles[i].x += particles[i].vx;
+        particles[i].y += particles[i].vy;
+        particles[i].vy += particles[i].gravity;
+        particles[i].life -= particles[i].fade;
+        
+        if (particles[i].life <= 0) {
+            particles.splice(i, 1);
+        }
+    }
+    
+    // تحديث الكومبو
+    if (comboTimeout > 0) {
+        comboTimeout -= deltaTime;
+    } else if (combo > 1) {
+        combo = 1;
+    }
+    
+    // زيادة النقاط والسرعة
+    const pointsEarned = Math.floor(speed * (combo > 1 ? combo : 1));
+    score += pointsEarned;
+    
+    // زيادة السرعة
+    speed += 0.0002;
+    
+    // تحديث الكاميرا
+    updateCamera();
+    
+    // تحديث واجهة المستخدم
+    document.getElementById('score').textContent = score;
+    document.getElementById('coins').textContent = coins;
+    document.getElementById('jumps').textContent = player.maxJumps - player.jumps;
+    document.getElementById('speed').textContent = speed.toFixed(1);
+    
+    // تحديث أعلى نتيجة
+    if (score > highScore) {
+        highScore = score;
+        localStorage.setItem('ultraJumpHighScore', highScore);
+    }
+}
+
+// ==================== جمع القوى الخاصة ====================
+function collectPowerup(powerup) {
+    createParticles(powerup.x + powerup.width/2, powerup.y + powerup.height/2, 25, powerup.color, 3, 6);
+    playSound('collect', 0.4);
+    screenShake(3, 200);
+    
+    // زيادة الكومبو
+    combo++;
+    comboTimeout = 2000;
+    
+    // عرض الكومبو
+    comboDisplay.textContent = `COMBO x${combo}!`;
+    comboDisplay.style.fontSize = `${3 + combo * 0.5}em`;
+    comboDisplay.style.display = 'block';
+    comboDisplay.style.color = combo >= 10 ? '#ff0000' : combo >= 5 ? '#ffff00' : '#00ff00';
+    
+    setTimeout(() => {
+        comboDisplay.style.display = 'none';
+    }, 800);
+    
+    if (combo >= 5) {
+        playSound('combo', 0.6);
+        createParticles(player.x + player.width/2, player.y, 40, '#ffff00', 5, 10);
+    }
+    
+    // تطبيق تأثيرات القوة
+    switch(powerup.type) {
+        case 'shield':
+            player.shield = true;
+            player.color = '#00ffff';
+            setTimeout(() => {
+                if (player.shield && !playerDead) {
+                    player.shield = false;
+                    player.color = '#ff00ff';
+                }
+            }, 8000);
+            break;
+            
+        case 'jump':
+            player.maxJumps = 3;
+            setTimeout(() => {
+                if (!playerDead) {
+                    player.maxJumps = 2;
+                }
+            }, 10000);
+            break;
+            
+        case 'magnet':
+            player.magnet = true;
+            setTimeout(() => {
+                if (!playerDead) {
+                    player.magnet = false;
+                }
+            }, 12000);
+            break;
+            
+        case 'coins':
+            const coinBonus = player.doubleCoins ? 20 : 10;
+            coins += coinBonus;
+            break;
+    }
+    
+    // إضافة نقاط إضافية
+    score += 150 * combo;
+}
+
+// ==================== موت اللاعب ====================
+function playerDeath() {
+    playerDead = true;
+    player.deathAnimation = 1;
+    player.color = '#666666';
+    
+    playSound('damage', 0.6);
+    playSound('gameOver', 0.4);
+    screenShake(10, 1000);
+    stopBackgroundMusic();
+    
+    createParticles(player.x + player.width/2, player.y + player.height/2, 100, '#ff0000', 4, 10);
+    createParticles(player.x + player.width/2, player.y + player.height/2, 50, '#ffffff', 2, 6);
+    
+    setTimeout(() => {
+        gameOver();
+    }, 1500);
+}
+
+// ==================== نهاية اللعبة ====================
+function gameOver() {
+    gameRunning = false;
+    document.getElementById('finalScore').textContent = score;
+    document.getElementById('highScore').textContent = highScore;
+    gameOverScreen.style.display = 'flex';
+}
+
+// ==================== إعادة اللعب ====================
+function restartGame() {
+    score = 0;
+    coins = 0;
+    speed = 4;
+    
+    player.x = 100;
+    player.y = 0;
+    player.velocityY = 0;
+    player.jumps = 0;
+    player.maxJumps = 2;
+    player.color = '#ff00ff';
+    player.shield = false;
+    player.magnet = false;
+    player.doubleCoins = false;
+    player.blinkState = 0;
+    player.deathAnimation = 0;
+    player.rotation = 0;
+    player.scale = 1;
+    player.trail = [];
+    playerDead = false;
+    
+    obstacles = [];
+    powerups = [];
+    particles = [];
+    cameraOffset = 0;
+    
+    gameStartTime = Date.now();
+    combo = 0;
+    comboTimeout = 0;
+    blinkTimer = 0;
+    
+    gameOverScreen.style.display = 'none';
+    startGame();
+}
+
+// ==================== الرسم ====================
+function draw() {
+    // مسح الشاشة
+    const gradient = ctx.createLinearGradient(0, 0, 0, canvas.height);
+    gradient.addColorStop(0, '#000011');
+    gradient.addColorStop(1, '#000033');
+    ctx.fillStyle = gradient;
+    ctx.fillRect(0, 0, canvas.width, canvas.height);
+    
+    // رسم النجوم
+    ctx.fillStyle = '#ffffff';
+    for (let star of stars) {
+        ctx.globalAlpha = star.brightness;
+        ctx.beginPath();
+        ctx.arc(star.x + cameraOffset * 0.3, star.y, star.size, 0, Math.PI * 2);
+        ctx.fill();
+    }
+    ctx.globalAlpha = 1;
+    
+    // تطبيق تحويل الكاميرا
+    ctx.save();
+    ctx.translate(cameraOffset, 0);
+    
+    // رسم الأرض
+    const groundGradient = ctx.createLinearGradient(0, groundY, 0, canvas.height);
+    groundGradient.addColorStop(0, '#222222');
+    groundGradient.addColorStop(0.5, '#1a1a1a');
+    groundGradient.addColorStop(1, '#111111');
+    ctx.fillStyle = groundGradient;
+    ctx.fillRect(-100, groundY, canvas.width + 200, canvas.height - groundY);
+    
+    // رسم خطوط الأرض
+    ctx.strokeStyle = '#333333';
+    ctx.lineWidth = 3;
+    for (let i = -100; i < canvas.width + 200; i += 60) {
+        ctx.beginPath();
+        ctx.moveTo(i, groundY);
+        ctx.lineTo(i + 30, groundY + 15);
+        ctx.stroke();
+    }
+    
+    // رسم خطوط سرعة
+    ctx.strokeStyle = 'rgba(0, 255, 0, 0.1)';
+    ctx.lineWidth = 1;
+    for (let i = 0; i < canvas.width + 200; i += 40) {
+        const offset = (Date.now() * 0.01) % 40;
+        ctx.beginPath();
+        ctx.moveTo(i - offset, 0);
+        ctx.lineTo(i - offset, canvas.height);
+        ctx.stroke();
+    }
+    
+    // رسم الذيل
+    for (let i = 0; i < player.trail.length; i++) {
+        const point = player.trail[i];
+        ctx.globalAlpha = point.alpha;
+        ctx.fillStyle = player.shield ? '#00ffff' : '#ff00ff';
+        ctx.fillRect(point.x, point.y, point.width, point.height);
+    }
+    ctx.globalAlpha = 1;
+    
+    // رسم العقبات
+    for (let obstacle of obstacles) {
+        if (obstacle.glow) {
+            ctx.shadowColor = obstacle.color;
+            ctx.shadowBlur = 20;
+        }
+        
+        ctx.fillStyle = obstacle.color;
+        ctx.beginPath();
+        ctx.moveTo(obstacle.x, groundY);
+        ctx.lineTo(obstacle.x + obstacle.width, groundY);
+        ctx.lineTo(obstacle.x + obstacle.width / 2, obstacle.y);
+        ctx.closePath();
+        ctx.fill();
+        
+        ctx.strokeStyle = '#ffffff';
+        ctx.lineWidth = 2;
+        ctx.stroke();
+        
+        ctx.shadowBlur = 0;
+    }
+    
+    // رسم القوى الخاصة
+    for (let powerup of powerups) {
+        ctx.save();
+        ctx.translate(powerup.x + powerup.width/2, powerup.y + powerup.height/2);
+        ctx.scale(powerup.pulse, powerup.pulse);
+        ctx.rotate(powerup.rotation);
+        
+        ctx.shadowColor = powerup.color;
+        ctx.shadowBlur = 25;
+        
+        ctx.fillStyle = powerup.color;
+        ctx.beginPath();
+        ctx.arc(0, 0, powerup.width/2, 0, Math.PI * 2);
+        ctx.fill();
+        
+        ctx.font = '20px Arial';
+        ctx.textAlign = 'center';
+        ctx.textBaseline = 'middle';
+        ctx.fillStyle = '#000000';
+        ctx.fillText(powerup.symbol, 0, 0);
+        
+        ctx.restore();
+        ctx.shadowBlur = 0;
+    }
+    
+    // رسم اللاعب
+    ctx.save();
+    ctx.translate(player.x + player.width/2, player.y + player.height/2);
+    
+    if (player.deathAnimation > 0) {
+        player.deathAnimation += 0.02;
+        ctx.scale(1 + Math.sin(player.deathAnimation * 5) * 0.1, 
+                  1 + Math.cos(player.deathAnimation * 5) * 0.1);
+        ctx.rotate(player.deathAnimation * 0.5);
+    } else {
+        ctx.rotate(player.rotation);
+    }
+    
+    if (player.shield) {
+        ctx.shadowColor = '#00ffff';
+        ctx.shadowBlur = 30;
+    }
+    
+    // جسم اللاعب
+    ctx.fillStyle = player.color;
+    ctx.fillRect(-player.width/2, -player.height/2, player.width, player.height);
+    
+    // وجه اللاعب
+    ctx.fillStyle = '#000000';
+    
+    // عيون - حالة الموت
+    if (player.deathAnimation > 0.5) {
+        // عيون X (موت)
+        ctx.lineWidth = 4;
+        ctx.strokeStyle = '#000000';
+        
+        // عين يسرى
+        ctx.beginPath();
+        ctx.moveTo(-15, -10);
+        ctx.lineTo(-5, 0);
+        ctx.moveTo(-5, -10);
+        ctx.lineTo(-15, 0);
+        ctx.stroke();
+        
+        // عين يمنى
+        ctx.beginPath();
+        ctx.moveTo(5, -10);
+        ctx.lineTo(15, 0);
+        ctx.moveTo(15, -10);
+        ctx.lineTo(5, 0);
+        ctx.stroke();
+        
+        // فم حزين
+        ctx.beginPath();
+        ctx.arc(0, 15, 8, 0, Math.PI);
+        ctx.stroke();
+    } else {
+        // عيون عادية مع وميض
+        if (player.blinkState === 0) {
+            // عيون مفتوحة
+            ctx.fillRect(-15, -10, 10, 15);
+            ctx.fillRect(5, -10, 10, 15);
+            
+            // بؤبؤ العين
+            ctx.fillStyle = '#ffffff';
+            ctx.fillRect(-12, -7, 4, 4);
+            ctx.fillRect(8, -7, 4, 4);
+        } else {
+            // عيون مغلقة (غمزة)
+            ctx.fillStyle = '#000000';
+            ctx.fillRect(-15, -5, 10, 3);
+            ctx.fillRect(5, -5, 10, 3);
+        }
+        
+        // فم مبتسم
+        ctx.beginPath();
+        ctx.arc(0, 15, 6, 0, Math.PI);
+        ctx.strokeStyle = '#000000';
+        ctx.lineWidth = 2;
+        ctx.stroke();
+    }
+    
+    // رسم الدرع
+    if (player.shield) {
+        ctx.strokeStyle = '#00ffff';
+        ctx.lineWidth = 4;
+        ctx.beginPath();
+        ctx.arc(0, 0, player.width/2 + 8, 0, Math.PI * 2);
+        ctx.stroke();
+    }
+    
+    ctx.restore();
+    ctx.shadowBlur = 0;
+    
+    // رسم الجسيمات
+    for (let particle of particles) {
+        ctx.globalAlpha = particle.life;
+        ctx.fillStyle = particle.color;
+        ctx.beginPath();
+        ctx.arc(particle.x, particle.y, particle.size, 0, Math.PI * 2);
+        ctx.fill();
+    }
+    ctx.globalAlpha = 1;
+    
+    // رسم تأثير المغناطيس
+    if (player.magnet) {
+        ctx.strokeStyle = 'rgba(255, 136, 0, 0.4)';
+        ctx.lineWidth = 4;
+        ctx.setLineDash([15, 10]);
+        ctx.beginPath();
+        ctx.arc(player.x + player.width/2, player.y + player.height/2, 250, 0, Math.PI * 2);
+        ctx.stroke();
+        ctx.setLineDash([]);
+    }
+    
+    // إعادة تحويل الكاميرا
+    ctx.restore();
+}
+
+// ==================== بدء اللعبة ====================
+function startGame() {
+    console.log('Game starting...');
+    startScreen.style.display = 'none';
+    gameRunning = true;
+    playerDead = false;
+    lastTime = Date.now();
+    gameStartTime = Date.now();
+    
+    // تهيئة الصوت
+    initAudio();
+    
+    if (audioEnabled) {
+        playBackgroundMusic();
+    }
+    
+    // بدء حلقة اللعبة
+    gameLoop();
+}
+
+// ==================== إيقاف/تشغيل اللعبة ====================
+function togglePause() {
+    gameRunning = !gameRunning;
+    if (gameRunning) {
+        gameLoop();
+        if (audioEnabled) {
+            playBackgroundMusic();
+        }
+    } else {
+        stopBackgroundMusic();
+    }
+}
+
+// ==================== العودة للقائمة ====================
+function goToMenu() {
+    gameOverScreen.style.display = 'none';
+    startScreen.style.display = 'flex';
+    stopBackgroundMusic();
+    gameRunning = false;
+}
+
+// ==================== الحلقة الرئيسية ====================
+function gameLoop() {
+    if (!gameRunning) return;
+    
+    const currentTime = Date.now();
+    const deltaTime = currentTime - lastTime;
+    lastTime = currentTime;
+    
+    update(deltaTime);
+    draw();
+    
+    requestAnimationFrame(gameLoop);
+}
+
+// ==================== بدء الشاشة الأولى ====================
+window.onload = function() {
+    resizeCanvas();
+    startScreen.style.display = 'flex';
+    
+    // استعادة أعلى نتيجة
+    highScore = localStorage.getItem('ultraJumpHighScore') || 0;
+    
+    // إضافة حدث Space للقفز
+    document.addEventListener('keydown', function(e) {
+        if (e.code === 'Space' || e.key === ' ') {
+            jump(e);
+        }
+        if (e.key === 'Escape') {
+            togglePause();
+        }
+    });
+    
+    // إضافة حدث اللمس للقفز
+    canvas.addEventListener('touchstart', function(e) {
+        e.preventDefault();
+        jump(e);
+    });
+};
+
+// بدء اللعبة عند النقر على الزر مباشرة
+document.getElementById('startButton').onclick = startGame;
+</script>
+</body>
+</html>
