@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>ø ASAØ - قبو الظل</title>
+    <title>ø ASAØ - ظل الإنترنت</title>
     <style>
         :root {
             --bg: #0a0a0a;
@@ -11,17 +11,12 @@
             --border: #1a1a1a;
             --text: #c0c0c0;
             --accent: #8b0000;
-            --gold: #8b0000;
-            --my-msg: #1a0000;
-            --their-msg: #0a0a0a;
         }
-
         * {
             margin: 0;
             padding: 0;
             box-sizing: border-box;
         }
-
         body {
             background: var(--bg);
             font-family: 'Segoe UI', 'Arial', sans-serif;
@@ -32,7 +27,7 @@
             align-items: center;
         }
 
-        /* شاشة تسجيل الدخول */
+        /* شاشة الدخول */
         #loginScreen {
             background: var(--panel);
             border: 1px solid var(--border);
@@ -42,7 +37,6 @@
             width: 350px;
             box-shadow: 0 0 40px rgba(139, 0, 0, 0.3);
         }
-
         #loginScreen h1 {
             color: var(--accent);
             font-size: 28px;
@@ -50,14 +44,12 @@
             margin-bottom: 10px;
             font-family: 'Courier New', monospace;
         }
-
         #loginScreen .subtitle {
             color: #555;
             font-size: 11px;
             letter-spacing: 3px;
             margin-bottom: 30px;
         }
-
         #loginScreen input {
             width: 100%;
             padding: 14px;
@@ -72,12 +64,10 @@
             outline: none;
             transition: all 0.3s;
         }
-
         #loginScreen input:focus {
             border-color: var(--accent);
             box-shadow: 0 0 15px rgba(139, 0, 0, 0.3);
         }
-
         #loginScreen button {
             width: 100%;
             padding: 14px;
@@ -92,12 +82,10 @@
             border-radius: 4px;
             transition: all 0.3s;
         }
-
         #loginScreen button:hover {
             background: #a00000;
             box-shadow: 0 0 25px rgba(139, 0, 0, 0.5);
         }
-
         #loginError {
             color: #ff0000;
             font-size: 12px;
@@ -113,7 +101,6 @@
             flex-direction: column;
             background: var(--bg);
         }
-
         #chatHeader {
             background: #000;
             border-bottom: 1px solid var(--accent);
@@ -122,17 +109,21 @@
             justify-content: space-between;
             align-items: center;
         }
-
         #chatHeader .room-name {
             color: var(--accent);
             font-family: 'Courier New', monospace;
             font-size: 16px;
             letter-spacing: 4px;
         }
-
-        #chatHeader .user-count {
-            color: #555;
-            font-size: 12px;
+        #chatHeader .status {
+            font-size: 10px;
+            letter-spacing: 2px;
+        }
+        .online {
+            color: #00ff00;
+        }
+        .offline {
+            color: #ff0000;
         }
 
         #chatMessages {
@@ -150,9 +141,7 @@
             border-radius: 12px;
             word-break: break-word;
             animation: msgIn 0.3s ease;
-            position: relative;
         }
-
         @keyframes msgIn {
             from {
                 opacity: 0;
@@ -163,21 +152,18 @@
                 transform: translateY(0);
             }
         }
-
         .message-mine {
             align-self: flex-end;
-            background: var(--my-msg);
+            background: #1a0000;
             border: 1px solid #330000;
             border-bottom-right-radius: 2px;
         }
-
         .message-theirs {
             align-self: flex-start;
-            background: var(--their-msg);
+            background: #0a0a0a;
             border: 1px solid #1a1a1a;
             border-bottom-left-radius: 2px;
         }
-
         .message-sender {
             font-size: 10px;
             color: var(--accent);
@@ -185,31 +171,24 @@
             font-weight: bold;
             letter-spacing: 1px;
         }
-
         .message-text {
             font-size: 15px;
             color: #ccc;
             line-height: 1.5;
         }
-
         .message-text img {
             max-width: 200px;
             max-height: 200px;
             border-radius: 8px;
             margin: 5px 0;
+            cursor: pointer;
         }
-
-        .message-text .emoji-large {
-            font-size: 40px;
-        }
-
         .message-time {
             font-size: 9px;
             color: #444;
             margin-top: 4px;
             text-align: left;
         }
-
         .system-msg {
             text-align: center;
             color: #333;
@@ -218,7 +197,6 @@
             padding: 8px;
         }
 
-        /* شريط الإدخال */
         #chatInputArea {
             background: #000;
             border-top: 1px solid #1a1a1a;
@@ -227,7 +205,6 @@
             gap: 8px;
             align-items: center;
         }
-
         #chatInputArea input[type="text"] {
             flex: 1;
             padding: 14px;
@@ -238,11 +215,9 @@
             outline: none;
             font-size: 15px;
         }
-
         #chatInputArea input[type="text"]:focus {
             border-color: var(--accent);
         }
-
         #chatInputArea button {
             background: transparent;
             border: 1px solid #333;
@@ -257,17 +232,13 @@
             align-items: center;
             justify-content: center;
         }
-
         #chatInputArea button:hover {
             border-color: var(--accent);
             color: var(--accent);
         }
-
         #fileInput {
             display: none;
         }
-
-        /* الإيموجيات */
         #emojiPanel {
             display: none;
             flex-wrap: wrap;
@@ -279,32 +250,17 @@
             overflow-y: auto;
             justify-content: center;
         }
-
         #emojiPanel.active {
             display: flex;
         }
-
         #emojiPanel span {
             font-size: 28px;
             cursor: pointer;
             transition: transform 0.2s;
-            animation: emojiBounce 0.5s infinite alternate;
         }
-
         #emojiPanel span:hover {
             transform: scale(1.4);
         }
-
-        @keyframes emojiBounce {
-            from {
-                transform: translateY(0);
-            }
-            to {
-                transform: translateY(-5px);
-            }
-        }
-
-        /* صورة مكبرة */
         #imageModal {
             display: none;
             position: fixed;
@@ -318,22 +274,11 @@
             align-items: center;
             cursor: pointer;
         }
-
         #imageModal img {
             max-width: 95%;
             max-height: 95%;
             border-radius: 8px;
         }
-
-        /* التشفير */
-        .secure-badge {
-            color: #004400;
-            font-size: 10px;
-            letter-spacing: 2px;
-            margin-left: 5px;
-        }
-
-        /* شريط التمرير */
         #chatMessages::-webkit-scrollbar {
             width: 4px;
         }
@@ -351,7 +296,7 @@
     <!-- شاشة الدخول -->
     <div id="loginScreen">
         <h1>ø ASAØ</h1>
-        <div class="subtitle">SHADOW-VAULT</div>
+        <div class="subtitle">INTERNET-SHADOW</div>
         <input type="text" id="usernameInput" placeholder="أدخل اسمك" maxlength="20" autocomplete="off">
         <input type="password" id="codeInput" placeholder="أدخل رمز الدخول" maxlength="10" autocomplete="off">
         <button onclick="attemptLogin()">⚔️ دخول</button>
@@ -361,236 +306,231 @@
     <!-- شاشة المحادثة -->
     <div id="chatScreen">
         <div id="chatHeader">
-            <span class="room-name">ø ASAØ <span class="secure-badge">[ENCRYPTED]</span></span>
-            <span class="user-count" id="userCount">👤 0</span>
+            <span class="room-name">ø ASAØ <span style="color:#004400;font-size:10px;">[ENCRYPTED]</span></span>
+            <span class="status online" id="connectionStatus">● متصل</span>
         </div>
-
         <div id="chatMessages"></div>
-
         <div id="emojiPanel">
-            <!-- إيموجيات متحركة -->
-            <span onclick="insertEmoji('😈')">😈</span>
-            <span onclick="insertEmoji('💀')">💀</span>
-            <span onclick="insertEmoji('🐱‍👤')">🐱‍👤</span>
-            <span onclick="insertEmoji('👁️')">👁️</span>
-            <span onclick="insertEmoji('🔥')">🔥</span>
-            <span onclick="insertEmoji('⚡')">⚡</span>
-            <span onclick="insertEmoji('🩸')">🩸</span>
-            <span onclick="insertEmoji('🧨')">🧨</span>
-            <span onclick="insertEmoji('💣')">💣</span>
-            <span onclick="insertEmoji('🗡️')">🗡️</span>
-            <span onclick="insertEmoji('🖤')">🖤</span>
-            <span onclick="insertEmoji('👻')">👻</span>
-            <span onclick="insertEmoji('🎭')">🎭</span>
-            <span onclick="insertEmoji('🦅')">🦅</span>
-            <span onclick="insertEmoji('🐺')">🐺</span>
-            <span onclick="insertEmoji('🕷️')">🕷️</span>
-            <span onclick="insertEmoji('🦇')">🦇</span>
-            <span onclick="insertEmoji('⛓️')">⛓️</span>
-            <span onclick="insertEmoji('🪦')">🪦</span>
-            <span onclick="insertEmoji('☠️')">☠️</span>
-            <span onclick="insertEmoji('👹')">👹</span>
-            <span onclick="insertEmoji('🤖')">🤖</span>
-            <span onclick="insertEmoji('🎃')">🎃</span>
-            <span onclick="insertEmoji('😱')">😱</span>
+            <span onclick="insertEmoji('😈')">😈</span><span onclick="insertEmoji('💀')">💀</span>
+            <span onclick="insertEmoji('🐱‍👤')">🐱‍👤</span><span onclick="insertEmoji('👁️')">👁️</span>
+            <span onclick="insertEmoji('🔥')">🔥</span><span onclick="insertEmoji('⚡')">⚡</span>
+            <span onclick="insertEmoji('🩸')">🩸</span><span onclick="insertEmoji('🧨')">🧨</span>
+            <span onclick="insertEmoji('💣')">💣</span><span onclick="insertEmoji('🗡️')">🗡️</span>
+            <span onclick="insertEmoji('🖤')">🖤</span><span onclick="insertEmoji('👻')">👻</span>
+            <span onclick="insertEmoji('🎭')">🎭</span><span onclick="insertEmoji('🦅')">🦅</span>
+            <span onclick="insertEmoji('🐺')">🐺</span><span onclick="insertEmoji('🕷️')">🕷️</span>
+            <span onclick="insertEmoji('🦇')">🦇</span><span onclick="insertEmoji('⛓️')">⛓️</span>
+            <span onclick="insertEmoji('🪦')">🪦</span><span onclick="insertEmoji('☠️')">☠️</span>
+            <span onclick="insertEmoji('👹')">👹</span><span onclick="insertEmoji('🤖')">🤖</span>
+            <span onclick="insertEmoji('🎃')">🎃</span><span onclick="insertEmoji('😱')">😱</span>
         </div>
-
         <div id="chatInputArea">
-            <button onclick="toggleEmojiPanel()" title="إيموجيات">😀</button>
-            <button onclick="document.getElementById('fileInput').click()" title="إرسال صورة">📷</button>
+            <button onclick="toggleEmoji()" title="إيموجيات">😀</button>
+            <button onclick="document.getElementById('fileInput').click()" title="صورة">📷</button>
             <input type="file" id="fileInput" accept="image/*" onchange="sendImage()">
             <input type="text" id="messageInput" placeholder="اكتب رسالتك..." onkeydown="if(event.key==='Enter')sendMessage()">
             <button onclick="sendMessage()" title="إرسال">▶</button>
         </div>
     </div>
 
-    <!-- مكبر الصور -->
-    <div id="imageModal" onclick="closeImageModal()">
+    <div id="imageModal" onclick="this.style.display='none'">
         <img id="modalImage" src="" alt="صورة">
     </div>
 
-    <script>
-        // ============================================================
-        // ø ASAØ | "قبو الظل" (SHADOW-VAULT)
-        // غرفة محادثة مشفرة - رمز الدخول: 57348
-        // ============================================================
+    <!-- Firebase SDK -->
+    <script type="module">
+        import { initializeApp } from "https://www.gstatic.com/firebasejs/10.7.1/firebase-app.js";
+        import { getDatabase, ref, push, onChildAdded, set, serverTimestamp, onValue, off, remove } from
+        "https://www.gstatic.com/firebasejs/10.7.1/firebase-database.js";
+
+        const firebaseConfig = {
+            apiKey: "AIzaSyDktNhUGoYbKqJPK4JJ8RCeF9KZ5HGhQvE",
+            authDomain: "shadow-vault-chat.firebaseapp.com",
+            databaseURL: "https://shadow-vault-chat-default-rtdb.firebaseio.com",
+            projectId: "shadow-vault-chat",
+            storageBucket: "shadow-vault-chat.appspot.com",
+            messagingSenderId: "1085738429214",
+            appId: "1:1085738429214:web:abc123def456"
+        };
+
+        const app = initializeApp(firebaseConfig);
+        const db = getDatabase(app);
 
         const ACCESS_CODE = '57348';
+        const ROOM_ID = 'shadow_vault_room_omega';
         let currentUser = '';
-        let localMessages = [];
+        let isLoggedIn = false;
 
-        // --- الدخول ---
-        function attemptLogin() {
+        window.attemptLogin = function() {
             const username = document.getElementById('usernameInput').value.trim();
             const code = document.getElementById('codeInput').value.trim();
             const errorEl = document.getElementById('loginError');
 
-            if (!username) {
-                errorEl.textContent = '❌ أدخل اسمك أولاً';
-                errorEl.style.display = 'block';
-                return;
-            }
-            if (!code) {
-                errorEl.textContent = '❌ أدخل الرمز';
+            if (!username || !code) {
+                errorEl.textContent = '❌ املأ جميع الحقول';
                 errorEl.style.display = 'block';
                 return;
             }
             if (code !== ACCESS_CODE) {
-                errorEl.textContent = '❌ الرمز غير صحيح - تم تسجيل المحاولة';
+                errorEl.textContent = '❌ الرمز غير صحيح';
                 errorEl.style.display = 'block';
-                document.getElementById('codeInput').value = '';
-                document.getElementById('codeInput').style.borderColor = '#ff0000';
-                setTimeout(() => { document.getElementById('codeInput').style.borderColor = '#333'; }, 1500);
                 return;
             }
 
             currentUser = username;
+            isLoggedIn = true;
             document.getElementById('loginScreen').style.display = 'none';
             document.getElementById('chatScreen').style.display = 'flex';
-
-            addSystemMessage('👤 ' + currentUser + ' دخل الغرفة');
-            updateUserCount();
             document.getElementById('messageInput').focus();
 
-            // تشفير بسيط للاسم
-            const encryptedName = btoa(currentUser);
-            console.log('🔒 اسم مشفر: ' + encryptedName);
-        }
+            addSystemMessage('👤 ' + currentUser + ' انضم إلى الغرفة');
+            listenForMessages();
+            monitorConnection();
+            updatePresence(true);
+        };
 
-        // --- إرسال رسالة ---
-        function sendMessage() {
+        window.sendMessage = function() {
+            if (!isLoggedIn) return;
             const input = document.getElementById('messageInput');
             const text = input.value.trim();
             if (!text) return;
 
-            addMessage(currentUser, text, true);
+            const msgRef = push(ref(db, ROOM_ID));
+            set(msgRef, {
+                sender: currentUser,
+                text: text,
+                type: 'text',
+                timestamp: serverTimestamp(),
+                encrypted: btoa(encodeURIComponent(text))
+            });
+
             input.value = '';
             input.focus();
-            updateUserCount();
-        }
+        };
 
-        // --- إرسال صورة ---
-        function sendImage() {
+        window.sendImage = function() {
+            if (!isLoggedIn) return;
             const fileInput = document.getElementById('fileInput');
             const file = fileInput.files[0];
             if (!file) return;
+            if (file.size > 500000) {
+                alert('الصورة كبيرة جداً. الحد الأقصى 500KB.');
+                fileInput.value = '';
+                return;
+            }
 
             const reader = new FileReader();
             reader.onload = function(e) {
-                const imgSrc = e.target.result;
-                const imgHtml = '<img src="' + imgSrc + '" onclick="openImageModal(\'' + imgSrc +
-                    '\')" style="cursor:pointer;">';
-                addMessage(currentUser, imgHtml, true);
+                const msgRef = push(ref(db, ROOM_ID));
+                set(msgRef, {
+                    sender: currentUser,
+                    text: e.target.result,
+                    type: 'image',
+                    timestamp: serverTimestamp()
+                });
             };
             reader.readAsDataURL(file);
             fileInput.value = '';
+        };
+
+        function listenForMessages() {
+            const roomRef = ref(db, ROOM_ID);
+            onChildAdded(roomRef, function(snapshot) {
+                const msg = snapshot.val();
+                if (msg.sender === currentUser) {
+                    renderMessage(msg, true);
+                } else {
+                    renderMessage(msg, false);
+                }
+                scrollToBottom();
+            });
         }
 
-        // --- إضافة رسالة ---
-        function addMessage(sender, text, isMine) {
-            const msgObj = {
-                sender: sender,
-                text: text,
-                isMine: isMine,
-                time: new Date().toLocaleTimeString('ar-SA', { hour: '2-digit', minute: '2-digit' })
-            };
-            localMessages.push(msgObj);
-            renderMessage(msgObj);
-            document.getElementById('chatMessages').scrollTop = document.getElementById('chatMessages').scrollHeight;
-        }
-
-        // --- عرض رسالة ---
-        function renderMessage(msgObj) {
+        function renderMessage(msg, isMine) {
             const msgDiv = document.createElement('div');
-            msgDiv.className = 'message-bubble ' + (msgObj.isMine ? 'message-mine' : 'message-theirs');
+            msgDiv.className = 'message-bubble ' + (isMine ? 'message-mine' : 'message-theirs');
 
             const senderSpan = document.createElement('div');
             senderSpan.className = 'message-sender';
-            senderSpan.textContent = msgObj.isMine ? 'أنت' : msgObj.sender;
+            senderSpan.textContent = isMine ? 'أنت' : msg.sender;
 
             const textDiv = document.createElement('div');
             textDiv.className = 'message-text';
-            textDiv.innerHTML = msgObj.text;
+
+            if (msg.type === 'image') {
+                textDiv.innerHTML = '<img src="' + msg.text +
+                    '" onclick="document.getElementById(\'modalImage\').src=this.src;document.getElementById(\'imageModal\').style.display=\'flex\'" style="cursor:pointer;max-width:200px;max-height:200px;border-radius:8px;">';
+            } else {
+                try {
+                    textDiv.textContent = decodeURIComponent(atob(msg.encrypted));
+                } catch (e) {
+                    textDiv.textContent = msg.text;
+                }
+            }
 
             const timeSpan = document.createElement('div');
             timeSpan.className = 'message-time';
-            timeSpan.textContent = msgObj.time;
+            timeSpan.textContent = new Date().toLocaleTimeString('ar-SA', { hour: '2-digit', minute: '2-digit' });
 
             msgDiv.appendChild(senderSpan);
             msgDiv.appendChild(textDiv);
             msgDiv.appendChild(timeSpan);
-
             document.getElementById('chatMessages').appendChild(msgDiv);
         }
 
-        // --- رسالة نظام ---
         function addSystemMessage(text) {
             const sysDiv = document.createElement('div');
             sysDiv.className = 'system-msg';
             sysDiv.textContent = text;
             document.getElementById('chatMessages').appendChild(sysDiv);
-            document.getElementById('chatMessages').scrollTop = document.getElementById('chatMessages').scrollHeight;
+            scrollToBottom();
         }
 
-        // --- إيموجيات ---
-        function toggleEmojiPanel() {
-            const panel = document.getElementById('emojiPanel');
-            panel.classList.toggle('active');
+        function scrollToBottom() {
+            const container = document.getElementById('chatMessages');
+            container.scrollTop = container.scrollHeight;
         }
 
-        function insertEmoji(emoji) {
-            const input = document.getElementById('messageInput');
-            input.value += emoji;
-            input.focus();
+        function monitorConnection() {
+            const connectedRef = ref(db, '.info/connected');
+            onValue(connectedRef, function(snap) {
+                const status = document.getElementById('connectionStatus');
+                if (snap.val() === true) {
+                    status.textContent = '● متصل';
+                    status.className = 'status online';
+                } else {
+                    status.textContent = '● غير متصل';
+                    status.className = 'status offline';
+                }
+            });
         }
 
-        // --- مكبر الصور ---
-        function openImageModal(src) {
-            document.getElementById('modalImage').src = src;
-            document.getElementById('imageModal').style.display = 'flex';
-        }
-
-        function closeImageModal() {
-            document.getElementById('imageModal').style.display = 'none';
-        }
-
-        // --- تحديث عدد المستخدمين ---
-        function updateUserCount() {
-            const uniqueUsers = [...new Set(localMessages.map(m => m.sender)), currentUser];
-            document.getElementById('userCount').textContent = '👤 ' + uniqueUsers.length;
-        }
-
-        // --- منع الدخول غير المصرح ---
-        document.addEventListener('keydown', function(e) {
-            if (e.key === 'Enter' && document.getElementById('loginScreen').style.display !== 'none') {
-                attemptLogin();
-            }
-        });
-
-        // --- تشفير محلي للرسائل ---
-        function encryptMessage(text) {
-            return btoa(encodeURIComponent(text));
-        }
-
-        function decryptMessage(encoded) {
-            try {
-                return decodeURIComponent(atob(encoded));
-            } catch (e) {
-                return '[رسالة مشفرة]';
+        function updatePresence(online) {
+            const presenceRef = ref(db, ROOM_ID + '_presence/' + currentUser.replace(/[.#$\[\]]/g, '_'));
+            if (online) {
+                set(presenceRef, { online: true, timestamp: serverTimestamp() });
+                window.addEventListener('beforeunload', function() {
+                    set(presenceRef, { online: false });
+                });
             }
         }
 
-        // --- حماية من F12 و DevTools ---
+        window.toggleEmoji = function() {
+            document.getElementById('emojiPanel').classList.toggle('active');
+        };
+
+        window.insertEmoji = function(emoji) {
+            document.getElementById('messageInput').value += emoji;
+            document.getElementById('messageInput').focus();
+        };
+
         document.addEventListener('contextmenu', function(e) { e.preventDefault(); });
         document.addEventListener('keydown', function(e) {
-            if (e.key === 'F12' || (e.ctrlKey && e.shiftKey && e.key === 'I') || (e.ctrlKey && e.key === 'U')) {
+            if (e.key === 'F12' || (e.ctrlKey && e.shiftKey && e.key === 'I') || (e.ctrlKey && e.key ===
+                    'U')) {
                 e.preventDefault();
-                return false;
             }
         });
-
-        console.log('ø ASAØ SHADOW-VAULT // READY');
-        console.log('ACCESS CODE: ' + btoa(ACCESS_CODE));
     </script>
 </body>
 </html>
