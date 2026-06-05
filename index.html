@@ -3,528 +3,311 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>ø ASAØ - ظل النار</title>
+    <title>🌑 DARK KNIGHT - ø ASAØ</title>
     <style>
-        :root {
-            --bg: #0a0a0a;
-            --panel: #111;
-            --accent: #8b0000;
-            --text: #c0c0c0;
-        }
-        * {
-            margin: 0;
-            padding: 0;
-            box-sizing: border-box;
-        }
-        body {
-            background: var(--bg);
-            font-family: 'Segoe UI', 'Arial', sans-serif;
-            color: var(--text);
-            height: 100vh;
-            display: flex;
-            justify-content: center;
-            align-items: center;
-        }
-
-        #loginScreen {
-            background: var(--panel);
-            border: 1px solid #1a1a1a;
-            border-radius: 12px;
-            padding: 50px 30px;
-            text-align: center;
-            width: 350px;
-            box-shadow: 0 0 40px rgba(139, 0, 0, 0.3);
-        }
-        #loginScreen h1 {
-            color: var(--accent);
-            font-size: 28px;
-            letter-spacing: 6px;
-            margin-bottom: 10px;
-            font-family: 'Courier New', monospace;
-        }
-        #loginScreen .sub {
-            color: #555;
-            font-size: 11px;
-            letter-spacing: 3px;
-            margin-bottom: 30px;
-        }
-        #loginScreen input {
-            width: 100%;
-            padding: 14px;
-            margin: 8px 0;
-            background: #000;
-            border: 1px solid #333;
-            color: #fff;
-            font-size: 16px;
-            border-radius: 4px;
-            text-align: center;
-            letter-spacing: 2px;
-            outline: none;
-        }
-        #loginScreen input:focus {
-            border-color: var(--accent);
-            box-shadow: 0 0 15px rgba(139, 0, 0, 0.3);
-        }
-        #loginScreen button {
-            width: 100%;
-            padding: 14px;
-            margin-top: 15px;
-            background: var(--accent);
-            color: #fff;
-            border: none;
-            font-size: 16px;
-            font-weight: bold;
-            letter-spacing: 4px;
-            cursor: pointer;
-            border-radius: 4px;
-        }
-        #loginScreen button:hover {
-            background: #a00000;
-        }
-        #loginError {
-            color: #ff0000;
-            font-size: 12px;
-            margin-top: 10px;
-            display: none;
-        }
-
-        #chatScreen {
-            display: none;
-            width: 100%;
-            height: 100vh;
-            flex-direction: column;
-            background: var(--bg);
-        }
-        #chatHeader {
-            background: #000;
-            border-bottom: 1px solid var(--accent);
-            padding: 14px 20px;
-            display: flex;
-            justify-content: space-between;
-            align-items: center;
-        }
-        #chatHeader .name {
-            color: var(--accent);
-            font-family: 'Courier New', monospace;
-            font-size: 16px;
-            letter-spacing: 4px;
-        }
-        #chatHeader .status {
-            font-size: 10px;
-            letter-spacing: 2px;
-        }
-        .online {
-            color: #00ff00;
-        }
-
-        #chatMessages {
-            flex: 1;
-            overflow-y: auto;
-            padding: 20px;
-            display: flex;
-            flex-direction: column;
-            gap: 8px;
-        }
-        .message-bubble {
-            max-width: 75%;
-            padding: 12px 16px;
-            border-radius: 12px;
-            word-break: break-word;
-            animation: pop 0.3s ease;
-        }
-        @keyframes pop {
-            from {
-                opacity: 0;
-                transform: translateY(10px);
-            }
-            to {
-                opacity: 1;
-                transform: translateY(0);
-            }
-        }
-        .mine {
-            align-self: flex-end;
-            background: #1a0000;
-            border: 1px solid #330000;
-            border-bottom-right-radius: 2px;
-        }
-        .theirs {
-            align-self: flex-start;
-            background: #0a0a0a;
-            border: 1px solid #1a1a1a;
-            border-bottom-left-radius: 2px;
-        }
-        .sender {
-            font-size: 10px;
-            color: var(--accent);
-            margin-bottom: 4px;
-            font-weight: bold;
-        }
-        .text {
-            font-size: 15px;
-            color: #ccc;
-            line-height: 1.5;
-        }
-        .text img {
-            max-width: 200px;
-            max-height: 200px;
-            border-radius: 8px;
-            margin: 5px 0;
-            cursor: pointer;
-        }
-        .time {
-            font-size: 9px;
-            color: #444;
-            margin-top: 4px;
-            text-align: left;
-        }
-        .sys {
-            text-align: center;
-            color: #333;
-            font-size: 11px;
-            letter-spacing: 2px;
-            padding: 8px;
-        }
-
-        #inputArea {
-            background: #000;
-            border-top: 1px solid #1a1a1a;
-            padding: 12px;
-            display: flex;
-            gap: 8px;
-            align-items: center;
-        }
-        #inputArea input[type="text"] {
-            flex: 1;
-            padding: 14px;
-            background: #0a0a0a;
-            border: 1px solid #222;
-            color: #fff;
-            border-radius: 20px;
-            outline: none;
-            font-size: 15px;
-        }
-        #inputArea input[type="text"]:focus {
-            border-color: var(--accent);
-        }
-        #inputArea button {
-            background: transparent;
-            border: 1px solid #333;
-            color: #888;
-            width: 44px;
-            height: 44px;
-            border-radius: 50%;
-            cursor: pointer;
-            font-size: 20px;
-            display: flex;
-            align-items: center;
-            justify-content: center;
-        }
-        #inputArea button:hover {
-            border-color: var(--accent);
-            color: var(--accent);
-        }
-        #fileInput {
-            display: none;
-        }
-        #emojiPanel {
-            display: none;
-            flex-wrap: wrap;
-            gap: 6px;
-            padding: 10px;
-            background: #000;
-            border-top: 1px solid #1a1a1a;
-            max-height: 180px;
-            overflow-y: auto;
-            justify-content: center;
-        }
-        #emojiPanel.show {
-            display: flex;
-        }
-        #emojiPanel span {
-            font-size: 26px;
-            cursor: pointer;
-        }
-        #imageModal {
-            display: none;
-            position: fixed;
-            top: 0;
-            left: 0;
-            width: 100%;
-            height: 100%;
-            background: rgba(0, 0, 0, 0.95);
-            z-index: 9999;
-            justify-content: center;
-            align-items: center;
-            cursor: pointer;
-        }
-        #imageModal img {
-            max-width: 95%;
-            max-height: 95%;
-            border-radius: 8px;
-        }
-        #chatMessages::-webkit-scrollbar {
-            width: 3px;
-        }
-        #chatMessages::-webkit-scrollbar-track {
-            background: #000;
-        }
-        #chatMessages::-webkit-scrollbar-thumb {
-            background: #1a0000;
-        }
+        :root{--bg:#000a14;--panel:#001020;--accent:#1a73e8;--accent2:#ff6d00;--text:#c0c0c0;--gold:#ffaa00;}
+        *{margin:0;padding:0;box-sizing:border-box;}
+        body{background:var(--bg);font-family:'Segoe UI','Arial',sans-serif;color:var(--text);min-height:100vh;}
+        
+        #loginScreen{display:flex;justify-content:center;align-items:center;height:100vh;background:var(--bg);}
+        .login-box{background:var(--panel);border:1px solid #1a3050;border-radius:16px;padding:40px;text-align:center;width:380px;box-shadow:0 0 60px rgba(26,115,232,0.2);}
+        .login-box .logo{font-size:60px;margin-bottom:10px;}
+        .login-box h1{color:#fff;font-size:24px;letter-spacing:4px;margin-bottom:5px;}
+        .login-box .sub{color:#666;font-size:10px;letter-spacing:2px;margin-bottom:25px;}
+        .login-box input, .login-box textarea{width:100%;padding:12px;margin:6px 0;background:#000;border:1px solid #1a3050;color:#fff;font-size:14px;border-radius:6px;text-align:center;outline:none;font-family:inherit;resize:none;}
+        .login-box input:focus{border-color:var(--accent);box-shadow:0 0 15px rgba(26,115,232,0.3);}
+        .login-box button{width:100%;padding:12px;margin-top:10px;background:var(--accent);color:#fff;border:none;border-radius:6px;font-size:14px;font-weight:bold;cursor:pointer;letter-spacing:2px;}
+        .login-box button:hover{background:#1a5fd4;}
+        .login-box button.orange{background:var(--accent2);}
+        .login-box button.orange:hover{background:#e05500;}
+        .login-box .link{color:var(--accent);font-size:10px;cursor:pointer;margin-top:10px;display:inline-block;}
+        .login-box .link:hover{text-decoration:underline;}
+        .error{color:#f00;font-size:10px;margin-top:5px;display:none;}
+        .success{color:#0f0;font-size:10px;margin-top:5px;display:none;}
+        
+        #mainScreen{display:none;}
+        .header{background:#000;border-bottom:1px solid #1a3050;padding:12px 20px;display:flex;justify-content:space-between;align-items:center;position:sticky;top:0;z-index:100;}
+        .header .brand{color:var(--accent);font-size:18px;font-weight:bold;letter-spacing:3px;}
+        .header .user{color:#888;font-size:11px;}
+        .header button{background:var(--accent2);color:#fff;border:none;padding:6px 14px;border-radius:4px;cursor:pointer;font-size:10px;letter-spacing:1px;}
+        
+        .layout{max-width:700px;margin:0 auto;padding:20px;display:flex;flex-direction:column;gap:15px;}
+        
+        .post-box{background:var(--panel);border:1px solid #1a3050;border-radius:12px;padding:20px;}
+        .post-box textarea{width:100%;background:#000;border:1px solid #1a3050;color:#fff;padding:12px;border-radius:8px;font-size:14px;outline:none;font-family:inherit;resize:none;min-height:80px;}
+        .post-box textarea:focus{border-color:var(--accent);}
+        .post-box button{background:var(--accent);color:#fff;border:none;padding:8px 20px;border-radius:6px;cursor:pointer;font-weight:bold;margin-top:8px;letter-spacing:1px;}
+        
+        .post-card{background:var(--panel);border:1px solid #1a3050;border-radius:12px;padding:15px 20px;}
+        .post-card .post-author{color:var(--accent);font-size:11px;font-weight:bold;letter-spacing:1px;}
+        .post-card .post-time{color:#555;font-size:9px;}
+        .post-card .post-content{color:#ddd;font-size:14px;margin:10px 0;line-height:1.6;}
+        .post-card .post-actions{display:flex;gap:10px;margin-top:8px;}
+        .post-card .post-actions button{background:transparent;border:1px solid #333;color:#888;padding:4px 12px;border-radius:20px;cursor:pointer;font-size:10px;}
+        .post-card .post-actions button:hover{background:#1a3050;color:#fff;}
+        
+        .comment-section{margin-top:10px;border-top:1px solid #1a3050;padding-top:10px;}
+        .comment-section input{width:100%;background:#000;border:1px solid #1a3050;color:#fff;padding:8px;border-radius:20px;font-size:11px;outline:none;margin-top:5px;}
+        .comment-section input:focus{border-color:var(--accent);}
+        .comment-item{padding:4px 0;font-size:10px;}
+        .comment-item .comment-author{color:var(--accent);font-size:9px;}
+        .comment-item .comment-text{color:#aaa;}
+        
+        .modal{display:none;position:fixed;top:0;left:0;width:100%;height:100%;background:rgba(0,0,0,0.9);z-index:200;justify-content:center;align-items:center;}
+        .modal.active{display:flex;}
+        .modal-content{background:var(--panel);border:1px solid #1a3050;border-radius:12px;padding:25px;width:350px;text-align:center;}
+        .modal-content h3{color:#fff;margin-bottom:15px;}
+        .modal-content button{background:var(--accent);color:#fff;border:none;padding:8px 20px;border-radius:6px;cursor:pointer;margin:4px;}
+        
+        .badge{display:inline-block;padding:2px 8px;border-radius:10px;font-size:8px;letter-spacing:1px;}
+        .badge.owner{background:var(--gold);color:#000;}
+        .badge.visitor{background:var(--accent);color:#fff;}
+        
+        @media(max-width:600px){.login-box{width:90%;padding:25px;}}
     </style>
 </head>
 <body>
 
-    <div id="loginScreen">
-        <h1>ø ASAØ</h1>
-        <div class="sub">FIRE-SHADOW</div>
-        <input type="text" id="usernameInput" placeholder="أدخل اسمك" maxlength="20" autocomplete="off">
-        <input type="password" id="codeInput" placeholder="أدخل رمز الدخول" maxlength="10" autocomplete="off">
-        <button onclick="login()">⚔️ دخول</button>
-        <div id="loginError">❌ الرمز غير صحيح</div>
-    </div>
-
-    <div id="chatScreen">
-        <div id="chatHeader">
-            <span class="name">ø ASAØ <span style="color:#004400;font-size:9px;">[ENCRYPTED]</span></span>
-            <span class="status online" id="connStatus">● متصل</span>
+<!-- شاشة الدخول -->
+<div id="loginScreen">
+    <div class="login-box" id="loginBox">
+        <div class="logo">🌑</div>
+        <h1>DARK KNIGHT</h1>
+        <div class="sub">ø ASAØ // منصة اجتماعية خاصة</div>
+        
+        <!-- خيار المالك -->
+        <div id="ownerLogin">
+            <input type="password" id="ownerCode" placeholder="🔑 أدخل رمز المالك" maxlength="10">
+            <button onclick="ownerLogin()">👑 دخول المالك</button>
+            <div class="error" id="ownerError">❌ رمز خاطئ</div>
         </div>
-        <div id="chatMessages"></div>
-        <div id="emojiPanel">
-            <span onclick="addEmoji('😈')">😈</span><span onclick="addEmoji('💀')">💀</span>
-            <span onclick="addEmoji('🐱‍👤')">🐱‍👤</span><span onclick="addEmoji('👁️')">👁️</span>
-            <span onclick="addEmoji('🔥')">🔥</span><span onclick="addEmoji('⚡')">⚡</span>
-            <span onclick="addEmoji('🩸')">🩸</span><span onclick="addEmoji('🧨')">🧨</span>
-            <span onclick="addEmoji('💣')">💣</span><span onclick="addEmoji('🗡️')">🗡️</span>
-            <span onclick="addEmoji('🖤')">🖤</span><span onclick="addEmoji('👻')">👻</span>
-            <span onclick="addEmoji('🦅')">🦅</span><span onclick="addEmoji('🐺')">🐺</span>
-            <span onclick="addEmoji('🕷️')">🕷️</span><span onclick="addEmoji('🦇')">🦇</span>
-            <span onclick="addEmoji('⛓️')">⛓️</span><span onclick="addEmoji('🪦')">🪦</span>
-            <span onclick="addEmoji('☠️')">☠️</span><span onclick="addEmoji('👹')">👹</span>
-            <span onclick="addEmoji('🎃')">🎃</span><span onclick="addEmoji('😱')">😱</span>
+        
+        <div style="color:#333;margin:15px 0;">─── أو ───</div>
+        
+        <!-- خيار الزائر -->
+        <div id="visitorSection">
+            <input type="text" id="visitorPhone" placeholder="📱 أدخل رقم هاتفك" maxlength="20">
+            <button class="orange" onclick="visitorRequest()">🚶 دخول كزائر</button>
+            <div class="success" id="visitorSuccess">✅ تم إرسال طلبك للمالك</div>
+            <div class="error" id="visitorError">❌ أدخل رقم هاتف صحيح</div>
         </div>
-        <div id="inputArea">
-            <button onclick="document.getElementById('emojiPanel').classList.toggle('show')">😀</button>
-            <button onclick="document.getElementById('fileInput').click()">📷</button>
-            <input type="file" id="fileInput" accept="image/*" onchange="sendImg()">
-            <input type="text" id="msgInput" placeholder="اكتب رسالتك..." onkeydown="if(event.key==='Enter')sendMsg()">
-            <button onclick="sendMsg()">▶</button>
+        
+        <div class="link" onclick="showApprovedList()">📋 عرض الزوار المقبولين</div>
+    </div>
+</div>
+
+<!-- الشاشة الرئيسية -->
+<div id="mainScreen">
+    <div class="header">
+        <span class="brand">🌑 DARK KNIGHT</span>
+        <span class="user" id="headerUser"></span>
+        <button onclick="logout()">🚪 خروج</button>
+    </div>
+    
+    <div class="layout">
+        <!-- صندوق النشر (للمالك فقط) -->
+        <div class="post-box" id="publishBox" style="display:none;">
+            <textarea id="postContent" placeholder="✍️ ماذا تريد أن تنشر؟"></textarea>
+            <button onclick="publishPost()">📢 نشر</button>
+        </div>
+        
+        <!-- المنشورات -->
+        <div id="postsContainer">
+            <div style="text-align:center;color:#555;padding:30px;">📭 لا توجد منشورات بعد...</div>
         </div>
     </div>
+</div>
 
-    <div id="imageModal" onclick="this.style.display='none'">
-        <img id="modalImg" src="" alt="صورة">
+<!-- نافذة الزوار -->
+<div class="modal" id="visitorsModal">
+    <div class="modal-content">
+        <h3>📋 الزوار المقبولين</h3>
+        <div id="visitorsList" style="max-height:300px;overflow-y:auto;text-align:right;font-size:10px;"></div>
+        <button onclick="closeVisitors()">إغلاق</button>
     </div>
+</div>
 
-    <script>
-        // ============================================================
-        // ø ASAØ | FIRE-SHADOW | غرفة محادثة عبر الإنترنت
-        // الخادم: JSONBin.io عام - جاهز - لا يحتاج إعداد
-        // ============================================================
+<script>
+// ============================================================
+// ø ASAØ | DARK KNIGHT | منصة اجتماعية خاصة
+// ============================================================
 
-        const ACCESS_CODE = '57348';
-        const BIN_ID = '670e5a9cad19ca34f8b5e8a5';
-        const API_KEY = '$2a$10$MhQZxYpLqNwRvTcVbKjXeO';
-        const BASE_URL = 'https://api.jsonbin.io/v3/b/' + BIN_ID;
-        let currentUser = '';
-        let lastMsgCount = 0;
-        let pollInterval;
+const OWNER_CODE='54379';
+let currentUser=null;
+let isOwner=false;
 
-        function login() {
-            const name = document.getElementById('usernameInput').value.trim();
-            const code = document.getElementById('codeInput').value.trim();
-            const err = document.getElementById('loginError');
+// --- تخزين محلي ---
+function getData(){return JSON.parse(localStorage.getItem('darkKnightData')||'{"posts":[],"visitors":[],"approvedVisitors":[]}');}
+function saveData(d){localStorage.setItem('darkKnightData',JSON.stringify(d));}
 
-            if (!name || !code) {
-                err.textContent = '❌ املأ جميع الحقول';
-                err.style.display = 'block';
-                return;
-            }
-            if (code !== ACCESS_CODE) {
-                err.textContent = '❌ الرمز غير صحيح';
-                err.style.display = 'block';
-                return;
-            }
+// --- دخول المالك ---
+function ownerLogin(){
+    const code=document.getElementById('ownerCode').value.trim();
+    if(code===OWNER_CODE){
+        currentUser='👑 المالك';
+        isOwner=true;
+        document.getElementById('ownerError').style.display='none';
+        showMainScreen();
+    }else{
+        document.getElementById('ownerError').style.display='block';
+    }
+}
 
-            currentUser = name;
-            document.getElementById('loginScreen').style.display = 'none';
-            document.getElementById('chatScreen').style.display = 'flex';
-            document.getElementById('msgInput').focus();
+// --- طلب زيارة ---
+function visitorRequest(){
+    const phone=document.getElementById('visitorPhone').value.trim();
+    if(!phone||phone.length<5){
+        document.getElementById('visitorError').style.display='block';
+        return;
+    }
+    document.getElementById('visitorError').style.display='none';
+    
+    const data=getData();
+    // تحقق مما إذا كان مقبولاً مسبقاً
+    if(data.approvedVisitors.includes(phone)){
+        currentUser='🚶 زائر ('+phone+')';
+        isOwner=false;
+        document.getElementById('visitorSuccess').style.display='block';
+        setTimeout(()=>showMainScreen(),800);
+        return;
+    }
+    // إضافة إلى قائمة الطلبات
+    if(!data.visitors.includes(phone)){
+        data.visitors.push(phone);
+        saveData(data);
+    }
+    document.getElementById('visitorSuccess').textContent='✅ تم إرسال رقمك للمالك. انتظر القبول.';
+    document.getElementById('visitorSuccess').style.display='block';
+    document.getElementById('visitorError').style.display='none';
+    
+    // إظهار للمالك في المرة القادمة
+    alert('📱 رقمك أرسل للمالك. سيتم قبولك قريباً.');
+}
 
-            sysMsg('👤 ' + currentUser + ' انضم إلى الغرفة');
-            addToChat(currentUser, 'دخل الغرفة', 'sys');
-            startPolling();
-            updateStatus(true);
-            window.addEventListener('beforeunload', () => updateStatus(false));
-        }
-
-        async function sendMsg() {
-            const input = document.getElementById('msgInput');
-            const text = input.value.trim();
-            if (!text || !currentUser) return;
-
-            await addMessageToBin(currentUser, text, 'text');
-            input.value = '';
-            input.focus();
-        }
-
-        async function sendImg() {
-            const file = document.getElementById('fileInput').files[0];
-            if (!file || !currentUser) return;
-            if (file.size > 400000) {
-                alert('الصورة كبيرة جداً. الحد الأقصى 400KB.');
-                document.getElementById('fileInput').value = '';
-                return;
-            }
-
-            const reader = new FileReader();
-            reader.onload = async function(e) {
-                await addMessageToBin(currentUser, e.target.result, 'image');
-            };
-            reader.readAsDataURL(file);
-            document.getElementById('fileInput').value = '';
-        }
-
-        async function addMessageToBin(sender, content, type) {
-            try {
-                const getRes = await fetch(BASE_URL + '/latest', {
-                    headers: { 'X-Master-Key': API_KEY }
-                });
-                const data = await getRes.json();
-                let messages = data.record.messages || [];
-                messages.push({
-                    sender: sender,
-                    content: content,
-                    type: type,
-                    time: new Date().toISOString()
-                });
-                if (messages.length > 200) messages = messages.slice(-200);
-
-                await fetch(BASE_URL, {
-                    method: 'PUT',
-                    headers: {
-                        'Content-Type': 'application/json',
-                        'X-Master-Key': API_KEY,
-                        'Versioning': 'false'
-                    },
-                    body: JSON.stringify({ messages: messages, lastUpdate: Date.now() })
-                });
-            } catch (e) {
-                console.error(e);
-            }
-        }
-
-        async function startPolling() {
-            pollInterval = setInterval(async () => {
-                try {
-                    const res = await fetch(BASE_URL + '/latest', {
-                        headers: { 'X-Master-Key': API_KEY },
-                        cache: 'no-store'
-                    });
-                    const data = await res.json();
-                    const messages = data.record.messages || [];
-                    const newMsgs = messages.slice(lastMsgCount);
-                    if (newMsgs.length > 0) {
-                        newMsgs.forEach(msg => {
-                            if (msg.type === 'sys') {
-                                sysMsg(msg.content);
-                            } else if (msg.sender === currentUser) {
-                                renderMsg(msg, true);
-                            } else {
-                                renderMsg(msg, false);
-                            }
-                        });
-                        lastMsgCount = messages.length;
-                        scrollDown();
-                    }
-                    document.getElementById('connStatus').textContent = '● متصل';
-                    document.getElementById('connStatus').className = 'status online';
-                } catch (e) {
-                    document.getElementById('connStatus').textContent = '● إعادة اتصال...';
-                    document.getElementById('connStatus').className = 'status';
+// --- إظهار الشاشة الرئيسية ---
+function showMainScreen(){
+    document.getElementById('loginScreen').style.display='none';
+    document.getElementById('mainScreen').style.display='block';
+    document.getElementById('headerUser').textContent=currentUser;
+    
+    if(isOwner){
+        document.getElementById('publishBox').style.display='block';
+    }
+    
+    loadPosts();
+    
+    // إذا كان المالك، أظهر طلبات الزوار
+    if(isOwner){
+        const data=getData();
+        if(data.visitors.length>0){
+            const pending=data.visitors.filter(v=>!data.approvedVisitors.includes(v));
+            if(pending.length>0){
+                if(confirm('📱 هناك '+pending.length+' زائر جديد ينتظر القبول:\n\n'+pending.join('\n')+'\n\nهل تريد قبولهم جميعاً؟')){
+                    data.approvedVisitors=[...new Set([...data.approvedVisitors,...pending])];
+                    data.visitors=[];
+                    saveData(data);
+                    alert('✅ تم قبول جميع الزوار!');
                 }
-            }, 1500);
-        }
-
-        function renderMsg(msg, isMine) {
-            const div = document.createElement('div');
-            div.className = 'message-bubble ' + (isMine ? 'mine' : 'theirs');
-
-            const s = document.createElement('div');
-            s.className = 'sender';
-            s.textContent = isMine ? 'أنت' : msg.sender;
-
-            const t = document.createElement('div');
-            t.className = 'text';
-            if (msg.type === 'image') {
-                t.innerHTML = '<img src="' + msg.content +
-                    '" onclick="document.getElementById(\'modalImg\').src=this.src;document.getElementById(\'imageModal\').style.display=\'flex\'" style="cursor:pointer;">';
-            } else {
-                t.textContent = msg.content;
             }
-
-            const ti = document.createElement('div');
-            ti.className = 'time';
-            ti.textContent = new Date(msg.time).toLocaleTimeString('ar-SA', { hour: '2-digit', minute: '2-digit' });
-
-            div.appendChild(s);
-            div.appendChild(t);
-            div.appendChild(ti);
-            document.getElementById('chatMessages').appendChild(div);
         }
+    }
+}
 
-        function sysMsg(text) {
-            const div = document.createElement('div');
-            div.className = 'sys';
-            div.textContent = text;
-            document.getElementById('chatMessages').appendChild(div);
-        }
+// --- نشر ---
+function publishPost(){
+    const content=document.getElementById('postContent').value.trim();
+    if(!content)return;
+    
+    const data=getData();
+    data.posts.unshift({
+        id:Date.now(),
+        author:'👑 المالك',
+        content:content,
+        time:new Date().toLocaleString('ar-SA'),
+        comments:[]
+    });
+    saveData(data);
+    document.getElementById('postContent').value='';
+    loadPosts();
+}
 
-        async function addToChat(sender, content, type) {
-            await addMessageToBin(sender, content, type);
-        }
+// --- تحميل المنشورات ---
+function loadPosts(){
+    const data=getData();
+    const container=document.getElementById('postsContainer');
+    
+    if(data.posts.length===0){
+        container.innerHTML='<div style="text-align:center;color:#555;padding:30px;">📭 لا توجد منشورات بعد...</div>';
+        return;
+    }
+    
+    container.innerHTML=data.posts.map(post=>`
+        <div class="post-card">
+            <div class="post-author">${post.author} <span class="badge owner">مالك</span></div>
+            <div class="post-time">${post.time}</div>
+            <div class="post-content">${post.content}</div>
+            <div class="post-actions">
+                <button onclick="toggleComments('${post.id}')">💬 تعليق (${post.comments.length})</button>
+            </div>
+            <div class="comment-section" id="comments-${post.id}" style="display:none;">
+                ${post.comments.map(c=>`
+                    <div class="comment-item">
+                        <span class="comment-author">${c.author}:</span>
+                        <span class="comment-text">${c.text}</span>
+                    </div>
+                `).join('')}
+                <input type="text" placeholder="✍️ اكتب تعليقاً..." onkeydown="if(event.key==='Enter')addComment('${post.id}',this)">
+            </div>
+        </div>
+    `).join('');
+}
 
-        async function updateStatus(online) {
-            try {
-                const res = await fetch(BASE_URL + '/latest', {
-                    headers: { 'X-Master-Key': API_KEY }
-                });
-                const data = await res.json();
-                let presence = data.record.presence || {};
-                presence[currentUser.replace(/[.#$\[\]]/g, '_')] = online ? 'online' : 'offline';
-                await fetch(BASE_URL, {
-                    method: 'PUT',
-                    headers: {
-                        'Content-Type': 'application/json',
-                        'X-Master-Key': API_KEY,
-                        'Versioning': 'false'
-                    },
-                    body: JSON.stringify({
-                        messages: data.record.messages || [],
-                        presence: presence,
-                        lastUpdate: Date.now()
-                    })
-                });
-            } catch (e) {}
-        }
+// --- تعليقات ---
+function toggleComments(postId){
+    const sec=document.getElementById('comments-'+postId);
+    sec.style.display=sec.style.display==='none'?'block':'none';
+}
 
-        function scrollDown() {
-            const c = document.getElementById('chatMessages');
-            c.scrollTop = c.scrollHeight;
-        }
+function addComment(postId,input){
+    const text=input.value.trim();
+    if(!text)return;
+    
+    const data=getData();
+    const post=data.posts.find(p=>p.id==parseInt(postId));
+    if(post){
+        post.comments.push({author:currentUser,text:text,time:new Date().toLocaleString('ar-SA')});
+        saveData(data);
+        input.value='';
+        loadPosts();
+        document.getElementById('comments-'+postId).style.display='block';
+    }
+}
 
-        function addEmoji(emoji) {
-            document.getElementById('msgInput').value += emoji;
-            document.getElementById('msgInput').focus();
-        }
+// --- الزوار ---
+function showApprovedList(){
+    const data=getData();
+    document.getElementById('visitorsList').innerHTML=data.approvedVisitors.length>0
+        ?data.approvedVisitors.map(v=>'📱 '+v).join('<br>')
+        :'لا يوجد زوار مقبولون';
+    document.getElementById('visitorsModal').classList.add('active');
+}
 
-        document.addEventListener('contextmenu', e => e.preventDefault());
-        document.addEventListener('keydown', function(e) {
-            if (e.key === 'F12' || (e.ctrlKey && e.shiftKey && e.key === 'I') || (e.ctrlKey && e.key === 'U')) {
-                e.preventDefault();
-            }
-        });
-    </script>
+function closeVisitors(){
+    document.getElementById('visitorsModal').classList.remove('active');
+}
+
+// --- خروج ---
+function logout(){
+    currentUser=null;
+    isOwner=false;
+    document.getElementById('mainScreen').style.display='none';
+    document.getElementById('loginScreen').style.display='flex';
+    document.getElementById('ownerCode').value='';
+    document.getElementById('visitorPhone').value='';
+    document.getElementById('ownerError').style.display='none';
+    document.getElementById('visitorSuccess').style.display='none';
+    document.getElementById('visitorError').style.display='none';
+}
+</script>
 </body>
 </html>
