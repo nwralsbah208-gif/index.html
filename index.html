@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>🌑 DARK KNIGHT FINAL - ø ASAØ</title>
+    <title>🌑 DARK KNIGHT X - ø ASAØ</title>
     <style>
         :root{--bg:#000a14;--panel:#001020;--accent:#1a73e8;--accent2:#ff6d00;--red:#ff1744;--green:#00e676;--gold:#ffaa00;--text:#c0c0c0;}
         *{margin:0;padding:0;box-sizing:border-box;}
@@ -17,9 +17,7 @@
         .login-box input{width:100%;padding:12px;margin:6px 0;background:#000;border:1px solid #1a3050;color:#fff;font-size:14px;border-radius:6px;text-align:center;outline:none;font-family:inherit;}
         .login-box input:focus{border-color:var(--accent);box-shadow:0 0 15px rgba(26,115,232,0.3);}
         .login-box button{width:100%;padding:12px;margin-top:10px;background:var(--accent);color:#fff;border:none;border-radius:6px;font-size:14px;font-weight:bold;cursor:pointer;letter-spacing:2px;}
-        .login-box button:hover{background:#1a5fd4;}
         .login-box button.orange{background:var(--accent2);}
-        .login-box .link{color:var(--accent);font-size:10px;cursor:pointer;margin-top:10px;display:inline-block;}
         .error{color:#f00;font-size:10px;margin-top:5px;display:none;}
         .success{color:#0f0;font-size:10px;margin-top:5px;display:none;}
         
@@ -71,8 +69,8 @@
         .badge.owner{background:var(--gold);color:#000;}
         .badge.banned{background:#f00;color:#fff;}
         
-        .live-dot{display:inline-block;width:6px;height:6px;background:#0f0;border-radius:50%;animation:livePulse 1s infinite;margin-left:4px;}
-        @keyframes livePulse{0%,100%{opacity:1;}50%{opacity:0.3;}}
+        .notif-badge{position:relative;display:inline-block;}
+        .notif-count{position:absolute;top:-8px;right:-8px;background:var(--red);color:#fff;border-radius:50%;width:18px;height:18px;font-size:10px;display:flex;align-items:center;justify-content:center;font-weight:bold;display:none;}
         
         @media(max-width:600px){.login-box{width:90%;padding:25px;}}
     </style>
@@ -82,8 +80,8 @@
 <div id="loginScreen">
     <div class="login-box">
         <div class="logo">🌑</div>
-        <h1>DARK KNIGHT</h1>
-        <div class="sub">ø ASAØ // FINAL EDITION <span class="live-dot"></span> LIVE</div>
+        <h1>DARK KNIGHT X</h1>
+        <div class="sub">ø ASAØ // النسخة النهائية</div>
         
         <input type="password" id="ownerCode" placeholder="🔑 رمز المالك">
         <button onclick="ownerLogin()">👑 دخول المالك</button>
@@ -91,7 +89,7 @@
         
         <div style="color:#333;margin:15px 0;">─── أو ───</div>
         
-        <input type="text" id="visitorPhone" placeholder="📱 رقم هاتفك (سري)">
+        <input type="text" id="visitorPhone" placeholder="📱 رقم هاتفك (سري - يصلك الرد)">
         <button class="orange" onclick="visitorRequest()">🚶 دخول كزائر</button>
         <div class="success" id="visitorSuccess"></div>
         <div class="error" id="visitorError"></div>
@@ -100,11 +98,11 @@
 
 <div id="mainScreen">
     <div class="header">
-        <span class="brand">🌑 DARK KNIGHT <span class="live-dot"></span></span>
+        <span class="brand">🌑 DARK KNIGHT X</span>
         <span class="user" id="headerUser"></span>
         <div class="btns">
-            <button onclick="openVisitors()">📋 الزوار</button>
-            <button onclick="openReports()">🚨 البلاغات</button>
+            <span class="notif-badge"><button onclick="openVisitors()">📋 الزوار</button><span class="notif-count" id="visitorBadge">0</span></span>
+            <span class="notif-badge"><button onclick="openReports()">🚨 البلاغات</button><span class="notif-count" id="reportBadge">0</span></span>
             <button class="red" onclick="logout()">🚪 خروج</button>
         </div>
     </div>
@@ -156,11 +154,11 @@
     </div>
 </div>
 
-<!-- Firebase SDK -->
 <script type="module">
 import { initializeApp } from "https://www.gstatic.com/firebasejs/10.7.1/firebase-app.js";
-import { getDatabase, ref, push, onChildAdded, set, serverTimestamp, onValue, remove, update } from "https://www.gstatic.com/firebasejs/10.7.1/firebase-database.js";
+import { getDatabase, ref, push, set, serverTimestamp, onValue, remove, update, get, child } from "https://www.gstatic.com/firebasejs/10.7.1/firebase-database.js";
 
+// تكوين Firebase
 const firebaseConfig = {
     apiKey: "AIzaSyDktNhUGoYbKqJPK4JJ8RCeF9KZ5HGhQvE",
     authDomain: "shadow-vault-chat.firebaseapp.com",
@@ -171,171 +169,214 @@ const firebaseConfig = {
     appId: "1:1085738429214:web:abc123def456"
 };
 
-const app = initializeApp(firebaseConfig);
-const db = getDatabase(app);
+let app, db;
+try {
+    app = initializeApp(firebaseConfig);
+    db = getDatabase(app);
+    console.log('✅ Firebase متصل');
+} catch(e) {
+    console.error('❌ Firebase خطأ:', e);
+}
 
 const OWNER_CODE = '54379';
 let currentUser = null;
 let isOwner = false;
 let reportTarget = null;
-let visitorIPData = null;
 
 // --- حماية ---
 document.addEventListener('contextmenu', e => e.preventDefault());
 document.addEventListener('keydown', function(e) {
-    if (e.key === 'F12' || (e.ctrlKey && e.shiftKey && e.key === 'I') || (e.ctrlKey && e.key === 'U') || (e
-        .ctrlKey && e.key === 'S')) {
-        e.preventDefault();
-        return false;
+    if (e.key === 'F12' || (e.ctrlKey && e.shiftKey && e.key === 'I') || (e.ctrlKey && e.key === 'U') || (e.ctrlKey && e.key === 'S')) {
+        e.preventDefault(); return false;
     }
 });
 
-// --- IP ---
-async function getIPInfo() {
-    try { const r = await fetch('https://ipapi.co/json/'); return await r.json(); } catch (e) { return null; }
+// --- دوال المساعدة ---
+function showError(id, msg) {
+    const el = document.getElementById(id);
+    el.textContent = msg;
+    el.style.display = 'block';
+    setTimeout(() => el.style.display = 'none', 3000);
 }
 
 // --- دخول المالك ---
 window.ownerLogin = async function() {
     const code = document.getElementById('ownerCode').value.trim();
-    if (code === OWNER_CODE) {
-        currentUser = '👑 المالك';
-        isOwner = true;
-        document.getElementById('ownerError').style.display = 'none';
-        visitorIPData = await getIPInfo();
-        showMainScreen();
-    } else { document.getElementById('ownerError').style.display = 'block'; }
+    if (code !== OWNER_CODE) {
+        showError('ownerError', '❌ رمز خاطئ');
+        return;
+    }
+    
+    currentUser = '👑 المالك';
+    isOwner = true;
+    document.getElementById('ownerError').style.display = 'none';
+    document.getElementById('loginScreen').style.display = 'none';
+    document.getElementById('mainScreen').style.display = 'block';
+    document.getElementById('headerUser').textContent = currentUser;
+    document.getElementById('publishBox').style.display = 'block';
+    
+    listenForPosts();
+    listenForVisitors();
+    listenForReports();
 };
 
 // --- دخول الزائر ---
 window.visitorRequest = async function() {
     const phone = document.getElementById('visitorPhone').value.trim();
     if (!phone || phone.length < 5) {
-        document.getElementById('visitorError').textContent = '❌ أدخل رقم هاتف صحيح';
-        document.getElementById('visitorError').style.display = 'block';
+        showError('visitorError', '❌ أدخل رقم هاتف صحيح');
         return;
     }
-
-    visitorIPData = await getIPInfo();
-
-    // التحقق من الحظر
-    const banRef = ref(db, 'banned/' + phone.replace(/[.#$\[\]]/g, '_'));
-    const banSnap = await new Promise(resolve => onValue(banRef, resolve, { onlyOnce: true }));
-    if (banSnap.val()) {
-        document.getElementById('visitorError').textContent = '🚫 تم حظرك من الموقع. لا يمكنك الدخول.';
-        document.getElementById('visitorError').style.display = 'block';
+    
+    if (!db) {
+        showError('visitorError', '❌ خطأ في الاتصال بالخادم');
         return;
     }
-
-    // التحقق من الموافقة
-    const appRef = ref(db, 'approved/' + phone.replace(/[.#$\[\]]/g, '_'));
-    const appSnap = await new Promise(resolve => onValue(appRef, resolve, { onlyOnce: true }));
-
-    if (appSnap.val()) {
-        currentUser = '🚶 ' + phone.substring(0, 4) + '****';
-        isOwner = false;
-        document.getElementById('visitorError').style.display = 'none';
-        document.getElementById('visitorSuccess').textContent = '✅ مرحباً بعودتك!';
-        document.getElementById('visitorSuccess').style.display = 'block';
-        setTimeout(() => showMainScreen(), 500);
-        return;
-    }
-
-    // إرسال طلب للمالك
-    const visitRef = ref(db, 'visitorRequests');
-    const newReq = push(visitRef);
-    await set(newReq, {
-        phone: phone,
-        time: new Date().toISOString(),
-        device: navigator.userAgent.substring(0, 100),
-        ip: visitorIPData ? visitorIPData.ip : 'غير معروف',
-        country: visitorIPData ? visitorIPData.country_name : 'غير معروف',
-        city: visitorIPData ? visitorIPData.city : 'غير معروف',
-        status: 'pending'
-    });
-
-    document.getElementById('visitorError').style.display = 'none';
-    document.getElementById('visitorSuccess').textContent = '✅ تم إرسال طلبك للمالك. انتظر القبول.';
-    document.getElementById('visitorSuccess').style.display = 'block';
-};
-
-// --- الشاشة الرئيسية ---
-function showMainScreen() {
-    document.getElementById('loginScreen').style.display = 'none';
-    document.getElementById('mainScreen').style.display = 'block';
-    document.getElementById('headerUser').textContent = currentUser;
-
-    if (isOwner) {
-        document.getElementById('publishBox').style.display = 'block';
-        listenForVisitorRequests();
-    }
-
-    listenForPosts();
-}
-
-// --- استماع للطلبات ---
-function listenForVisitorRequests() {
-    const visitRef = ref(db, 'visitorRequests');
-    onChildAdded(visitRef, async function(snapshot) {
-        const req = snapshot.val();
-        if (req.status === 'pending') {
-            if (confirm('📱 زائر جديد:\n\nالرقم: ' + req.phone + '\nالدولة: ' + req.country + '\nالمدينة: ' +
-                    req.city + '\n\nهل تقبله؟')) {
-                const appRef = ref(db, 'approved/' + req.phone.replace(/[.#$\[\]]/g, '_'));
-                await set(appRef, { phone: req.phone, device: req.device, country: req.country, city: req
-                        .city, ip: req.ip, approvedAt: serverTimestamp() });
-                await set(ref(db, 'visitorRequests/' + snapshot.key), { ...req, status: 'approved' });
-                alert('✅ تم قبول الزائر');
-            } else {
-                await set(ref(db, 'visitorRequests/' + snapshot.key), { ...req, status: 'rejected' });
-            }
+    
+    const phoneKey = phone.replace(/[.#$\[\]]/g, '_');
+    
+    try {
+        // تحقق من الحظر
+        const banSnap = await get(child(ref(db), 'banned/' + phoneKey));
+        if (banSnap.exists()) {
+            showError('visitorError', '🚫 تم حظرك من الموقع');
+            return;
         }
-    });
-}
+        
+        // تحقق من الموافقة
+        const appSnap = await get(child(ref(db), 'approved/' + phoneKey));
+        if (appSnap.exists()) {
+            currentUser = '🚶 ' + phone.substring(0, 4) + '****';
+            isOwner = false;
+            document.getElementById('visitorError').style.display = 'none';
+            document.getElementById('visitorSuccess').textContent = '✅ مرحباً بعودتك!';
+            document.getElementById('visitorSuccess').style.display = 'block';
+            setTimeout(() => {
+                document.getElementById('loginScreen').style.display = 'none';
+                document.getElementById('mainScreen').style.display = 'block';
+                document.getElementById('headerUser').textContent = currentUser;
+                document.getElementById('publishBox').style.display = 'none';
+                listenForPosts();
+            }, 500);
+            return;
+        }
+        
+        // إرسال طلب للمالك
+        const visitRef = ref(db, 'visitorRequests');
+        const newReq = push(visitRef);
+        await set(newReq, {
+            phone: phone,
+            phoneKey: phoneKey,
+            time: new Date().toISOString(),
+            device: navigator.userAgent.substring(0, 100),
+            status: 'pending'
+        });
+        
+        document.getElementById('visitorError').style.display = 'none';
+        document.getElementById('visitorSuccess').textContent = '✅ تم إرسال رقمك للمالك. انتظر القبول.';
+        document.getElementById('visitorSuccess').style.display = 'block';
+        
+    } catch(e) {
+        console.error(e);
+        showError('visitorError', '❌ خطأ في الاتصال. حاول مرة أخرى.');
+    }
+};
 
 // --- استماع للمنشورات ---
 function listenForPosts() {
+    if (!db) return;
     const postsRef = ref(db, 'posts');
     onValue(postsRef, function(snapshot) {
         const data = snapshot.val();
         const container = document.getElementById('postsContainer');
         if (!data) {
-            container.innerHTML =
-                '<div style="text-align:center;color:#555;padding:30px;">📭 لا توجد منشورات...</div>';
+            container.innerHTML = '<div style="text-align:center;color:#555;padding:30px;">📭 لا توجد منشورات</div>';
             return;
         }
         const posts = Object.entries(data).map(([id, p]) => ({ id, ...p }));
-        posts.sort((a, b) => b.timestamp - a.timestamp);
-
+        posts.sort((a, b) => (b.timestamp || 0) - (a.timestamp || 0));
+        
         container.innerHTML = posts.map(post => `
             <div class="post-card">
                 <div class="post-author">
-                    ${post.author}
+                    ${post.author || 'مجهول'}
                     ${post.authorPhone === 'OWNER' ? ' <span class="badge owner">مالك</span>' : ''}
-                    ${isOwner && post.authorPhone !== 'OWNER' ? ' <span style="color:#fa0;font-size:9px;">📱 ' + post.authorPhone + '</span>' : ''}
+                    ${isOwner && post.authorPhone && post.authorPhone !== 'OWNER' ? ' <span style="color:#fa0;font-size:9px;">📱 ' + post.authorPhone + '</span>' : ''}
                 </div>
-                <div class="post-time">${new Date(post.timestamp).toLocaleString('ar-SA')}</div>
+                <div class="post-time">${post.timestamp ? new Date(post.timestamp).toLocaleString('ar-SA') : ''}</div>
                 <div class="post-content">
-                    ${post.content}
-                    ${post.image ? '<br><img src="' + post.image + '" onclick="this.style.transform=this.style.transform===\'scale(2)\'?\'\':\'scale(2)\'" style="cursor:pointer;transition:0.3s;max-width:200px;">' : ''}
+                    ${post.content || ''}
+                    ${post.image ? '<br><img src="' + post.image + '" style="max-width:200px;border-radius:8px;cursor:pointer;" onclick="this.style.transform=this.style.transform===\'scale(2)\'?\'\':\'scale(2)\'">' : ''}
                 </div>
                 <div class="post-actions">
-                    <button onclick="toggleComments('${post.id}')">💬 تعليق (${post.comments ? Object.keys(post.comments).length : 0})</button>
-                    ${!isOwner ? '<button class="report-btn" onclick="openReport(\'' + post.id + '\',\'post\')">🚨 بلاغ</button>' : ''}
-                    ${post.reports && Object.keys(post.reports).length > 0 && isOwner ? '<span style="color:#f00;font-size:9px;">🚨 ' + Object.keys(post.reports).length + ' بلاغ</span>' : ''}
-                    ${isOwner ? '<button class="report-btn" onclick="deletePost(\'' + post.id + '\')">🗑️ حذف</button>' : ''}
+                    <button onclick="window.toggleComments('${post.id}')">💬 تعليق (${post.comments ? Object.keys(post.comments).length : 0})</button>
+                    ${!isOwner ? '<button class="report-btn" onclick="window.openReport(\'' + post.id + '\',\'post\')">🚨 بلاغ</button>' : ''}
+                    ${isOwner ? '<button class="report-btn" onclick="window.deletePost(\'' + post.id + '\')">🗑️ حذف</button>' : ''}
                 </div>
                 <div class="comment-section" id="comments-${post.id}" style="display:none;">
                     ${post.comments ? Object.entries(post.comments).map(([cid, c]) => `
                         <div class="comment-item">
                             <span><span class="comment-author">${c.author}:</span> <span class="comment-text">${c.text}</span></span>
-                            ${!isOwner ? '<button style="background:transparent;border:none;color:#600;cursor:pointer;font-size:8px;" onclick="openReport(\'' + post.id + '\',\'comment\',\'' + cid + '\')">🚨</button>' : ''}
                         </div>
                     `).join('') : ''}
-                    <input type="text" placeholder="✍️ تعليق..." onkeydown="if(event.key==='Enter')addComment('${post.id}',this)">
+                    <input type="text" placeholder="✍️ تعليق..." onkeydown="if(event.key==='Enter')window.addComment('${post.id}',this)">
                 </div>
             </div>
         `).join('');
+    });
+}
+
+// --- استماع للزوار (للمالك) ---
+function listenForVisitors() {
+    if (!db || !isOwner) return;
+    const visitRef = ref(db, 'visitorRequests');
+    onValue(visitRef, function(snapshot) {
+        const data = snapshot.val();
+        let count = 0;
+        if (data) {
+            Object.values(data).forEach(req => {
+                if (req.status === 'pending') {
+                    count++;
+                    // إشعار فوري للمالك
+                    if (confirm('📱 زائر جديد!\n\nالرقم: ' + req.phone + '\nالجهاز: ' + (req.device || 'غير معروف') + '\n\nهل تقبله؟')) {
+                        const key = req.phoneKey || req.phone.replace(/[.#$\[\]]/g, '_');
+                        set(ref(db, 'approved/' + key), {
+                            phone: req.phone,
+                            device: req.device,
+                            approvedAt: serverTimestamp()
+                        });
+                        set(ref(db, 'visitorRequests/' + snapshot.key), { ...req, status: 'approved' });
+                        alert('✅ تم قبول الزائر');
+                    } else {
+                        set(ref(db, 'visitorRequests/' + snapshot.key), { ...req, status: 'rejected' });
+                    }
+                }
+            });
+        }
+        const badge = document.getElementById('visitorBadge');
+        if (count > 0) {
+            badge.textContent = count;
+            badge.style.display = 'flex';
+        } else {
+            badge.style.display = 'none';
+        }
+    });
+}
+
+// --- استماع للبلاغات ---
+function listenForReports() {
+    if (!db || !isOwner) return;
+    const reportsRef = ref(db, 'reports');
+    onValue(reportsRef, function(snapshot) {
+        const data = snapshot.val();
+        const count = data ? Object.keys(data).length : 0;
+        const badge = document.getElementById('reportBadge');
+        if (count > 0) {
+            badge.textContent = count;
+            badge.style.display = 'flex';
+        } else {
+            badge.style.display = 'none';
+        }
     });
 }
 
@@ -343,26 +384,30 @@ function listenForPosts() {
 window.publishPost = async function() {
     const content = document.getElementById('postContent').value.trim();
     const imgPreview = document.getElementById('imagePreview');
-    const imageData = imgPreview.src && imgPreview.style.display !== 'none' ? imgPreview.src : null;
-
+    const imageData = (imgPreview.src && imgPreview.style.display !== 'none') ? imgPreview.src : null;
+    
     if (!content && !imageData) return;
-
-    const postsRef = ref(db, 'posts');
-    const newPost = push(postsRef);
-    await set(newPost, {
-        author: isOwner ? '👑 المالك' : currentUser,
-        authorPhone: isOwner ? 'OWNER' : currentUser,
-        content: content || '📷 صورة',
-        image: imageData || '',
-        timestamp: serverTimestamp(),
-        comments: {},
-        reports: {}
-    });
-
-    document.getElementById('postContent').value = '';
-    imgPreview.src = '';
-    imgPreview.style.display = 'none';
-    document.getElementById('postImage').value = '';
+    if (!db) { alert('❌ خطأ في الاتصال'); return; }
+    
+    try {
+        const postsRef = ref(db, 'posts');
+        const newPost = push(postsRef);
+        await set(newPost, {
+            author: '👑 المالك',
+            authorPhone: 'OWNER',
+            content: content || '📷 صورة',
+            image: imageData || '',
+            timestamp: serverTimestamp(),
+            comments: {}
+        });
+        
+        document.getElementById('postContent').value = '';
+        imgPreview.src = '';
+        imgPreview.style.display = 'none';
+        document.getElementById('postImage').value = '';
+    } catch(e) {
+        alert('❌ خطأ في النشر');
+    }
 };
 
 window.previewImage = function() {
@@ -380,130 +425,133 @@ window.previewImage = function() {
 // --- تعليقات ---
 window.toggleComments = function(postId) {
     const sec = document.getElementById('comments-' + postId);
-    sec.style.display = sec.style.display === 'none' ? 'block' : 'none';
+    if (sec) sec.style.display = sec.style.display === 'none' ? 'block' : 'none';
 };
 
 window.addComment = async function(postId, input) {
     const text = input.value.trim();
-    if (!text) return;
-    const commRef = ref(db, 'posts/' + postId + '/comments');
-    const newComm = push(commRef);
-    await set(newComm, {
-        author: currentUser,
-        text: text,
-        timestamp: serverTimestamp()
-    });
-    input.value = '';
-    document.getElementById('comments-' + postId).style.display = 'block';
+    if (!text || !db) return;
+    try {
+        const commRef = ref(db, 'posts/' + postId + '/comments');
+        const newComm = push(commRef);
+        await set(newComm, { author: currentUser, text: text, timestamp: serverTimestamp() });
+        input.value = '';
+    } catch(e) {}
 };
 
 window.deletePost = async function(postId) {
     if (!isOwner) return;
-    if (!confirm('هل أنت متأكد من حذف هذا المنشور؟')) return;
-    await remove(ref(db, 'posts/' + postId));
+    if (!confirm('حذف هذا المنشور؟')) return;
+    try { await remove(ref(db, 'posts/' + postId)); } catch(e) {}
 };
 
 // --- بلاغات ---
-window.openReport = function(targetId, type, commentId = null) {
-    reportTarget = { targetId, type, commentId };
-    document.getElementById('reportTarget').textContent = '🚨 بلاغ على: ' + (type === 'post' ? 'منشور' :
-        'تعليق');
+window.openReport = function(targetId, type) {
+    reportTarget = { targetId, type };
+    document.getElementById('reportTarget').textContent = '🚨 بلاغ على: ' + (type === 'post' ? 'منشور' : 'تعليق');
     document.getElementById('reportModal').classList.add('active');
 };
 
 window.submitReport = async function(reason) {
-    if (!reportTarget) return;
-    const reportRef = ref(db, 'reports');
-    const newReport = push(reportRef);
-    await set(newReport, {
-        targetId: reportTarget.targetId,
-        type: reportTarget.type,
-        commentId: reportTarget.commentId || '',
-        reason: reason,
-        reporter: currentUser,
-        timestamp: serverTimestamp()
-    });
-
-    if (reportTarget.type === 'post') {
-        const postReportRef = ref(db, 'posts/' + reportTarget.targetId + '/reports');
-        const pr = push(postReportRef);
-        await set(pr, { reason: reason, reporter: currentUser, timestamp: serverTimestamp() });
-    }
-
-    document.getElementById('reportModal').classList.remove('active');
-    alert('✅ تم إرسال البلاغ للمالك.');
-    reportTarget = null;
+    if (!reportTarget || !db) return;
+    try {
+        const reportRef = ref(db, 'reports');
+        const newReport = push(reportRef);
+        await set(newReport, {
+            targetId: reportTarget.targetId,
+            type: reportTarget.type,
+            reason: reason,
+            reporter: currentUser,
+            timestamp: serverTimestamp()
+        });
+        document.getElementById('reportModal').classList.remove('active');
+        alert('✅ تم إرسال البلاغ للمالك');
+        reportTarget = null;
+    } catch(e) {}
 };
 
-// --- نافذة البلاغات ---
-window.openReports = function() {
-    const reportsRef = ref(db, 'reports');
-    onValue(reportsRef, function(snapshot) {
-        const data = snapshot.val();
-        const list = document.getElementById('reportsList');
-        if (!data) {
-            list.innerHTML = '<div style="color:#888;text-align:center;">لا توجد بلاغات</div>';
-        } else {
-            list.innerHTML = Object.entries(data).map(([id, r]) => `
-                <div class="visitor-row">
-                    <span>🚨 ${r.reason} | من: ${r.reporter} | ${new Date(r.timestamp).toLocaleString('ar-SA')}</span>
-                </div>
-            `).join('');
-        }
-        document.getElementById('reportsModal').classList.add('active');
-    }, { onlyOnce: true });
-};
-
-// --- نافذة الزوار ---
+// --- الزوار ---
 window.openVisitors = function() {
-    if (!isOwner) return;
-    const appRef = ref(db, 'approved');
-    const banRef = ref(db, 'banned');
-
+    if (!isOwner || !db) return;
+    const modal = document.getElementById('visitorsModal');
+    const list = document.getElementById('visitorsList');
+    list.innerHTML = '<div style="color:#888;">جاري التحميل...</div>';
+    modal.classList.add('active');
+    
     Promise.all([
-        new Promise(resolve => onValue(appRef, resolve, { onlyOnce: true })),
-        new Promise(resolve => onValue(banRef, resolve, { onlyOnce: true }))
+        get(child(ref(db), 'approved')),
+        get(child(ref(db), 'banned'))
     ]).then(([appSnap, banSnap]) => {
         const approved = appSnap.val() || {};
         const banned = banSnap.val() || {};
-        const list = document.getElementById('visitorsList');
-
-        const allPhones = [...new Set([...Object.keys(approved), ...Object.keys(banned)])];
-        if (allPhones.length === 0) {
+        const all = { ...approved, ...banned };
+        const keys = Object.keys(all);
+        
+        if (keys.length === 0) {
             list.innerHTML = '<div style="color:#888;text-align:center;">لا يوجد زوار</div>';
-        } else {
-            list.innerHTML = allPhones.map(phone => {
-                const v = approved[phone] || banned[phone] || {};
-                const isBanned = !!banned[phone];
-                return `
-                    <div class="visitor-row">
-                        <span>📱 ${v.phone || phone}</span>
-                        <span style="color:#888;font-size:9px;">${v.country || '?'} - ${v.city || '?'}</span>
-                        ${isBanned ? '<span class="badge banned">محظور</span>' : ''}
-                        ${!isBanned ? '<button onclick="banVisitor(\'' + phone + '\')">🚫 حظر</button>' : '<button style="background:#0f0;color:#000;" onclick="unbanVisitor(\'' + phone + '\')">✅ فك</button>'}
-                    </div>
-                `;
-            }).join('');
+            return;
         }
-        document.getElementById('visitorsModal').classList.add('active');
+        
+        list.innerHTML = keys.map(k => {
+            const v = all[k];
+            const isBanned = !!banned[k];
+            return `
+                <div class="visitor-row">
+                    <span>📱 ${v.phone || k}</span>
+                    <span style="color:#888;font-size:9px;">${v.device ? v.device.substring(0,30) : ''}</span>
+                    ${isBanned ? '<span class="badge banned">محظور</span>' : ''}
+                    ${!isBanned ? '<button onclick="window.banVisitor(\'' + k + '\')">🚫 حظر</button>' : '<button style="background:#0f0;color:#000;" onclick="window.unbanVisitor(\'' + k + '\')">✅ فك</button>'}
+                </div>
+            `;
+        }).join('');
     });
 };
 
-window.banVisitor = async function(phone) {
-    if (!confirm('🚫 حظر ' + phone + ' نهائياً؟')) return;
-    const key = phone.replace(/[.#$\[\]]/g, '_');
-    await set(ref(db, 'banned/' + key), { phone: phone, bannedAt: serverTimestamp() });
-    await remove(ref(db, 'approved/' + key));
-    alert('🚫 تم حظر ' + phone);
-    openVisitors();
+window.banVisitor = async function(key) {
+    if (!confirm('حظر هذا الزائر نهائياً؟')) return;
+    try {
+        const appSnap = await get(child(ref(db), 'approved/' + key));
+        if (appSnap.exists()) {
+            await set(ref(db, 'banned/' + key), appSnap.val());
+            await remove(ref(db, 'approved/' + key));
+        }
+        alert('🚫 تم الحظر');
+        openVisitors();
+    } catch(e) {}
 };
 
-window.unbanVisitor = async function(phone) {
-    const key = phone.replace(/[.#$\[\]]/g, '_');
-    await remove(ref(db, 'banned/' + key));
-    await set(ref(db, 'approved/' + key), { phone: phone, unbannedAt: serverTimestamp() });
-    alert('✅ تم فك الحظر عن ' + phone);
-    openVisitors();
+window.unbanVisitor = async function(key) {
+    try {
+        const banSnap = await get(child(ref(db), 'banned/' + key));
+        if (banSnap.exists()) {
+            await set(ref(db, 'approved/' + key), banSnap.val());
+            await remove(ref(db, 'banned/' + key));
+        }
+        alert('✅ تم فك الحظر');
+        openVisitors();
+    } catch(e) {}
+};
+
+window.openReports = function() {
+    if (!isOwner || !db) return;
+    const modal = document.getElementById('reportsModal');
+    const list = document.getElementById('reportsList');
+    list.innerHTML = '<div style="color:#888;">جاري التحميل...</div>';
+    modal.classList.add('active');
+    
+    get(child(ref(db), 'reports')).then(snap => {
+        const data = snap.val();
+        if (!data) {
+            list.innerHTML = '<div style="color:#888;text-align:center;">لا توجد بلاغات</div>';
+            return;
+        }
+        list.innerHTML = Object.entries(data).map(([id, r]) => `
+            <div class="visitor-row">
+                <span>🚨 ${r.reason} | من: ${r.reporter}</span>
+                <span style="color:#888;font-size:8px;">${r.timestamp ? new Date(r.timestamp).toLocaleString('ar-SA') : ''}</span>
+            </div>
+        `).join('');
+    });
 };
 
 window.closeModal = function(id) {
@@ -513,7 +561,6 @@ window.closeModal = function(id) {
 window.logout = function() {
     currentUser = null;
     isOwner = false;
-    visitorIPData = null;
     document.getElementById('mainScreen').style.display = 'none';
     document.getElementById('loginScreen').style.display = 'flex';
     document.getElementById('ownerCode').value = '';
