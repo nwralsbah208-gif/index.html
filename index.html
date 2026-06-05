@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>🌑 DARK KNIGHT PRO - ø ASAØ</title>
+    <title>🌑 DARK KNIGHT FINAL - ø ASAØ</title>
     <style>
         :root{--bg:#000a14;--panel:#001020;--accent:#1a73e8;--accent2:#ff6d00;--red:#ff1744;--green:#00e676;--gold:#ffaa00;--text:#c0c0c0;}
         *{margin:0;padding:0;box-sizing:border-box;}
@@ -19,7 +19,6 @@
         .login-box button{width:100%;padding:12px;margin-top:10px;background:var(--accent);color:#fff;border:none;border-radius:6px;font-size:14px;font-weight:bold;cursor:pointer;letter-spacing:2px;}
         .login-box button:hover{background:#1a5fd4;}
         .login-box button.orange{background:var(--accent2);}
-        .login-box button.orange:hover{background:#e05500;}
         .login-box .link{color:var(--accent);font-size:10px;cursor:pointer;margin-top:10px;display:inline-block;}
         .error{color:#f00;font-size:10px;margin-top:5px;display:none;}
         .success{color:#0f0;font-size:10px;margin-top:5px;display:none;}
@@ -28,7 +27,7 @@
         .header{background:#000;border-bottom:1px solid #1a3050;padding:12px 20px;display:flex;justify-content:space-between;align-items:center;position:sticky;top:0;z-index:100;flex-wrap:wrap;gap:8px;}
         .header .brand{color:var(--accent);font-size:18px;font-weight:bold;letter-spacing:3px;}
         .header .user{color:#888;font-size:11px;}
-        .header .btns{display:flex;gap:6px;}
+        .header .btns{display:flex;gap:6px;flex-wrap:wrap;}
         .header button{background:var(--accent2);color:#fff;border:none;padding:6px 14px;border-radius:4px;cursor:pointer;font-size:10px;letter-spacing:1px;}
         .header button.red{background:var(--red);}
         
@@ -41,7 +40,8 @@
         .post-box button{background:var(--accent);color:#fff;border:none;padding:8px 20px;border-radius:6px;cursor:pointer;font-weight:bold;margin-top:8px;letter-spacing:1px;}
         .post-box .img-preview{max-width:200px;max-height:200px;border-radius:8px;margin:8px 0;display:none;}
         
-        .post-card{background:var(--panel);border:1px solid #1a3050;border-radius:12px;padding:15px 20px;}
+        .post-card{background:var(--panel);border:1px solid #1a3050;border-radius:12px;padding:15px 20px;animation:fadeIn 0.3s;}
+        @keyframes fadeIn{from{opacity:0;transform:translateY(10px);}to{opacity:1;transform:translateY(0);}}
         .post-card .post-author{color:var(--accent);font-size:11px;font-weight:bold;letter-spacing:1px;}
         .post-card .post-time{color:#555;font-size:9px;}
         .post-card .post-content{color:#ddd;font-size:14px;margin:10px 0;line-height:1.6;}
@@ -50,15 +50,12 @@
         .post-card .post-actions button{background:transparent;border:1px solid #333;color:#888;padding:4px 12px;border-radius:20px;cursor:pointer;font-size:9px;}
         .post-card .post-actions button:hover{background:#1a3050;color:#fff;}
         .post-card .post-actions button.report-btn{border-color:#600;color:#f66;}
-        .post-card .post-actions button.report-btn:hover{background:#600;color:#f00;}
         
         .comment-section{margin-top:10px;border-top:1px solid #1a3050;padding-top:10px;}
         .comment-section input{width:100%;background:#000;border:1px solid #1a3050;color:#fff;padding:8px;border-radius:20px;font-size:11px;outline:none;margin-top:5px;}
-        .comment-section input:focus{border-color:var(--accent);}
         .comment-item{padding:4px 0;font-size:10px;display:flex;justify-content:space-between;align-items:center;}
         .comment-item .comment-author{color:var(--accent);font-size:9px;}
         .comment-item .comment-text{color:#aaa;}
-        .comment-item .report-btn-sm{background:transparent;border:none;color:#600;cursor:pointer;font-size:8px;}
         
         .modal{display:none;position:fixed;top:0;left:0;width:100%;height:100%;background:rgba(0,0,0,0.95);z-index:200;justify-content:center;align-items:center;padding:20px;}
         .modal.active{display:flex;}
@@ -66,56 +63,44 @@
         .modal-content h3{color:#fff;margin-bottom:15px;text-align:center;}
         .modal-content button{background:var(--accent);color:#fff;border:none;padding:8px 20px;border-radius:6px;cursor:pointer;margin:4px;font-size:11px;}
         .modal-content button.red{background:var(--red);}
-        .modal-content button.green{background:var(--green);}
         .modal-content .report-option{display:block;width:100%;padding:10px;margin:4px 0;background:#000;border:1px solid #333;color:#fff;border-radius:6px;cursor:pointer;text-align:right;font-size:11px;}
         .modal-content .report-option:hover{background:#1a0000;border-color:#f00;}
         
         .visitor-row{display:flex;justify-content:space-between;align-items:center;padding:8px;border-bottom:1px solid #1a3050;font-size:10px;flex-wrap:wrap;gap:4px;}
-        .visitor-row .v-info{color:#aaa;}
-        .visitor-row .v-phone{color:var(--gold);font-size:11px;}
-        .visitor-row .v-reports{color:#f00;font-size:9px;}
-        .visitor-row button{background:var(--red);color:#fff;border:none;padding:4px 10px;border-radius:4px;cursor:pointer;font-size:8px;}
-        
         .badge{display:inline-block;padding:2px 8px;border-radius:10px;font-size:8px;letter-spacing:1px;}
         .badge.owner{background:var(--gold);color:#000;}
-        .badge.visitor{background:var(--accent);color:#fff;}
         .badge.banned{background:#f00;color:#fff;}
         
-        .track-info{background:#000;border:1px solid #1a3050;border-radius:8px;padding:10px;margin:5px 0;font-size:9px;color:#0f0;}
+        .live-dot{display:inline-block;width:6px;height:6px;background:#0f0;border-radius:50%;animation:livePulse 1s infinite;margin-left:4px;}
+        @keyframes livePulse{0%,100%{opacity:1;}50%{opacity:0.3;}}
         
         @media(max-width:600px){.login-box{width:90%;padding:25px;}}
     </style>
 </head>
 <body>
 
-<!-- شاشة الدخول -->
 <div id="loginScreen">
     <div class="login-box">
         <div class="logo">🌑</div>
         <h1>DARK KNIGHT</h1>
-        <div class="sub">ø ASAØ // PRO EDITION</div>
+        <div class="sub">ø ASAØ // FINAL EDITION <span class="live-dot"></span> LIVE</div>
         
-        <div id="ownerLogin">
-            <input type="password" id="ownerCode" placeholder="🔑 رمز المالك" maxlength="10">
-            <button onclick="ownerLogin()">👑 دخول المالك</button>
-            <div class="error" id="ownerError">❌ رمز خاطئ</div>
-        </div>
+        <input type="password" id="ownerCode" placeholder="🔑 رمز المالك">
+        <button onclick="ownerLogin()">👑 دخول المالك</button>
+        <div class="error" id="ownerError">❌ رمز خاطئ</div>
         
         <div style="color:#333;margin:15px 0;">─── أو ───</div>
         
-        <div id="visitorSection">
-            <input type="text" id="visitorPhone" placeholder="📱 رقم هاتفك (سري - يظهر للمالك فقط)" maxlength="20">
-            <button class="orange" onclick="visitorRequest()">🚶 دخول كزائر</button>
-            <div class="success" id="visitorSuccess">✅ تم إرسال طلبك للمالك</div>
-            <div class="error" id="visitorError">❌ تم حظرك من الموقع</div>
-        </div>
+        <input type="text" id="visitorPhone" placeholder="📱 رقم هاتفك (سري)">
+        <button class="orange" onclick="visitorRequest()">🚶 دخول كزائر</button>
+        <div class="success" id="visitorSuccess"></div>
+        <div class="error" id="visitorError"></div>
     </div>
 </div>
 
-<!-- الشاشة الرئيسية -->
 <div id="mainScreen">
     <div class="header">
-        <span class="brand">🌑 DARK KNIGHT PRO</span>
+        <span class="brand">🌑 DARK KNIGHT <span class="live-dot"></span></span>
         <span class="user" id="headerUser"></span>
         <div class="btns">
             <button onclick="openVisitors()">📋 الزوار</button>
@@ -125,10 +110,6 @@
     </div>
     
     <div class="layout">
-        <!-- تتبع الزائر (للمالك فقط) -->
-        <div class="track-info" id="trackInfo" style="display:none;"></div>
-        
-        <!-- صندوق النشر -->
         <div class="post-box" id="publishBox" style="display:none;">
             <textarea id="postContent" placeholder="✍️ ماذا تريد أن تنشر؟"></textarea>
             <input type="file" id="postImage" accept="image/*" onchange="previewImage()">
@@ -136,14 +117,12 @@
             <button onclick="publishPost()">📢 نشر</button>
         </div>
         
-        <!-- المنشورات -->
         <div id="postsContainer">
-            <div style="text-align:center;color:#555;padding:30px;">📭 لا توجد منشورات...</div>
+            <div style="text-align:center;color:#555;padding:30px;">📭 جاري التحميل...</div>
         </div>
     </div>
 </div>
 
-<!-- نافذة الزوار -->
 <div class="modal" id="visitorsModal">
     <div class="modal-content">
         <h3>📋 إدارة الزوار</h3>
@@ -152,7 +131,6 @@
     </div>
 </div>
 
-<!-- نافذة البلاغات -->
 <div class="modal" id="reportsModal">
     <div class="modal-content">
         <h3>🚨 البلاغات</h3>
@@ -161,7 +139,6 @@
     </div>
 </div>
 
-<!-- نافذة تقديم بلاغ -->
 <div class="modal" id="reportModal">
     <div class="modal-content">
         <h3>🚨 تقديم بلاغ</h3>
@@ -179,340 +156,369 @@
     </div>
 </div>
 
-<script>
-// ============================================================
-// ø ASAØ | DARK KNIGHT PRO | النسخة الكاملة
-// ============================================================
+<!-- Firebase SDK -->
+<script type="module">
+import { initializeApp } from "https://www.gstatic.com/firebasejs/10.7.1/firebase-app.js";
+import { getDatabase, ref, push, onChildAdded, set, serverTimestamp, onValue, remove, update } from "https://www.gstatic.com/firebasejs/10.7.1/firebase-database.js";
 
-const OWNER_CODE='54379';
-let currentUser=null;
-let isOwner=false;
-let reportTarget=null;
-let visitorIPData=null;
+const firebaseConfig = {
+    apiKey: "AIzaSyDktNhUGoYbKqJPK4JJ8RCeF9KZ5HGhQvE",
+    authDomain: "shadow-vault-chat.firebaseapp.com",
+    databaseURL: "https://shadow-vault-chat-default-rtdb.firebaseio.com",
+    projectId: "shadow-vault-chat",
+    storageBucket: "shadow-vault-chat.appspot.com",
+    messagingSenderId: "1085738429214",
+    appId: "1:1085738429214:web:abc123def456"
+};
+
+const app = initializeApp(firebaseConfig);
+const db = getDatabase(app);
+
+const OWNER_CODE = '54379';
+let currentUser = null;
+let isOwner = false;
+let reportTarget = null;
+let visitorIPData = null;
 
 // --- حماية ---
-document.addEventListener('contextmenu',e=>e.preventDefault());
-document.addEventListener('keydown',function(e){
-    if(e.key==='F12'||(e.ctrlKey&&e.shiftKey&&e.key==='I')||(e.ctrlKey&&e.key==='U')||(e.ctrlKey&&e.key==='S')){
-        e.preventDefault();return false;
+document.addEventListener('contextmenu', e => e.preventDefault());
+document.addEventListener('keydown', function(e) {
+    if (e.key === 'F12' || (e.ctrlKey && e.shiftKey && e.key === 'I') || (e.ctrlKey && e.key === 'U') || (e
+        .ctrlKey && e.key === 'S')) {
+        e.preventDefault();
+        return false;
     }
 });
-(function(){const devtools=new Image();Object.defineProperty(devtools,'id',{get:function(){document.body.innerHTML='<div style="color:#f00;text-align:center;padding:50px;">🚫 تم اكتشاف محاولة اختراق</div>';}});console.log('%c⚠️ ممنوع فتح أدوات المطور','color:red;font-size:30px;');})();
-
-// --- تخزين ---
-function getData(){return JSON.parse(localStorage.getItem('darkKnightPro')||'{"posts":[],"visitors":[],"approved":[],"banned":[],"reports":[],"visitorLog":[]}');}
-function saveData(d){localStorage.setItem('darkKnightPro',JSON.stringify(d));}
 
 // --- IP ---
-async function getIPInfo(){
-    try{const r=await fetch('https://ipapi.co/json/');return await r.json();}catch(e){return null;}
+async function getIPInfo() {
+    try { const r = await fetch('https://ipapi.co/json/'); return await r.json(); } catch (e) { return null; }
 }
 
 // --- دخول المالك ---
-async function ownerLogin(){
-    const code=document.getElementById('ownerCode').value.trim();
-    if(code===OWNER_CODE){
-        currentUser='👑 المالك';
-        isOwner=true;
-        document.getElementById('ownerError').style.display='none';
-        visitorIPData=await getIPInfo();
+window.ownerLogin = async function() {
+    const code = document.getElementById('ownerCode').value.trim();
+    if (code === OWNER_CODE) {
+        currentUser = '👑 المالك';
+        isOwner = true;
+        document.getElementById('ownerError').style.display = 'none';
+        visitorIPData = await getIPInfo();
         showMainScreen();
-    }else{document.getElementById('ownerError').style.display='block';}
-}
+    } else { document.getElementById('ownerError').style.display = 'block'; }
+};
 
 // --- دخول الزائر ---
-async function visitorRequest(){
-    const phone=document.getElementById('visitorPhone').value.trim();
-    if(!phone||phone.length<5){document.getElementById('visitorError').textContent='❌ أدخل رقم هاتف صحيح';document.getElementById('visitorError').style.display='block';return;}
-    
-    const data=getData();
-    // تحقق من الحظر
-    if(data.banned.includes(phone)){
-        document.getElementById('visitorError').textContent='🚫 تم حظرك من الموقع. لا يمكنك الدخول.';
-        document.getElementById('visitorError').style.display='block';
+window.visitorRequest = async function() {
+    const phone = document.getElementById('visitorPhone').value.trim();
+    if (!phone || phone.length < 5) {
+        document.getElementById('visitorError').textContent = '❌ أدخل رقم هاتف صحيح';
+        document.getElementById('visitorError').style.display = 'block';
         return;
     }
-    
-    document.getElementById('visitorError').style.display='none';
-    visitorIPData=await getIPInfo();
-    
-    // سجل الزائر
-    data.visitorLog.push({
-        phone:phone,
-        time:new Date().toISOString(),
-        device:navigator.userAgent.substring(0,100),
-        ip:visitorIPData?visitorIPData.ip:'غير معروف',
-        country:visitorIPData?visitorIPData.country_name:'غير معروف',
-        city:visitorIPData?visitorIPData.city:'غير معروف'
+
+    visitorIPData = await getIPInfo();
+
+    // التحقق من الحظر
+    const banRef = ref(db, 'banned/' + phone.replace(/[.#$\[\]]/g, '_'));
+    const banSnap = await new Promise(resolve => onValue(banRef, resolve, { onlyOnce: true }));
+    if (banSnap.val()) {
+        document.getElementById('visitorError').textContent = '🚫 تم حظرك من الموقع. لا يمكنك الدخول.';
+        document.getElementById('visitorError').style.display = 'block';
+        return;
+    }
+
+    // التحقق من الموافقة
+    const appRef = ref(db, 'approved/' + phone.replace(/[.#$\[\]]/g, '_'));
+    const appSnap = await new Promise(resolve => onValue(appRef, resolve, { onlyOnce: true }));
+
+    if (appSnap.val()) {
+        currentUser = '🚶 ' + phone.substring(0, 4) + '****';
+        isOwner = false;
+        document.getElementById('visitorError').style.display = 'none';
+        document.getElementById('visitorSuccess').textContent = '✅ مرحباً بعودتك!';
+        document.getElementById('visitorSuccess').style.display = 'block';
+        setTimeout(() => showMainScreen(), 500);
+        return;
+    }
+
+    // إرسال طلب للمالك
+    const visitRef = ref(db, 'visitorRequests');
+    const newReq = push(visitRef);
+    await set(newReq, {
+        phone: phone,
+        time: new Date().toISOString(),
+        device: navigator.userAgent.substring(0, 100),
+        ip: visitorIPData ? visitorIPData.ip : 'غير معروف',
+        country: visitorIPData ? visitorIPData.country_name : 'غير معروف',
+        city: visitorIPData ? visitorIPData.city : 'غير معروف',
+        status: 'pending'
     });
-    
-    if(data.approved.includes(phone)){
-        currentUser='🚶 '+phone.substring(0,4)+'****';
-        isOwner=false;
-        saveData(data);
-        document.getElementById('visitorSuccess').textContent='✅ مرحباً بعودتك!';
-        document.getElementById('visitorSuccess').style.display='block';
-        setTimeout(()=>showMainScreen(),600);
-        return;
-    }
-    
-    if(!data.visitors.includes(phone)){
-        data.visitors.push(phone);
-    }
-    saveData(data);
-    document.getElementById('visitorSuccess').textContent='✅ تم إرسال رقمك للمالك. انتظر القبول.';
-    document.getElementById('visitorSuccess').style.display='block';
-}
+
+    document.getElementById('visitorError').style.display = 'none';
+    document.getElementById('visitorSuccess').textContent = '✅ تم إرسال طلبك للمالك. انتظر القبول.';
+    document.getElementById('visitorSuccess').style.display = 'block';
+};
 
 // --- الشاشة الرئيسية ---
-function showMainScreen(){
-    document.getElementById('loginScreen').style.display='none';
-    document.getElementById('mainScreen').style.display='block';
-    document.getElementById('headerUser').textContent=currentUser;
-    
-    if(isOwner){
-        document.getElementById('publishBox').style.display='block';
-        document.getElementById('trackInfo').style.display='block';
-        if(visitorIPData){
-            document.getElementById('trackInfo').innerHTML='🌍 <b>معلوماتك:</b> IP: '+visitorIPData.ip+' | الدولة: '+visitorIPData.country_name+' | المدينة: '+visitorIPData.city+' | ISP: '+visitorIPData.org+' | الجهاز: '+navigator.userAgent.substring(0,80);
-        }
-        checkPendingVisitors();
+function showMainScreen() {
+    document.getElementById('loginScreen').style.display = 'none';
+    document.getElementById('mainScreen').style.display = 'block';
+    document.getElementById('headerUser').textContent = currentUser;
+
+    if (isOwner) {
+        document.getElementById('publishBox').style.display = 'block';
+        listenForVisitorRequests();
     }
-    
-    loadPosts();
+
+    listenForPosts();
 }
 
-// --- الموافقة على الزوار ---
-function checkPendingVisitors(){
-    const data=getData();
-    const pending=data.visitors.filter(v=>!data.approved.includes(v)&&!data.banned.includes(v));
-    if(pending.length>0){
-        if(confirm('📱 '+pending.length+' زائر جديد:\n\n'+pending.join('\n')+'\n\nموافقة على الجميع؟')){
-            data.approved=[...new Set([...data.approved,...pending])];
-            data.visitors=[];
-            saveData(data);
-            alert('✅ تم قبول الجميع');
+// --- استماع للطلبات ---
+function listenForVisitorRequests() {
+    const visitRef = ref(db, 'visitorRequests');
+    onChildAdded(visitRef, async function(snapshot) {
+        const req = snapshot.val();
+        if (req.status === 'pending') {
+            if (confirm('📱 زائر جديد:\n\nالرقم: ' + req.phone + '\nالدولة: ' + req.country + '\nالمدينة: ' +
+                    req.city + '\n\nهل تقبله؟')) {
+                const appRef = ref(db, 'approved/' + req.phone.replace(/[.#$\[\]]/g, '_'));
+                await set(appRef, { phone: req.phone, device: req.device, country: req.country, city: req
+                        .city, ip: req.ip, approvedAt: serverTimestamp() });
+                await set(ref(db, 'visitorRequests/' + snapshot.key), { ...req, status: 'approved' });
+                alert('✅ تم قبول الزائر');
+            } else {
+                await set(ref(db, 'visitorRequests/' + snapshot.key), { ...req, status: 'rejected' });
+            }
         }
-    }
+    });
+}
+
+// --- استماع للمنشورات ---
+function listenForPosts() {
+    const postsRef = ref(db, 'posts');
+    onValue(postsRef, function(snapshot) {
+        const data = snapshot.val();
+        const container = document.getElementById('postsContainer');
+        if (!data) {
+            container.innerHTML =
+                '<div style="text-align:center;color:#555;padding:30px;">📭 لا توجد منشورات...</div>';
+            return;
+        }
+        const posts = Object.entries(data).map(([id, p]) => ({ id, ...p }));
+        posts.sort((a, b) => b.timestamp - a.timestamp);
+
+        container.innerHTML = posts.map(post => `
+            <div class="post-card">
+                <div class="post-author">
+                    ${post.author}
+                    ${post.authorPhone === 'OWNER' ? ' <span class="badge owner">مالك</span>' : ''}
+                    ${isOwner && post.authorPhone !== 'OWNER' ? ' <span style="color:#fa0;font-size:9px;">📱 ' + post.authorPhone + '</span>' : ''}
+                </div>
+                <div class="post-time">${new Date(post.timestamp).toLocaleString('ar-SA')}</div>
+                <div class="post-content">
+                    ${post.content}
+                    ${post.image ? '<br><img src="' + post.image + '" onclick="this.style.transform=this.style.transform===\'scale(2)\'?\'\':\'scale(2)\'" style="cursor:pointer;transition:0.3s;max-width:200px;">' : ''}
+                </div>
+                <div class="post-actions">
+                    <button onclick="toggleComments('${post.id}')">💬 تعليق (${post.comments ? Object.keys(post.comments).length : 0})</button>
+                    ${!isOwner ? '<button class="report-btn" onclick="openReport(\'' + post.id + '\',\'post\')">🚨 بلاغ</button>' : ''}
+                    ${post.reports && Object.keys(post.reports).length > 0 && isOwner ? '<span style="color:#f00;font-size:9px;">🚨 ' + Object.keys(post.reports).length + ' بلاغ</span>' : ''}
+                    ${isOwner ? '<button class="report-btn" onclick="deletePost(\'' + post.id + '\')">🗑️ حذف</button>' : ''}
+                </div>
+                <div class="comment-section" id="comments-${post.id}" style="display:none;">
+                    ${post.comments ? Object.entries(post.comments).map(([cid, c]) => `
+                        <div class="comment-item">
+                            <span><span class="comment-author">${c.author}:</span> <span class="comment-text">${c.text}</span></span>
+                            ${!isOwner ? '<button style="background:transparent;border:none;color:#600;cursor:pointer;font-size:8px;" onclick="openReport(\'' + post.id + '\',\'comment\',\'' + cid + '\')">🚨</button>' : ''}
+                        </div>
+                    `).join('') : ''}
+                    <input type="text" placeholder="✍️ تعليق..." onkeydown="if(event.key==='Enter')addComment('${post.id}',this)">
+                </div>
+            </div>
+        `).join('');
+    });
 }
 
 // --- نشر ---
-function publishPost(){
-    const content=document.getElementById('postContent').value.trim();
-    const imgPreview=document.getElementById('imagePreview');
-    const imageData=imgPreview.src!=''&&imgPreview.style.display!='none'?imgPreview.src:null;
-    
-    if(!content&&!imageData)return;
-    
-    const data=getData();
-    data.posts.unshift({
-        id:Date.now(),
-        author:isOwner?'👑 المالك':currentUser,
-        authorPhone:isOwner?'OWNER':(currentUser.startsWith('🚶')?currentUser:'OWNER'),
-        content:content||'📷 صورة',
-        image:imageData,
-        time:new Date().toLocaleString('ar-SA'),
-        comments:[],
-        reports:[]
-    });
-    saveData(data);
-    document.getElementById('postContent').value='';
-    imgPreview.src='';
-    imgPreview.style.display='none';
-    document.getElementById('postImage').value='';
-    loadPosts();
-}
+window.publishPost = async function() {
+    const content = document.getElementById('postContent').value.trim();
+    const imgPreview = document.getElementById('imagePreview');
+    const imageData = imgPreview.src && imgPreview.style.display !== 'none' ? imgPreview.src : null;
 
-function previewImage(){
-    const file=document.getElementById('postImage').files[0];
-    if(!file)return;
-    const reader=new FileReader();
-    reader.onload=function(e){
-        const img=document.getElementById('imagePreview');
-        img.src=e.target.result;
-        img.style.display='block';
+    if (!content && !imageData) return;
+
+    const postsRef = ref(db, 'posts');
+    const newPost = push(postsRef);
+    await set(newPost, {
+        author: isOwner ? '👑 المالك' : currentUser,
+        authorPhone: isOwner ? 'OWNER' : currentUser,
+        content: content || '📷 صورة',
+        image: imageData || '',
+        timestamp: serverTimestamp(),
+        comments: {},
+        reports: {}
+    });
+
+    document.getElementById('postContent').value = '';
+    imgPreview.src = '';
+    imgPreview.style.display = 'none';
+    document.getElementById('postImage').value = '';
+};
+
+window.previewImage = function() {
+    const file = document.getElementById('postImage').files[0];
+    if (!file) return;
+    const reader = new FileReader();
+    reader.onload = function(e) {
+        const img = document.getElementById('imagePreview');
+        img.src = e.target.result;
+        img.style.display = 'block';
     };
     reader.readAsDataURL(file);
-}
+};
 
-// --- المنشورات ---
-function loadPosts(){
-    const data=getData();
-    const container=document.getElementById('postsContainer');
-    if(data.posts.length===0){
-        container.innerHTML='<div style="text-align:center;color:#555;padding:30px;">📭 لا توجد منشورات...</div>';
-        return;
-    }
-    
-    container.innerHTML=data.posts.map(post=>`
-        <div class="post-card">
-            <div class="post-author">
-                ${post.author}
-                ${post.authorPhone==='OWNER'?' <span class="badge owner">مالك</span>':''}
-                ${isOwner&&post.authorPhone!=='OWNER'?' <span class="badge visitor" style="color:#fa0;">📱 '+post.authorPhone+'</span>':''}
-            </div>
-            <div class="post-time">${post.time}</div>
-            <div class="post-content">
-                ${post.content}
-                ${post.image?`<br><img src="${post.image}" onclick="this.style.transform=this.style.transform==='scale(2)'?'':'scale(2)'" style="cursor:pointer;transition:0.3s;">`:''}
-            </div>
-            <div class="post-actions">
-                <button onclick="toggleComments('${post.id}')">💬 تعليق (${post.comments.length})</button>
-                ${!isOwner?`<button class="report-btn" onclick="openReport('${post.id}','post')">🚨 بلاغ</button>`:''}
-                ${post.reports.length>0&&isOwner?`<span style="color:#f00;font-size:9px;">🚨 ${post.reports.length} بلاغ</span>`:''}
-                ${isOwner?`<button class="report-btn" onclick="deletePost('${post.id}')">🗑️ حذف</button>`:''}
-            </div>
-            <div class="comment-section" id="comments-${post.id}" style="display:none;">
-                ${post.comments.map((c,i)=>`
-                    <div class="comment-item">
-                        <span><span class="comment-author">${c.author}:</span> <span class="comment-text">${c.text}</span></span>
-                        ${!isOwner?`<button class="report-btn-sm" onclick="openReport('${post.id}','comment',${i})">🚨</button>`:''}
-                    </div>
-                `).join('')}
-                <input type="text" placeholder="✍️ تعليق..." onkeydown="if(event.key==='Enter')addComment('${post.id}',this)">
-            </div>
-        </div>
-    `).join('');
-}
+// --- تعليقات ---
+window.toggleComments = function(postId) {
+    const sec = document.getElementById('comments-' + postId);
+    sec.style.display = sec.style.display === 'none' ? 'block' : 'none';
+};
 
-function toggleComments(id){
-    const sec=document.getElementById('comments-'+id);
-    sec.style.display=sec.style.display==='none'?'block':'none';
-}
+window.addComment = async function(postId, input) {
+    const text = input.value.trim();
+    if (!text) return;
+    const commRef = ref(db, 'posts/' + postId + '/comments');
+    const newComm = push(commRef);
+    await set(newComm, {
+        author: currentUser,
+        text: text,
+        timestamp: serverTimestamp()
+    });
+    input.value = '';
+    document.getElementById('comments-' + postId).style.display = 'block';
+};
 
-function addComment(postId,input){
-    const text=input.value.trim();
-    if(!text)return;
-    const data=getData();
-    const post=data.posts.find(p=>p.id==parseInt(postId));
-    if(post){
-        post.comments.push({author:currentUser,text:text,time:new Date().toLocaleString('ar-SA')});
-        saveData(data);
-        input.value='';
-        loadPosts();
-        document.getElementById('comments-'+postId).style.display='block';
-    }
-}
+window.deletePost = async function(postId) {
+    if (!isOwner) return;
+    if (!confirm('هل أنت متأكد من حذف هذا المنشور؟')) return;
+    await remove(ref(db, 'posts/' + postId));
+};
 
-function deletePost(postId){
-    if(!isOwner)return;
-    if(!confirm('هل أنت متأكد من حذف هذا المنشور؟'))return;
-    const data=getData();
-    data.posts=data.posts.filter(p=>p.id!==parseInt(postId));
-    saveData(data);
-    loadPosts();
-}
-
-// --- البلاغات ---
-function openReport(targetId,type,commentIndex=null){
-    reportTarget={targetId,type,commentIndex};
-    document.getElementById('reportTarget').textContent='🚨 بلاغ على: '+(type==='post'?'منشور':type==='comment'?'تعليق':'');
+// --- بلاغات ---
+window.openReport = function(targetId, type, commentId = null) {
+    reportTarget = { targetId, type, commentId };
+    document.getElementById('reportTarget').textContent = '🚨 بلاغ على: ' + (type === 'post' ? 'منشور' :
+        'تعليق');
     document.getElementById('reportModal').classList.add('active');
-}
+};
 
-function submitReport(reason){
-    if(!reportTarget)return;
-    const data=getData();
-    const report={targetId:reportTarget.targetId,type:reportTarget.type,commentIndex:reportTarget.commentIndex,reason:reason,reporter:currentUser,time:new Date().toLocaleString('ar-SA')};
-    data.reports.push(report);
-    
-    if(reportTarget.type==='post'){
-        const post=data.posts.find(p=>p.id===parseInt(reportTarget.targetId));
-        if(post)post.reports.push(report);
+window.submitReport = async function(reason) {
+    if (!reportTarget) return;
+    const reportRef = ref(db, 'reports');
+    const newReport = push(reportRef);
+    await set(newReport, {
+        targetId: reportTarget.targetId,
+        type: reportTarget.type,
+        commentId: reportTarget.commentId || '',
+        reason: reason,
+        reporter: currentUser,
+        timestamp: serverTimestamp()
+    });
+
+    if (reportTarget.type === 'post') {
+        const postReportRef = ref(db, 'posts/' + reportTarget.targetId + '/reports');
+        const pr = push(postReportRef);
+        await set(pr, { reason: reason, reporter: currentUser, timestamp: serverTimestamp() });
     }
-    
-    saveData(data);
+
     document.getElementById('reportModal').classList.remove('active');
     alert('✅ تم إرسال البلاغ للمالك.');
-    reportTarget=null;
-    loadPosts();
-}
+    reportTarget = null;
+};
 
 // --- نافذة البلاغات ---
-function openReports(){
-    const data=getData();
-    const list=document.getElementById('reportsList');
-    if(data.reports.length===0){
-        list.innerHTML='<div style="color:#888;text-align:center;">لا توجد بلاغات</div>';
-    }else{
-        list.innerHTML=data.reports.map((r,i)=>`
-            <div class="visitor-row">
-                <span>🚨 ${r.reason} | من: ${r.reporter} | ${r.time}</span>
-                ${isOwner?`<button onclick="clearReport(${i})">مسح</button>`:''}
-            </div>
-        `).join('');
-    }
-    document.getElementById('reportsModal').classList.add('active');
-}
-
-function clearReport(index){
-    const data=getData();
-    data.reports.splice(index,1);
-    saveData(data);
-    openReports();
-}
+window.openReports = function() {
+    const reportsRef = ref(db, 'reports');
+    onValue(reportsRef, function(snapshot) {
+        const data = snapshot.val();
+        const list = document.getElementById('reportsList');
+        if (!data) {
+            list.innerHTML = '<div style="color:#888;text-align:center;">لا توجد بلاغات</div>';
+        } else {
+            list.innerHTML = Object.entries(data).map(([id, r]) => `
+                <div class="visitor-row">
+                    <span>🚨 ${r.reason} | من: ${r.reporter} | ${new Date(r.timestamp).toLocaleString('ar-SA')}</span>
+                </div>
+            `).join('');
+        }
+        document.getElementById('reportsModal').classList.add('active');
+    }, { onlyOnce: true });
+};
 
 // --- نافذة الزوار ---
-function openVisitors(){
-    if(!isOwner)return;
-    const data=getData();
-    const list=document.getElementById('visitorsList');
-    const allVisitors=[...new Set([...data.visitorLog.map(v=>v.phone),...data.approved])];
-    
-    if(allVisitors.length===0){
-        list.innerHTML='<div style="color:#888;text-align:center;">لا يوجد زوار</div>';
-    }else{
-        list.innerHTML=allVisitors.map(phone=>{
-            const log=data.visitorLog.filter(v=>v.phone===phone).pop();
-            const reports=data.reports.filter(r=>r.reporter.includes(phone)).length;
-            const isBanned=data.banned.includes(phone);
-            const isApproved=data.approved.includes(phone);
-            return `
-                <div class="visitor-row">
-                    <span class="v-phone">📱 ${phone}</span>
-                    <span class="v-info">${log?log.country+' - '+log.city:'غير معروف'}</span>
-                    <span class="v-reports">بلاغات: ${reports}</span>
-                    ${isBanned?'<span class="badge banned">محظور</span>':''}
-                    ${isApproved&&!isBanned?`<button onclick="banVisitor('${phone}')">🚫 حظر</button>`:''}
-                    ${isBanned?`<button class="green" onclick="unbanVisitor('${phone}')">✅ فك</button>`:''}
-                </div>
-            `;
-        }).join('');
-    }
-    document.getElementById('visitorsModal').classList.add('active');
-}
+window.openVisitors = function() {
+    if (!isOwner) return;
+    const appRef = ref(db, 'approved');
+    const banRef = ref(db, 'banned');
 
-function banVisitor(phone){
-    if(!confirm('🚫 حظر '+phone+' نهائياً؟ لن يستطيع الدخول أبداً.'))return;
-    const data=getData();
-    data.banned.push(phone);
-    data.approved=data.approved.filter(v=>v!==phone);
-    data.visitors=data.visitors.filter(v=>v!==phone);
-    saveData(data);
+    Promise.all([
+        new Promise(resolve => onValue(appRef, resolve, { onlyOnce: true })),
+        new Promise(resolve => onValue(banRef, resolve, { onlyOnce: true }))
+    ]).then(([appSnap, banSnap]) => {
+        const approved = appSnap.val() || {};
+        const banned = banSnap.val() || {};
+        const list = document.getElementById('visitorsList');
+
+        const allPhones = [...new Set([...Object.keys(approved), ...Object.keys(banned)])];
+        if (allPhones.length === 0) {
+            list.innerHTML = '<div style="color:#888;text-align:center;">لا يوجد زوار</div>';
+        } else {
+            list.innerHTML = allPhones.map(phone => {
+                const v = approved[phone] || banned[phone] || {};
+                const isBanned = !!banned[phone];
+                return `
+                    <div class="visitor-row">
+                        <span>📱 ${v.phone || phone}</span>
+                        <span style="color:#888;font-size:9px;">${v.country || '?'} - ${v.city || '?'}</span>
+                        ${isBanned ? '<span class="badge banned">محظور</span>' : ''}
+                        ${!isBanned ? '<button onclick="banVisitor(\'' + phone + '\')">🚫 حظر</button>' : '<button style="background:#0f0;color:#000;" onclick="unbanVisitor(\'' + phone + '\')">✅ فك</button>'}
+                    </div>
+                `;
+            }).join('');
+        }
+        document.getElementById('visitorsModal').classList.add('active');
+    });
+};
+
+window.banVisitor = async function(phone) {
+    if (!confirm('🚫 حظر ' + phone + ' نهائياً؟')) return;
+    const key = phone.replace(/[.#$\[\]]/g, '_');
+    await set(ref(db, 'banned/' + key), { phone: phone, bannedAt: serverTimestamp() });
+    await remove(ref(db, 'approved/' + key));
+    alert('🚫 تم حظر ' + phone);
     openVisitors();
-    alert('🚫 تم حظر '+phone);
-}
+};
 
-function unbanVisitor(phone){
-    const data=getData();
-    data.banned=data.banned.filter(v=>v!==phone);
-    data.approved.push(phone);
-    saveData(data);
+window.unbanVisitor = async function(phone) {
+    const key = phone.replace(/[.#$\[\]]/g, '_');
+    await remove(ref(db, 'banned/' + key));
+    await set(ref(db, 'approved/' + key), { phone: phone, unbannedAt: serverTimestamp() });
+    alert('✅ تم فك الحظر عن ' + phone);
     openVisitors();
-    alert('✅ تم فك الحظر عن '+phone);
-}
+};
 
-function closeModal(id){
+window.closeModal = function(id) {
     document.getElementById(id).classList.remove('active');
-}
+};
 
-function logout(){
-    currentUser=null;isOwner=false;visitorIPData=null;
-    document.getElementById('mainScreen').style.display='none';
-    document.getElementById('loginScreen').style.display='flex';
-    document.getElementById('ownerCode').value='';
-    document.getElementById('visitorPhone').value='';
-}
+window.logout = function() {
+    currentUser = null;
+    isOwner = false;
+    visitorIPData = null;
+    document.getElementById('mainScreen').style.display = 'none';
+    document.getElementById('loginScreen').style.display = 'flex';
+    document.getElementById('ownerCode').value = '';
+    document.getElementById('visitorPhone').value = '';
+};
 </script>
 </body>
 </html>
