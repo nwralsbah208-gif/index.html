@@ -3,65 +3,85 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>🌑 DARK KNIGHT - ø ASAØ</title>
+    <title>🌑 DARK KNIGHT PRO - ø ASAØ</title>
     <style>
-        :root{--bg:#000a14;--panel:#001020;--accent:#1a73e8;--accent2:#ff6d00;--text:#c0c0c0;--gold:#ffaa00;}
+        :root{--bg:#000a14;--panel:#001020;--accent:#1a73e8;--accent2:#ff6d00;--red:#ff1744;--green:#00e676;--gold:#ffaa00;--text:#c0c0c0;}
         *{margin:0;padding:0;box-sizing:border-box;}
         body{background:var(--bg);font-family:'Segoe UI','Arial',sans-serif;color:var(--text);min-height:100vh;}
         
-        #loginScreen{display:flex;justify-content:center;align-items:center;height:100vh;background:var(--bg);}
-        .login-box{background:var(--panel);border:1px solid #1a3050;border-radius:16px;padding:40px;text-align:center;width:380px;box-shadow:0 0 60px rgba(26,115,232,0.2);}
+        #loginScreen{display:flex;justify-content:center;align-items:center;min-height:100vh;background:var(--bg);padding:20px;}
+        .login-box{background:var(--panel);border:1px solid #1a3050;border-radius:16px;padding:40px;text-align:center;width:400px;box-shadow:0 0 60px rgba(26,115,232,0.2);}
         .login-box .logo{font-size:60px;margin-bottom:10px;}
         .login-box h1{color:#fff;font-size:24px;letter-spacing:4px;margin-bottom:5px;}
         .login-box .sub{color:#666;font-size:10px;letter-spacing:2px;margin-bottom:25px;}
-        .login-box input, .login-box textarea{width:100%;padding:12px;margin:6px 0;background:#000;border:1px solid #1a3050;color:#fff;font-size:14px;border-radius:6px;text-align:center;outline:none;font-family:inherit;resize:none;}
+        .login-box input{width:100%;padding:12px;margin:6px 0;background:#000;border:1px solid #1a3050;color:#fff;font-size:14px;border-radius:6px;text-align:center;outline:none;font-family:inherit;}
         .login-box input:focus{border-color:var(--accent);box-shadow:0 0 15px rgba(26,115,232,0.3);}
         .login-box button{width:100%;padding:12px;margin-top:10px;background:var(--accent);color:#fff;border:none;border-radius:6px;font-size:14px;font-weight:bold;cursor:pointer;letter-spacing:2px;}
         .login-box button:hover{background:#1a5fd4;}
         .login-box button.orange{background:var(--accent2);}
         .login-box button.orange:hover{background:#e05500;}
         .login-box .link{color:var(--accent);font-size:10px;cursor:pointer;margin-top:10px;display:inline-block;}
-        .login-box .link:hover{text-decoration:underline;}
         .error{color:#f00;font-size:10px;margin-top:5px;display:none;}
         .success{color:#0f0;font-size:10px;margin-top:5px;display:none;}
         
         #mainScreen{display:none;}
-        .header{background:#000;border-bottom:1px solid #1a3050;padding:12px 20px;display:flex;justify-content:space-between;align-items:center;position:sticky;top:0;z-index:100;}
+        .header{background:#000;border-bottom:1px solid #1a3050;padding:12px 20px;display:flex;justify-content:space-between;align-items:center;position:sticky;top:0;z-index:100;flex-wrap:wrap;gap:8px;}
         .header .brand{color:var(--accent);font-size:18px;font-weight:bold;letter-spacing:3px;}
         .header .user{color:#888;font-size:11px;}
+        .header .btns{display:flex;gap:6px;}
         .header button{background:var(--accent2);color:#fff;border:none;padding:6px 14px;border-radius:4px;cursor:pointer;font-size:10px;letter-spacing:1px;}
+        .header button.red{background:var(--red);}
         
-        .layout{max-width:700px;margin:0 auto;padding:20px;display:flex;flex-direction:column;gap:15px;}
+        .layout{max-width:750px;margin:0 auto;padding:20px;display:flex;flex-direction:column;gap:15px;}
         
         .post-box{background:var(--panel);border:1px solid #1a3050;border-radius:12px;padding:20px;}
         .post-box textarea{width:100%;background:#000;border:1px solid #1a3050;color:#fff;padding:12px;border-radius:8px;font-size:14px;outline:none;font-family:inherit;resize:none;min-height:80px;}
         .post-box textarea:focus{border-color:var(--accent);}
+        .post-box input[type="file"]{margin:8px 0;color:#888;font-size:10px;}
         .post-box button{background:var(--accent);color:#fff;border:none;padding:8px 20px;border-radius:6px;cursor:pointer;font-weight:bold;margin-top:8px;letter-spacing:1px;}
+        .post-box .img-preview{max-width:200px;max-height:200px;border-radius:8px;margin:8px 0;display:none;}
         
         .post-card{background:var(--panel);border:1px solid #1a3050;border-radius:12px;padding:15px 20px;}
         .post-card .post-author{color:var(--accent);font-size:11px;font-weight:bold;letter-spacing:1px;}
         .post-card .post-time{color:#555;font-size:9px;}
         .post-card .post-content{color:#ddd;font-size:14px;margin:10px 0;line-height:1.6;}
-        .post-card .post-actions{display:flex;gap:10px;margin-top:8px;}
-        .post-card .post-actions button{background:transparent;border:1px solid #333;color:#888;padding:4px 12px;border-radius:20px;cursor:pointer;font-size:10px;}
+        .post-card .post-content img{max-width:300px;max-height:300px;border-radius:8px;margin:8px 0;cursor:pointer;}
+        .post-card .post-actions{display:flex;gap:8px;margin-top:8px;flex-wrap:wrap;}
+        .post-card .post-actions button{background:transparent;border:1px solid #333;color:#888;padding:4px 12px;border-radius:20px;cursor:pointer;font-size:9px;}
         .post-card .post-actions button:hover{background:#1a3050;color:#fff;}
+        .post-card .post-actions button.report-btn{border-color:#600;color:#f66;}
+        .post-card .post-actions button.report-btn:hover{background:#600;color:#f00;}
         
         .comment-section{margin-top:10px;border-top:1px solid #1a3050;padding-top:10px;}
         .comment-section input{width:100%;background:#000;border:1px solid #1a3050;color:#fff;padding:8px;border-radius:20px;font-size:11px;outline:none;margin-top:5px;}
         .comment-section input:focus{border-color:var(--accent);}
-        .comment-item{padding:4px 0;font-size:10px;}
+        .comment-item{padding:4px 0;font-size:10px;display:flex;justify-content:space-between;align-items:center;}
         .comment-item .comment-author{color:var(--accent);font-size:9px;}
         .comment-item .comment-text{color:#aaa;}
+        .comment-item .report-btn-sm{background:transparent;border:none;color:#600;cursor:pointer;font-size:8px;}
         
-        .modal{display:none;position:fixed;top:0;left:0;width:100%;height:100%;background:rgba(0,0,0,0.9);z-index:200;justify-content:center;align-items:center;}
+        .modal{display:none;position:fixed;top:0;left:0;width:100%;height:100%;background:rgba(0,0,0,0.95);z-index:200;justify-content:center;align-items:center;padding:20px;}
         .modal.active{display:flex;}
-        .modal-content{background:var(--panel);border:1px solid #1a3050;border-radius:12px;padding:25px;width:350px;text-align:center;}
-        .modal-content h3{color:#fff;margin-bottom:15px;}
-        .modal-content button{background:var(--accent);color:#fff;border:none;padding:8px 20px;border-radius:6px;cursor:pointer;margin:4px;}
+        .modal-content{background:var(--panel);border:1px solid #1a3050;border-radius:12px;padding:25px;width:90%;max-width:500px;max-height:80vh;overflow-y:auto;text-align:right;}
+        .modal-content h3{color:#fff;margin-bottom:15px;text-align:center;}
+        .modal-content button{background:var(--accent);color:#fff;border:none;padding:8px 20px;border-radius:6px;cursor:pointer;margin:4px;font-size:11px;}
+        .modal-content button.red{background:var(--red);}
+        .modal-content button.green{background:var(--green);}
+        .modal-content .report-option{display:block;width:100%;padding:10px;margin:4px 0;background:#000;border:1px solid #333;color:#fff;border-radius:6px;cursor:pointer;text-align:right;font-size:11px;}
+        .modal-content .report-option:hover{background:#1a0000;border-color:#f00;}
+        
+        .visitor-row{display:flex;justify-content:space-between;align-items:center;padding:8px;border-bottom:1px solid #1a3050;font-size:10px;flex-wrap:wrap;gap:4px;}
+        .visitor-row .v-info{color:#aaa;}
+        .visitor-row .v-phone{color:var(--gold);font-size:11px;}
+        .visitor-row .v-reports{color:#f00;font-size:9px;}
+        .visitor-row button{background:var(--red);color:#fff;border:none;padding:4px 10px;border-radius:4px;cursor:pointer;font-size:8px;}
         
         .badge{display:inline-block;padding:2px 8px;border-radius:10px;font-size:8px;letter-spacing:1px;}
         .badge.owner{background:var(--gold);color:#000;}
         .badge.visitor{background:var(--accent);color:#fff;}
+        .badge.banned{background:#f00;color:#fff;}
+        
+        .track-info{background:#000;border:1px solid #1a3050;border-radius:8px;padding:10px;margin:5px 0;font-size:9px;color:#0f0;}
         
         @media(max-width:600px){.login-box{width:90%;padding:25px;}}
     </style>
@@ -70,50 +90,55 @@
 
 <!-- شاشة الدخول -->
 <div id="loginScreen">
-    <div class="login-box" id="loginBox">
+    <div class="login-box">
         <div class="logo">🌑</div>
         <h1>DARK KNIGHT</h1>
-        <div class="sub">ø ASAØ // منصة اجتماعية خاصة</div>
+        <div class="sub">ø ASAØ // PRO EDITION</div>
         
-        <!-- خيار المالك -->
         <div id="ownerLogin">
-            <input type="password" id="ownerCode" placeholder="🔑 أدخل رمز المالك" maxlength="10">
+            <input type="password" id="ownerCode" placeholder="🔑 رمز المالك" maxlength="10">
             <button onclick="ownerLogin()">👑 دخول المالك</button>
             <div class="error" id="ownerError">❌ رمز خاطئ</div>
         </div>
         
         <div style="color:#333;margin:15px 0;">─── أو ───</div>
         
-        <!-- خيار الزائر -->
         <div id="visitorSection">
-            <input type="text" id="visitorPhone" placeholder="📱 أدخل رقم هاتفك" maxlength="20">
+            <input type="text" id="visitorPhone" placeholder="📱 رقم هاتفك (سري - يظهر للمالك فقط)" maxlength="20">
             <button class="orange" onclick="visitorRequest()">🚶 دخول كزائر</button>
             <div class="success" id="visitorSuccess">✅ تم إرسال طلبك للمالك</div>
-            <div class="error" id="visitorError">❌ أدخل رقم هاتف صحيح</div>
+            <div class="error" id="visitorError">❌ تم حظرك من الموقع</div>
         </div>
-        
-        <div class="link" onclick="showApprovedList()">📋 عرض الزوار المقبولين</div>
     </div>
 </div>
 
 <!-- الشاشة الرئيسية -->
 <div id="mainScreen">
     <div class="header">
-        <span class="brand">🌑 DARK KNIGHT</span>
+        <span class="brand">🌑 DARK KNIGHT PRO</span>
         <span class="user" id="headerUser"></span>
-        <button onclick="logout()">🚪 خروج</button>
+        <div class="btns">
+            <button onclick="openVisitors()">📋 الزوار</button>
+            <button onclick="openReports()">🚨 البلاغات</button>
+            <button class="red" onclick="logout()">🚪 خروج</button>
+        </div>
     </div>
     
     <div class="layout">
-        <!-- صندوق النشر (للمالك فقط) -->
+        <!-- تتبع الزائر (للمالك فقط) -->
+        <div class="track-info" id="trackInfo" style="display:none;"></div>
+        
+        <!-- صندوق النشر -->
         <div class="post-box" id="publishBox" style="display:none;">
             <textarea id="postContent" placeholder="✍️ ماذا تريد أن تنشر؟"></textarea>
+            <input type="file" id="postImage" accept="image/*" onchange="previewImage()">
+            <img class="img-preview" id="imagePreview">
             <button onclick="publishPost()">📢 نشر</button>
         </div>
         
         <!-- المنشورات -->
         <div id="postsContainer">
-            <div style="text-align:center;color:#555;padding:30px;">📭 لا توجد منشورات بعد...</div>
+            <div style="text-align:center;color:#555;padding:30px;">📭 لا توجد منشورات...</div>
         </div>
     </div>
 </div>
@@ -121,70 +146,125 @@
 <!-- نافذة الزوار -->
 <div class="modal" id="visitorsModal">
     <div class="modal-content">
-        <h3>📋 الزوار المقبولين</h3>
-        <div id="visitorsList" style="max-height:300px;overflow-y:auto;text-align:right;font-size:10px;"></div>
-        <button onclick="closeVisitors()">إغلاق</button>
+        <h3>📋 إدارة الزوار</h3>
+        <div id="visitorsList"></div>
+        <button onclick="closeModal('visitorsModal')">إغلاق</button>
+    </div>
+</div>
+
+<!-- نافذة البلاغات -->
+<div class="modal" id="reportsModal">
+    <div class="modal-content">
+        <h3>🚨 البلاغات</h3>
+        <div id="reportsList"></div>
+        <button onclick="closeModal('reportsModal')">إغلاق</button>
+    </div>
+</div>
+
+<!-- نافذة تقديم بلاغ -->
+<div class="modal" id="reportModal">
+    <div class="modal-content">
+        <h3>🚨 تقديم بلاغ</h3>
+        <div id="reportTarget"></div>
+        <button class="report-option" onclick="submitReport('فعل جنسي')">🔞 فعل جنسي</button>
+        <button class="report-option" onclick="submitReport('سرقة')">💰 سرقة</button>
+        <button class="report-option" onclick="submitReport('أفعال خبيثة')">💀 أفعال خبيثة</button>
+        <button class="report-option" onclick="submitReport('مضايقة')">😠 مضايقة</button>
+        <button class="report-option" onclick="submitReport('انتحال شخصية')">🎭 انتحال شخصية</button>
+        <button class="report-option" onclick="submitReport('محتوى غير لائق')">⚠️ محتوى غير لائق</button>
+        <button class="report-option" onclick="submitReport('تهديد')">🗡️ تهديد</button>
+        <button class="report-option" onclick="submitReport('اختراق')">👨‍💻 اختراق</button>
+        <button class="report-option" onclick="submitReport('غير ذلك')">📝 غير ذلك</button>
+        <button class="red" onclick="closeModal('reportModal')">إلغاء</button>
     </div>
 </div>
 
 <script>
 // ============================================================
-// ø ASAØ | DARK KNIGHT | منصة اجتماعية خاصة
+// ø ASAØ | DARK KNIGHT PRO | النسخة الكاملة
 // ============================================================
 
 const OWNER_CODE='54379';
 let currentUser=null;
 let isOwner=false;
+let reportTarget=null;
+let visitorIPData=null;
 
-// --- تخزين محلي ---
-function getData(){return JSON.parse(localStorage.getItem('darkKnightData')||'{"posts":[],"visitors":[],"approvedVisitors":[]}');}
-function saveData(d){localStorage.setItem('darkKnightData',JSON.stringify(d));}
+// --- حماية ---
+document.addEventListener('contextmenu',e=>e.preventDefault());
+document.addEventListener('keydown',function(e){
+    if(e.key==='F12'||(e.ctrlKey&&e.shiftKey&&e.key==='I')||(e.ctrlKey&&e.key==='U')||(e.ctrlKey&&e.key==='S')){
+        e.preventDefault();return false;
+    }
+});
+(function(){const devtools=new Image();Object.defineProperty(devtools,'id',{get:function(){document.body.innerHTML='<div style="color:#f00;text-align:center;padding:50px;">🚫 تم اكتشاف محاولة اختراق</div>';}});console.log('%c⚠️ ممنوع فتح أدوات المطور','color:red;font-size:30px;');})();
+
+// --- تخزين ---
+function getData(){return JSON.parse(localStorage.getItem('darkKnightPro')||'{"posts":[],"visitors":[],"approved":[],"banned":[],"reports":[],"visitorLog":[]}');}
+function saveData(d){localStorage.setItem('darkKnightPro',JSON.stringify(d));}
+
+// --- IP ---
+async function getIPInfo(){
+    try{const r=await fetch('https://ipapi.co/json/');return await r.json();}catch(e){return null;}
+}
 
 // --- دخول المالك ---
-function ownerLogin(){
+async function ownerLogin(){
     const code=document.getElementById('ownerCode').value.trim();
     if(code===OWNER_CODE){
         currentUser='👑 المالك';
         isOwner=true;
         document.getElementById('ownerError').style.display='none';
+        visitorIPData=await getIPInfo();
         showMainScreen();
-    }else{
-        document.getElementById('ownerError').style.display='block';
-    }
+    }else{document.getElementById('ownerError').style.display='block';}
 }
 
-// --- طلب زيارة ---
-function visitorRequest(){
+// --- دخول الزائر ---
+async function visitorRequest(){
     const phone=document.getElementById('visitorPhone').value.trim();
-    if(!phone||phone.length<5){
+    if(!phone||phone.length<5){document.getElementById('visitorError').textContent='❌ أدخل رقم هاتف صحيح';document.getElementById('visitorError').style.display='block';return;}
+    
+    const data=getData();
+    // تحقق من الحظر
+    if(data.banned.includes(phone)){
+        document.getElementById('visitorError').textContent='🚫 تم حظرك من الموقع. لا يمكنك الدخول.';
         document.getElementById('visitorError').style.display='block';
         return;
     }
-    document.getElementById('visitorError').style.display='none';
     
-    const data=getData();
-    // تحقق مما إذا كان مقبولاً مسبقاً
-    if(data.approvedVisitors.includes(phone)){
-        currentUser='🚶 زائر ('+phone+')';
+    document.getElementById('visitorError').style.display='none';
+    visitorIPData=await getIPInfo();
+    
+    // سجل الزائر
+    data.visitorLog.push({
+        phone:phone,
+        time:new Date().toISOString(),
+        device:navigator.userAgent.substring(0,100),
+        ip:visitorIPData?visitorIPData.ip:'غير معروف',
+        country:visitorIPData?visitorIPData.country_name:'غير معروف',
+        city:visitorIPData?visitorIPData.city:'غير معروف'
+    });
+    
+    if(data.approved.includes(phone)){
+        currentUser='🚶 '+phone.substring(0,4)+'****';
         isOwner=false;
+        saveData(data);
+        document.getElementById('visitorSuccess').textContent='✅ مرحباً بعودتك!';
         document.getElementById('visitorSuccess').style.display='block';
-        setTimeout(()=>showMainScreen(),800);
+        setTimeout(()=>showMainScreen(),600);
         return;
     }
-    // إضافة إلى قائمة الطلبات
+    
     if(!data.visitors.includes(phone)){
         data.visitors.push(phone);
-        saveData(data);
     }
+    saveData(data);
     document.getElementById('visitorSuccess').textContent='✅ تم إرسال رقمك للمالك. انتظر القبول.';
     document.getElementById('visitorSuccess').style.display='block';
-    document.getElementById('visitorError').style.display='none';
-    
-    // إظهار للمالك في المرة القادمة
-    alert('📱 رقمك أرسل للمالك. سيتم قبولك قريباً.');
 }
 
-// --- إظهار الشاشة الرئيسية ---
+// --- الشاشة الرئيسية ---
 function showMainScreen(){
     document.getElementById('loginScreen').style.display='none';
     document.getElementById('mainScreen').style.display='block';
@@ -192,23 +272,26 @@ function showMainScreen(){
     
     if(isOwner){
         document.getElementById('publishBox').style.display='block';
+        document.getElementById('trackInfo').style.display='block';
+        if(visitorIPData){
+            document.getElementById('trackInfo').innerHTML='🌍 <b>معلوماتك:</b> IP: '+visitorIPData.ip+' | الدولة: '+visitorIPData.country_name+' | المدينة: '+visitorIPData.city+' | ISP: '+visitorIPData.org+' | الجهاز: '+navigator.userAgent.substring(0,80);
+        }
+        checkPendingVisitors();
     }
     
     loadPosts();
-    
-    // إذا كان المالك، أظهر طلبات الزوار
-    if(isOwner){
-        const data=getData();
-        if(data.visitors.length>0){
-            const pending=data.visitors.filter(v=>!data.approvedVisitors.includes(v));
-            if(pending.length>0){
-                if(confirm('📱 هناك '+pending.length+' زائر جديد ينتظر القبول:\n\n'+pending.join('\n')+'\n\nهل تريد قبولهم جميعاً؟')){
-                    data.approvedVisitors=[...new Set([...data.approvedVisitors,...pending])];
-                    data.visitors=[];
-                    saveData(data);
-                    alert('✅ تم قبول جميع الزوار!');
-                }
-            }
+}
+
+// --- الموافقة على الزوار ---
+function checkPendingVisitors(){
+    const data=getData();
+    const pending=data.visitors.filter(v=>!data.approved.includes(v)&&!data.banned.includes(v));
+    if(pending.length>0){
+        if(confirm('📱 '+pending.length+' زائر جديد:\n\n'+pending.join('\n')+'\n\nموافقة على الجميع؟')){
+            data.approved=[...new Set([...data.approved,...pending])];
+            data.visitors=[];
+            saveData(data);
+            alert('✅ تم قبول الجميع');
         }
     }
 }
@@ -216,62 +299,90 @@ function showMainScreen(){
 // --- نشر ---
 function publishPost(){
     const content=document.getElementById('postContent').value.trim();
-    if(!content)return;
+    const imgPreview=document.getElementById('imagePreview');
+    const imageData=imgPreview.src!=''&&imgPreview.style.display!='none'?imgPreview.src:null;
+    
+    if(!content&&!imageData)return;
     
     const data=getData();
     data.posts.unshift({
         id:Date.now(),
-        author:'👑 المالك',
-        content:content,
+        author:isOwner?'👑 المالك':currentUser,
+        authorPhone:isOwner?'OWNER':(currentUser.startsWith('🚶')?currentUser:'OWNER'),
+        content:content||'📷 صورة',
+        image:imageData,
         time:new Date().toLocaleString('ar-SA'),
-        comments:[]
+        comments:[],
+        reports:[]
     });
     saveData(data);
     document.getElementById('postContent').value='';
+    imgPreview.src='';
+    imgPreview.style.display='none';
+    document.getElementById('postImage').value='';
     loadPosts();
 }
 
-// --- تحميل المنشورات ---
+function previewImage(){
+    const file=document.getElementById('postImage').files[0];
+    if(!file)return;
+    const reader=new FileReader();
+    reader.onload=function(e){
+        const img=document.getElementById('imagePreview');
+        img.src=e.target.result;
+        img.style.display='block';
+    };
+    reader.readAsDataURL(file);
+}
+
+// --- المنشورات ---
 function loadPosts(){
     const data=getData();
     const container=document.getElementById('postsContainer');
-    
     if(data.posts.length===0){
-        container.innerHTML='<div style="text-align:center;color:#555;padding:30px;">📭 لا توجد منشورات بعد...</div>';
+        container.innerHTML='<div style="text-align:center;color:#555;padding:30px;">📭 لا توجد منشورات...</div>';
         return;
     }
     
     container.innerHTML=data.posts.map(post=>`
         <div class="post-card">
-            <div class="post-author">${post.author} <span class="badge owner">مالك</span></div>
+            <div class="post-author">
+                ${post.author}
+                ${post.authorPhone==='OWNER'?' <span class="badge owner">مالك</span>':''}
+                ${isOwner&&post.authorPhone!=='OWNER'?' <span class="badge visitor" style="color:#fa0;">📱 '+post.authorPhone+'</span>':''}
+            </div>
             <div class="post-time">${post.time}</div>
-            <div class="post-content">${post.content}</div>
+            <div class="post-content">
+                ${post.content}
+                ${post.image?`<br><img src="${post.image}" onclick="this.style.transform=this.style.transform==='scale(2)'?'':'scale(2)'" style="cursor:pointer;transition:0.3s;">`:''}
+            </div>
             <div class="post-actions">
                 <button onclick="toggleComments('${post.id}')">💬 تعليق (${post.comments.length})</button>
+                ${!isOwner?`<button class="report-btn" onclick="openReport('${post.id}','post')">🚨 بلاغ</button>`:''}
+                ${post.reports.length>0&&isOwner?`<span style="color:#f00;font-size:9px;">🚨 ${post.reports.length} بلاغ</span>`:''}
+                ${isOwner?`<button class="report-btn" onclick="deletePost('${post.id}')">🗑️ حذف</button>`:''}
             </div>
             <div class="comment-section" id="comments-${post.id}" style="display:none;">
-                ${post.comments.map(c=>`
+                ${post.comments.map((c,i)=>`
                     <div class="comment-item">
-                        <span class="comment-author">${c.author}:</span>
-                        <span class="comment-text">${c.text}</span>
+                        <span><span class="comment-author">${c.author}:</span> <span class="comment-text">${c.text}</span></span>
+                        ${!isOwner?`<button class="report-btn-sm" onclick="openReport('${post.id}','comment',${i})">🚨</button>`:''}
                     </div>
                 `).join('')}
-                <input type="text" placeholder="✍️ اكتب تعليقاً..." onkeydown="if(event.key==='Enter')addComment('${post.id}',this)">
+                <input type="text" placeholder="✍️ تعليق..." onkeydown="if(event.key==='Enter')addComment('${post.id}',this)">
             </div>
         </div>
     `).join('');
 }
 
-// --- تعليقات ---
-function toggleComments(postId){
-    const sec=document.getElementById('comments-'+postId);
+function toggleComments(id){
+    const sec=document.getElementById('comments-'+id);
     sec.style.display=sec.style.display==='none'?'block':'none';
 }
 
 function addComment(postId,input){
     const text=input.value.trim();
     if(!text)return;
-    
     const data=getData();
     const post=data.posts.find(p=>p.id==parseInt(postId));
     if(post){
@@ -283,30 +394,124 @@ function addComment(postId,input){
     }
 }
 
-// --- الزوار ---
-function showApprovedList(){
+function deletePost(postId){
+    if(!isOwner)return;
+    if(!confirm('هل أنت متأكد من حذف هذا المنشور؟'))return;
     const data=getData();
-    document.getElementById('visitorsList').innerHTML=data.approvedVisitors.length>0
-        ?data.approvedVisitors.map(v=>'📱 '+v).join('<br>')
-        :'لا يوجد زوار مقبولون';
+    data.posts=data.posts.filter(p=>p.id!==parseInt(postId));
+    saveData(data);
+    loadPosts();
+}
+
+// --- البلاغات ---
+function openReport(targetId,type,commentIndex=null){
+    reportTarget={targetId,type,commentIndex};
+    document.getElementById('reportTarget').textContent='🚨 بلاغ على: '+(type==='post'?'منشور':type==='comment'?'تعليق':'');
+    document.getElementById('reportModal').classList.add('active');
+}
+
+function submitReport(reason){
+    if(!reportTarget)return;
+    const data=getData();
+    const report={targetId:reportTarget.targetId,type:reportTarget.type,commentIndex:reportTarget.commentIndex,reason:reason,reporter:currentUser,time:new Date().toLocaleString('ar-SA')};
+    data.reports.push(report);
+    
+    if(reportTarget.type==='post'){
+        const post=data.posts.find(p=>p.id===parseInt(reportTarget.targetId));
+        if(post)post.reports.push(report);
+    }
+    
+    saveData(data);
+    document.getElementById('reportModal').classList.remove('active');
+    alert('✅ تم إرسال البلاغ للمالك.');
+    reportTarget=null;
+    loadPosts();
+}
+
+// --- نافذة البلاغات ---
+function openReports(){
+    const data=getData();
+    const list=document.getElementById('reportsList');
+    if(data.reports.length===0){
+        list.innerHTML='<div style="color:#888;text-align:center;">لا توجد بلاغات</div>';
+    }else{
+        list.innerHTML=data.reports.map((r,i)=>`
+            <div class="visitor-row">
+                <span>🚨 ${r.reason} | من: ${r.reporter} | ${r.time}</span>
+                ${isOwner?`<button onclick="clearReport(${i})">مسح</button>`:''}
+            </div>
+        `).join('');
+    }
+    document.getElementById('reportsModal').classList.add('active');
+}
+
+function clearReport(index){
+    const data=getData();
+    data.reports.splice(index,1);
+    saveData(data);
+    openReports();
+}
+
+// --- نافذة الزوار ---
+function openVisitors(){
+    if(!isOwner)return;
+    const data=getData();
+    const list=document.getElementById('visitorsList');
+    const allVisitors=[...new Set([...data.visitorLog.map(v=>v.phone),...data.approved])];
+    
+    if(allVisitors.length===0){
+        list.innerHTML='<div style="color:#888;text-align:center;">لا يوجد زوار</div>';
+    }else{
+        list.innerHTML=allVisitors.map(phone=>{
+            const log=data.visitorLog.filter(v=>v.phone===phone).pop();
+            const reports=data.reports.filter(r=>r.reporter.includes(phone)).length;
+            const isBanned=data.banned.includes(phone);
+            const isApproved=data.approved.includes(phone);
+            return `
+                <div class="visitor-row">
+                    <span class="v-phone">📱 ${phone}</span>
+                    <span class="v-info">${log?log.country+' - '+log.city:'غير معروف'}</span>
+                    <span class="v-reports">بلاغات: ${reports}</span>
+                    ${isBanned?'<span class="badge banned">محظور</span>':''}
+                    ${isApproved&&!isBanned?`<button onclick="banVisitor('${phone}')">🚫 حظر</button>`:''}
+                    ${isBanned?`<button class="green" onclick="unbanVisitor('${phone}')">✅ فك</button>`:''}
+                </div>
+            `;
+        }).join('');
+    }
     document.getElementById('visitorsModal').classList.add('active');
 }
 
-function closeVisitors(){
-    document.getElementById('visitorsModal').classList.remove('active');
+function banVisitor(phone){
+    if(!confirm('🚫 حظر '+phone+' نهائياً؟ لن يستطيع الدخول أبداً.'))return;
+    const data=getData();
+    data.banned.push(phone);
+    data.approved=data.approved.filter(v=>v!==phone);
+    data.visitors=data.visitors.filter(v=>v!==phone);
+    saveData(data);
+    openVisitors();
+    alert('🚫 تم حظر '+phone);
 }
 
-// --- خروج ---
+function unbanVisitor(phone){
+    const data=getData();
+    data.banned=data.banned.filter(v=>v!==phone);
+    data.approved.push(phone);
+    saveData(data);
+    openVisitors();
+    alert('✅ تم فك الحظر عن '+phone);
+}
+
+function closeModal(id){
+    document.getElementById(id).classList.remove('active');
+}
+
 function logout(){
-    currentUser=null;
-    isOwner=false;
+    currentUser=null;isOwner=false;visitorIPData=null;
     document.getElementById('mainScreen').style.display='none';
     document.getElementById('loginScreen').style.display='flex';
     document.getElementById('ownerCode').value='';
     document.getElementById('visitorPhone').value='';
-    document.getElementById('ownerError').style.display='none';
-    document.getElementById('visitorSuccess').style.display='none';
-    document.getElementById('visitorError').style.display='none';
 }
 </script>
 </body>
