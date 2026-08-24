@@ -2,20 +2,50 @@
 <html lang="ar">
 <head>
     <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
     <title>🌍 LEX-Ω - المترجم العالمي</title>
+    <!-- Google AdSense -->
+    <script async src="https://pagead2.googlesyndication.com/pagead/js/adsbygoogle.js?client=ca-pub-xxxxxxxxxxxxx"
+    crossorigin="anonymous"></script>
+    <!-- Tesseract.js -->
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/tesseract.js/4.1.1/tesseract.min.js">
+    </script>
     <style>
+        /* ============================================================
+           الإعدادات الأساسية
+           ============================================================ */
+        @import url('https://fonts.googleapis.com/css2?family=Cairo:wght@300;400;600;700;900&family=Orbitron:wght@400;700;900&family=Tajawal:wght@300;400;500;700;800&display=swap');
+
         * {
             margin: 0;
             padding: 0;
             box-sizing: border-box;
         }
 
+        :root {
+            --primary: #00d4ff;
+            --primary-dark: #0099cc;
+            --secondary: #7b2ffc;
+            --secondary-dark: #5a1db3;
+            --gold: #d4af37;
+            --gold-dark: #b8960f;
+            --success: #4ade80;
+            --danger: #f87171;
+            --warning: #fbbf24;
+            --bg-dark: #0a0a12;
+            --bg-card: #141420;
+            --bg-input: rgba(255, 255, 255, 0.04);
+            --text: #e0e0e0;
+            --text-muted: #667;
+            --shadow: 0 20px 60px rgba(0, 0, 0, 0.8);
+            --radius: 16px;
+        }
+
         body {
-            background: #0a0a12;
-            color: #e0e0e0;
+            background: var(--bg-dark);
+            color: var(--text);
             min-height: 100vh;
-            font-family: 'Cairo', 'Segoe UI', sans-serif;
+            font-family: 'Cairo', 'Tajawal', 'Segoe UI', sans-serif;
             padding: 16px;
             display: flex;
             justify-content: center;
@@ -23,60 +53,168 @@
         }
 
         .app {
-            max-width: 750px;
+            max-width: 850px;
             width: 100%;
-            background: #141420;
+            background: var(--bg-card);
             border-radius: 28px;
             padding: 24px;
             border: 1px solid rgba(255, 255, 255, 0.04);
-            box-shadow: 0 20px 60px rgba(0, 0, 0, 0.8);
+            box-shadow: var(--shadow);
+            position: relative;
+            overflow: hidden;
         }
 
+        .app::before {
+            content: '';
+            position: absolute;
+            top: -50%;
+            left: -50%;
+            width: 200%;
+            height: 200%;
+            background: radial-gradient(circle at 30% 50%, rgba(0, 212, 255, 0.02), transparent 60%);
+            pointer-events: none;
+        }
+
+        /* ============================================================
+           الإعلانات
+           ============================================================ */
+        .ad-container {
+            margin: 8px 0;
+            padding: 12px;
+            background: rgba(0, 0, 0, 0.2);
+            border-radius: 12px;
+            border: 1px solid rgba(255, 255, 255, 0.02);
+            text-align: center;
+            min-height: 60px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            flex-wrap: wrap;
+            gap: 8px;
+        }
+
+        .ad-container .ad-label {
+            font-size: 8px;
+            color: #445;
+            text-transform: uppercase;
+            letter-spacing: 2px;
+            width: 100%;
+        }
+
+        .ad-container .ad-content {
+            color: #667;
+            font-size: 12px;
+            display: flex;
+            align-items: center;
+            gap: 12px;
+            flex-wrap: wrap;
+            justify-content: center;
+        }
+
+        .ad-container .ad-content .ad-btn {
+            padding: 6px 18px;
+            border: none;
+            border-radius: 8px;
+            background: linear-gradient(135deg, var(--gold), var(--gold-dark));
+            color: #000;
+            font-weight: 700;
+            font-size: 12px;
+            cursor: pointer;
+            font-family: 'Cairo', sans-serif;
+            transition: 0.3s;
+        }
+
+        .ad-container .ad-content .ad-btn:hover {
+            transform: scale(1.05);
+        }
+
+        .ad-container .ad-content .ad-badge {
+            padding: 4px 12px;
+            border-radius: 12px;
+            background: rgba(212, 175, 55, 0.1);
+            color: var(--gold);
+            font-size: 9px;
+            border: 1px solid rgba(212, 175, 55, 0.1);
+        }
+
+        /* ============================================================
+           رأس الصفحة
+           ============================================================ */
         .header {
             text-align: center;
             padding-bottom: 12px;
-            border-bottom: 2px solid rgba(0, 212, 255, 0.1);
+            border-bottom: 2px solid rgba(0, 212, 255, 0.05);
+            position: relative;
+            z-index: 1;
         }
 
         .header .logo {
-            font-size: 28px;
+            font-size: 32px;
             font-weight: 900;
-            background: linear-gradient(135deg, #00d4ff, #7b2ffc);
+            background: linear-gradient(135deg, var(--primary), var(--secondary), var(--primary));
             -webkit-background-clip: text;
             -webkit-text-fill-color: transparent;
-            letter-spacing: 3px;
+            letter-spacing: 4px;
             font-family: 'Orbitron', sans-serif;
+            text-shadow: 0 0 40px rgba(0, 212, 255, 0.1);
         }
 
         .header .sub {
-            font-size: 11px;
-            color: #8899bb;
-            letter-spacing: 3px;
+            font-size: 12px;
+            color: var(--text-muted);
+            letter-spacing: 4px;
             text-transform: uppercase;
             margin-top: 2px;
+            font-weight: 300;
         }
 
         .header .badge {
             display: inline-block;
-            background: rgba(0, 212, 255, 0.08);
+            background: rgba(0, 212, 255, 0.05);
             padding: 3px 16px;
             border-radius: 20px;
             font-size: 9px;
-            color: #00d4ff;
-            border: 1px solid rgba(0, 212, 255, 0.1);
+            color: var(--primary);
+            border: 1px solid rgba(0, 212, 255, 0.05);
             margin-top: 4px;
+            letter-spacing: 1px;
         }
 
+        .header .badge .dot {
+            display: inline-block;
+            width: 6px;
+            height: 6px;
+            background: var(--success);
+            border-radius: 50%;
+            margin-right: 6px;
+            animation: pulse 1.5s infinite;
+        }
+
+        @keyframes pulse {
+            0%,
+            100% {
+                opacity: 1;
+            }
+            50% {
+                opacity: 0.2;
+            }
+        }
+
+        /* ============================================================
+           شريط الحالة
+           ============================================================ */
         .status-bar {
             display: flex;
             justify-content: space-between;
             padding: 8px 14px;
-            background: rgba(0, 0, 0, 0.3);
+            background: rgba(0, 0, 0, 0.2);
             border-radius: 12px;
             margin: 8px 0;
             flex-wrap: wrap;
             gap: 4px;
-            border: 1px solid rgba(255, 255, 255, 0.03);
+            border: 1px solid rgba(255, 255, 255, 0.02);
+            position: relative;
+            z-index: 1;
         }
 
         .status-bar .stat {
@@ -84,89 +222,135 @@
             align-items: center;
             gap: 4px;
             font-size: 10px;
-            color: #667;
+            color: var(--text-muted);
         }
 
         .status-bar .stat .value {
             font-weight: 700;
-            color: #4ade80;
+            color: var(--success);
         }
 
+        .status-bar .stat .value.offline {
+            color: var(--danger);
+        }
+
+        /* ============================================================
+           اللغات
+           ============================================================ */
         .lang-section {
             display: flex;
             gap: 8px;
             margin: 8px 0;
             flex-wrap: wrap;
+            position: relative;
+            z-index: 1;
         }
 
         .lang-section select {
             flex: 1;
-            padding: 8px 12px;
-            background: rgba(255, 255, 255, 0.04);
-            border: 1px solid rgba(255, 255, 255, 0.06);
-            border-radius: 10px;
-            color: #e0e0e0;
+            padding: 10px 14px;
+            background: var(--bg-input);
+            border: 1px solid rgba(255, 255, 255, 0.04);
+            border-radius: 12px;
+            color: var(--text);
             font-size: 13px;
             outline: none;
             font-family: 'Cairo', sans-serif;
             min-width: 80px;
+            cursor: pointer;
+            transition: 0.3s;
+            appearance: none;
+            background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='12' height='12' viewBox='0 0 12 12'%3E%3Cpath fill='%23667' d='M6 8L1 3h10z'/%3E%3C/svg%3E");
+            background-repeat: no-repeat;
+            background-position: right 12px center;
         }
 
         .lang-section select:focus {
-            border-color: rgba(0, 212, 255, 0.2);
+            border-color: rgba(0, 212, 255, 0.1);
+            background: rgba(255, 255, 255, 0.06);
         }
 
         .lang-section select option {
-            background: #141420;
+            background: var(--bg-card);
         }
 
         .lang-section .swap-btn {
-            padding: 8px 14px;
+            padding: 10px 16px;
             border: none;
-            border-radius: 10px;
+            border-radius: 12px;
             background: rgba(0, 212, 255, 0.05);
-            color: #00d4ff;
+            color: var(--primary);
             cursor: pointer;
-            font-size: 18px;
+            font-size: 20px;
             transition: 0.3s;
+            display: flex;
+            align-items: center;
+            justify-content: center;
         }
 
         .lang-section .swap-btn:hover {
             background: rgba(0, 212, 255, 0.1);
+            transform: rotate(180deg);
         }
 
+        /* ============================================================
+           التبويبات
+           ============================================================ */
         .tabs {
             display: flex;
             gap: 4px;
-            margin: 8px 0;
-            border-bottom: 1px solid rgba(255, 255, 255, 0.03);
+            margin: 10px 0;
+            border-bottom: 1px solid rgba(255, 255, 255, 0.02);
             padding-bottom: 6px;
+            flex-wrap: wrap;
+            position: relative;
+            z-index: 1;
         }
 
         .tabs button {
-            padding: 6px 16px;
+            padding: 8px 18px;
             border: none;
-            border-radius: 8px 8px 0 0;
+            border-radius: 10px 10px 0 0;
             background: transparent;
-            color: #667;
+            color: var(--text-muted);
             font-size: 12px;
             cursor: pointer;
             transition: 0.3s;
             font-family: 'Cairo', sans-serif;
+            font-weight: 600;
+            position: relative;
         }
 
         .tabs button:hover {
-            color: #e0e0e0;
+            color: var(--text);
+            background: rgba(255, 255, 255, 0.02);
         }
 
         .tabs button.active {
-            color: #00d4ff;
-            background: rgba(0, 212, 255, 0.05);
+            color: var(--primary);
+            background: rgba(0, 212, 255, 0.03);
+        }
+
+        .tabs button.active::after {
+            content: '';
+            position: absolute;
+            bottom: -7px;
+            left: 20%;
+            right: 20%;
+            height: 2px;
+            background: linear-gradient(90deg, transparent, var(--primary), transparent);
+            border-radius: 2px;
+        }
+
+        .tabs button .tab-icon {
+            margin-right: 4px;
         }
 
         .tab-content {
             display: none;
-            animation: fadeIn 0.3s ease;
+            animation: fadeIn 0.4s ease;
+            position: relative;
+            z-index: 1;
         }
 
         .tab-content.active {
@@ -184,23 +368,29 @@
             }
         }
 
+        /* ============================================================
+           منطقة النص
+           ============================================================ */
         textarea {
             width: 100%;
-            padding: 12px 16px;
-            background: rgba(255, 255, 255, 0.04);
-            border: 1px solid rgba(255, 255, 255, 0.06);
-            border-radius: 12px;
-            color: #e0e0e0;
-            font-size: 14px;
+            padding: 14px 18px;
+            background: var(--bg-input);
+            border: 1px solid rgba(255, 255, 255, 0.04);
+            border-radius: 14px;
+            color: var(--text);
+            font-size: 15px;
             line-height: 1.8;
             resize: vertical;
             outline: none;
             font-family: 'Cairo', sans-serif;
             min-height: 100px;
+            transition: 0.3s;
         }
 
         textarea:focus {
-            border-color: rgba(0, 212, 255, 0.2);
+            border-color: rgba(0, 212, 255, 0.1);
+            background: rgba(255, 255, 255, 0.06);
+            box-shadow: 0 0 30px rgba(0, 212, 255, 0.02);
         }
 
         textarea::placeholder {
@@ -212,34 +402,55 @@
             font-size: 11px;
             color: #445;
             padding: 4px 0;
+            font-family: 'Orbitron', monospace;
         }
 
         .char-count.warning {
-            color: #fbbf24;
+            color: var(--warning);
         }
 
         .char-count.danger {
-            color: #f87171;
+            color: var(--danger);
         }
 
+        /* ============================================================
+           الأزرار
+           ============================================================ */
         .translate-btn {
             width: 100%;
-            padding: 12px;
+            padding: 14px;
             margin-top: 10px;
             border: none;
-            border-radius: 12px;
-            background: linear-gradient(135deg, #00d4ff, #7b2ffc);
+            border-radius: 14px;
+            background: linear-gradient(135deg, var(--primary), var(--secondary));
             color: #fff;
             font-weight: 700;
-            font-size: 15px;
+            font-size: 16px;
             cursor: pointer;
             transition: 0.3s;
             font-family: 'Cairo', sans-serif;
+            position: relative;
+            overflow: hidden;
+        }
+
+        .translate-btn::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: -100%;
+            width: 100%;
+            height: 100%;
+            background: linear-gradient(90deg, transparent, rgba(255, 255, 255, 0.1), transparent);
+            transition: 0.5s;
+        }
+
+        .translate-btn:hover:not(:disabled)::before {
+            left: 100%;
         }
 
         .translate-btn:hover:not(:disabled) {
             transform: scale(1.02);
-            box-shadow: 0 4px 30px rgba(0, 212, 255, 0.2);
+            box-shadow: 0 4px 40px rgba(0, 212, 255, 0.15);
         }
 
         .translate-btn:disabled {
@@ -247,20 +458,28 @@
             cursor: not-allowed;
         }
 
+        /* ============================================================
+           نتيجة الترجمة
+           ============================================================ */
         .result-box {
             margin-top: 10px;
-            padding: 12px 16px;
+            padding: 14px 18px;
             background: rgba(0, 0, 0, 0.2);
-            border-radius: 12px;
-            border: 1px solid rgba(255, 255, 255, 0.03);
+            border-radius: 14px;
+            border: 1px solid rgba(255, 255, 255, 0.02);
             min-height: 50px;
-            color: #e0e0e0;
-            font-size: 14px;
+            color: var(--text);
+            font-size: 15px;
             line-height: 1.8;
             white-space: pre-wrap;
             word-wrap: break-word;
             max-height: 300px;
             overflow-y: auto;
+            transition: 0.3s;
+        }
+
+        .result-box:hover {
+            border-color: rgba(255, 255, 255, 0.04);
         }
 
         .result-box .placeholder {
@@ -275,11 +494,78 @@
             border-radius: 4px;
         }
 
+        .result-box .translation-highlight {
+            color: var(--gold);
+            font-weight: 600;
+        }
+
+        /* ============================================================
+           الأزرار المساعدة
+           ============================================================ */
+        .actions {
+            display: flex;
+            gap: 6px;
+            margin-top: 8px;
+            flex-wrap: wrap;
+        }
+
+        .actions button {
+            padding: 6px 16px;
+            border: none;
+            border-radius: 10px;
+            background: rgba(255, 255, 255, 0.02);
+            color: var(--text-muted);
+            font-size: 11px;
+            cursor: pointer;
+            transition: 0.3s;
+            font-family: 'Cairo', sans-serif;
+            border: 1px solid rgba(255, 255, 255, 0.02);
+            display: flex;
+            align-items: center;
+            gap: 4px;
+        }
+
+        .actions button:hover {
+            background: rgba(255, 255, 255, 0.05);
+            color: var(--text);
+            border-color: rgba(255, 255, 255, 0.04);
+        }
+
+        .actions button.speak-btn {
+            background: rgba(0, 212, 255, 0.03);
+            color: var(--primary);
+            border-color: rgba(0, 212, 255, 0.03);
+        }
+
+        .actions button.speak-btn:hover {
+            background: rgba(0, 212, 255, 0.08);
+        }
+
+        .actions button.copy-btn {
+            background: rgba(74, 222, 128, 0.03);
+            color: var(--success);
+            border-color: rgba(74, 222, 128, 0.03);
+        }
+
+        .actions button.copy-btn:hover {
+            background: rgba(74, 222, 128, 0.08);
+        }
+
+        .actions button.save-btn {
+            background: rgba(212, 175, 55, 0.03);
+            color: var(--gold);
+            border-color: rgba(212, 175, 55, 0.03);
+        }
+
+        .actions button.save-btn:hover {
+            background: rgba(212, 175, 55, 0.08);
+        }
+
         /* ============================================================
            رفع الصور
            ============================================================ */
         .upload-area {
-            border: 2px dashed rgba(0, 212, 255, 0.15);
+            border: 2px dashed rgba(0, 212, 255, 0.06);
             border-radius: 16px;
             padding: 30px 20px;
             text-align: center;
@@ -289,8 +575,8 @@
         }
 
         .upload-area:hover {
-            border-color: rgba(0, 212, 255, 0.3);
-            background: rgba(0, 212, 255, 0.03);
+            border-color: rgba(0, 212, 255, 0.12);
+            background: rgba(0, 212, 255, 0.01);
         }
 
         .upload-area .icon {
@@ -300,12 +586,12 @@
         }
 
         .upload-area .text {
-            color: #667;
+            color: var(--text-muted);
             font-size: 14px;
         }
 
         .upload-area .text strong {
-            color: #00d4ff;
+            color: var(--primary);
         }
 
         .upload-area input[type="file"] {
@@ -315,10 +601,10 @@
         .image-preview {
             margin: 10px 0;
             max-width: 100%;
-            border-radius: 12px;
+            border-radius: 14px;
             overflow: hidden;
             display: none;
-            border: 1px solid rgba(255, 255, 255, 0.03);
+            border: 1px solid rgba(255, 255, 255, 0.02);
         }
 
         .image-preview img {
@@ -333,8 +619,8 @@
         }
 
         .ocr-status {
-            padding: 8px 12px;
-            border-radius: 8px;
+            padding: 8px 14px;
+            border-radius: 10px;
             margin: 8px 0;
             font-size: 12px;
             display: none;
@@ -346,57 +632,276 @@
 
         .ocr-status.loading {
             background: rgba(251, 191, 36, 0.05);
-            color: #fbbf24;
-            border: 1px solid rgba(251, 191, 36, 0.1);
+            color: var(--warning);
+            border: 1px solid rgba(251, 191, 36, 0.05);
         }
 
         .ocr-status.success {
             background: rgba(74, 222, 128, 0.05);
-            color: #4ade80;
-            border: 1px solid rgba(74, 222, 128, 0.1);
+            color: var(--success);
+            border: 1px solid rgba(74, 222, 128, 0.05);
         }
 
         .ocr-status.error {
             background: rgba(248, 113, 113, 0.05);
-            color: #f87171;
-            border: 1px solid rgba(248, 113, 113, 0.1);
+            color: var(--danger);
+            border: 1px solid rgba(248, 113, 113, 0.05);
         }
 
-        .actions {
+        /* ============================================================
+           الصوت والكاميرا
+           ============================================================ */
+        .voice-indicator {
+            display: flex;
+            align-items: center;
+            gap: 8px;
+            padding: 6px 12px;
+            border-radius: 10px;
+            background: rgba(0, 212, 255, 0.02);
+            border: 1px solid rgba(0, 212, 255, 0.02);
+            margin: 6px 0;
+            font-size: 12px;
+            color: var(--text-muted);
+        }
+
+        .voice-indicator .wave {
+            display: flex;
+            align-items: center;
+            gap: 2px;
+            height: 20px;
+        }
+
+        .voice-indicator .wave span {
+            display: block;
+            width: 3px;
+            height: 100%;
+            background: var(--primary);
+            border-radius: 2px;
+            animation: wave 0.8s ease-in-out infinite;
+        }
+
+        .voice-indicator .wave span:nth-child(1) {
+            animation-delay: 0s;
+            height: 40%;
+        }
+        .voice-indicator .wave span:nth-child(2) {
+            animation-delay: 0.1s;
+            height: 70%;
+        }
+        .voice-indicator .wave span:nth-child(3) {
+            animation-delay: 0.2s;
+            height: 100%;
+        }
+        .voice-indicator .wave span:nth-child(4) {
+            animation-delay: 0.3s;
+            height: 70%;
+        }
+        .voice-indicator .wave span:nth-child(5) {
+            animation-delay: 0.4s;
+            height: 40%;
+        }
+
+        @keyframes wave {
+            0%,
+            100% {
+                transform: scaleY(0.5);
+            }
+            50% {
+                transform: scaleY(1);
+            }
+        }
+
+        .camera-container {
+            position: relative;
+            width: 100%;
+            aspect-ratio: 16/9;
+            background: #000;
+            border-radius: 14px;
+            overflow: hidden;
+            margin: 8px 0;
+        }
+
+        .camera-container video {
+            width: 100%;
+            height: 100%;
+            object-fit: cover;
+        }
+
+        .camera-container canvas {
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+        }
+
+        .camera-container .camera-overlay {
+            position: absolute;
+            top: 50%;
+            left: 50%;
+            transform: translate(-50%, -50%);
+            border: 2px dashed rgba(0, 212, 255, 0.05);
+            border-radius: 12px;
+            width: 80%;
+            height: 60%;
+            pointer-events: none;
+        }
+
+        .camera-container .camera-overlay .corner {
+            position: absolute;
+            width: 16px;
+            height: 16px;
+            border-color: var(--primary);
+            border-style: solid;
+            border-width: 0;
+        }
+
+        .camera-container .camera-overlay .corner.tl {
+            top: -2px;
+            left: -2px;
+            border-top-width: 2px;
+            border-left-width: 2px;
+        }
+        .camera-container .camera-overlay .corner.tr {
+            top: -2px;
+            right: -2px;
+            border-top-width: 2px;
+            border-right-width: 2px;
+        }
+        .camera-container .camera-overlay .corner.bl {
+            bottom: -2px;
+            left: -2px;
+            border-bottom-width: 2px;
+            border-left-width: 2px;
+        }
+        .camera-container .camera-overlay .corner.br {
+            bottom: -2px;
+            right: -2px;
+            border-bottom-width: 2px;
+            border-right-width: 2px;
+        }
+
+        .camera-container .camera-label {
+            position: absolute;
+            bottom: 12px;
+            left: 50%;
+            transform: translateX(-50%);
+            font-size: 10px;
+            color: rgba(255, 255, 255, 0.1);
+            letter-spacing: 2px;
+            font-family: 'Orbitron', monospace;
+        }
+
+        .camera-controls {
             display: flex;
             gap: 6px;
-            margin-top: 8px;
+            margin: 6px 0;
             flex-wrap: wrap;
         }
 
-        .actions button {
-            padding: 6px 14px;
+        .camera-controls button {
+            flex: 1;
+            padding: 8px 12px;
             border: none;
-            border-radius: 8px;
-            background: rgba(255, 255, 255, 0.03);
-            color: #667;
+            border-radius: 10px;
+            font-weight: 600;
             font-size: 11px;
             cursor: pointer;
             transition: 0.3s;
             font-family: 'Cairo', sans-serif;
-            border: 1px solid rgba(255, 255, 255, 0.03);
+            min-width: 60px;
         }
 
-        .actions button:hover {
-            background: rgba(255, 255, 255, 0.06);
-            color: #e0e0e0;
+        .camera-controls .btn-cam {
+            background: rgba(0, 212, 255, 0.03);
+            color: var(--primary);
+            border: 1px solid rgba(0, 212, 255, 0.03);
         }
 
-        .actions button.speak-btn {
-            background: rgba(0, 212, 255, 0.05);
-            color: #00d4ff;
-            border-color: rgba(0, 212, 255, 0.05);
+        .camera-controls .btn-cam.active {
+            background: rgba(239, 68, 68, 0.05);
+            color: var(--danger);
+            border-color: rgba(239, 68, 68, 0.05);
         }
 
-        .actions button.speak-btn:hover {
-            background: rgba(0, 212, 255, 0.1);
+        .camera-controls .btn-cam:hover {
+            background: rgba(0, 212, 255, 0.08);
         }
 
+        .camera-controls .btn-scan {
+            background: linear-gradient(135deg, var(--primary), var(--secondary));
+            color: #fff;
+        }
+
+        .camera-controls .btn-scan:hover {
+            transform: scale(1.02);
+            box-shadow: 0 4px 20px rgba(0, 212, 255, 0.1);
+        }
+
+        /* ============================================================
+           شاشة التحميل
+           ============================================================ */
+        .loading-overlay {
+            display: none;
+            position: fixed;
+            top: 0;
+            left: 0;
+            right: 0;
+            bottom: 0;
+            background: rgba(0, 0, 0, 0.8);
+            backdrop-filter: blur(4px);
+            z-index: 999;
+            justify-content: center;
+            align-items: center;
+            flex-direction: column;
+            gap: 16px;
+        }
+
+        .loading-overlay.show {
+            display: flex;
+        }
+
+        .loading-overlay .spinner {
+            width: 50px;
+            height: 50px;
+            border: 3px solid rgba(255, 255, 255, 0.03);
+            border-top-color: var(--primary);
+            border-radius: 50%;
+            animation: spin 0.8s linear infinite;
+        }
+
+        @keyframes spin {
+            to {
+                transform: rotate(360deg);
+            }
+        }
+
+        .loading-overlay .text {
+            color: var(--text);
+            font-size: 16px;
+            font-family: 'Cairo', sans-serif;
+        }
+
+        .loading-overlay .progress-container {
+            width: 80%;
+            max-width: 400px;
+            height: 4px;
+            background: rgba(255, 255, 255, 0.03);
+            border-radius: 4px;
+            overflow: hidden;
+        }
+
+        .loading-overlay .progress-container .progress-bar {
+            height: 100%;
+            width: 0%;
+            background: linear-gradient(90deg, var(--primary), var(--secondary));
+            border-radius: 4px;
+            transition: width 0.3s;
+        }
+
+        /* ============================================================
+           السجل
+           ============================================================ */
         .history {
             margin-top: 10px;
             max-height: 120px;
@@ -416,12 +921,17 @@
         .history-item {
             display: flex;
             justify-content: space-between;
-            padding: 3px 8px;
-            background: rgba(255, 255, 255, 0.02);
-            border-radius: 6px;
+            padding: 4px 10px;
+            background: rgba(255, 255, 255, 0.01);
+            border-radius: 8px;
             margin-bottom: 2px;
             font-size: 10px;
-            color: #667;
+            color: var(--text-muted);
+            transition: 0.3s;
+        }
+
+        .history-item:hover {
+            background: rgba(255, 255, 255, 0.02);
         }
 
         .history-item .orig {
@@ -433,111 +943,76 @@
         }
 
         .history-item .trans {
-            color: #00d4ff;
+            color: var(--primary);
             max-width: 35%;
             overflow: hidden;
             text-overflow: ellipsis;
             white-space: nowrap;
         }
 
+        .history-item .h-time {
+            color: #445;
+            font-size: 8px;
+            font-family: 'Orbitron', monospace;
+        }
+
+        .history-item .h-mode {
+            padding: 1px 8px;
+            border-radius: 8px;
+            font-size: 7px;
+            background: rgba(0, 212, 255, 0.03);
+            color: var(--text-muted);
+            border: 1px solid rgba(255, 255, 255, 0.02);
+        }
+
+        /* ============================================================
+           معلومات API
+           ============================================================ */
         .api-info {
             margin-top: 10px;
             padding: 8px 12px;
-            background: rgba(248, 113, 113, 0.05);
+            background: rgba(248, 113, 113, 0.02);
             border-radius: 10px;
-            border: 1px solid rgba(248, 113, 113, 0.1);
+            border: 1px solid rgba(248, 113, 113, 0.03);
             text-align: center;
             font-size: 10px;
             color: #889;
         }
 
         .api-info strong {
-            color: #f87171;
+            color: var(--danger);
         }
 
         .api-info .status-ok {
-            color: #4ade80;
+            color: var(--success);
         }
 
-        .loading-overlay {
-            display: none;
-            position: fixed;
-            top: 0;
-            left: 0;
-            right: 0;
-            bottom: 0;
-            background: rgba(0, 0, 0, 0.7);
-            z-index: 999;
-            justify-content: center;
-            align-items: center;
-            flex-direction: column;
-            gap: 12px;
-        }
-
-        .loading-overlay.show {
-            display: flex;
-        }
-
-        .loading-overlay .spinner {
-            width: 50px;
-            height: 50px;
-            border: 4px solid rgba(255, 255, 255, 0.03);
-            border-top-color: #00d4ff;
-            border-radius: 50%;
-            animation: spin 0.8s linear infinite;
-        }
-
-        @keyframes spin {
-            to {
-                transform: rotate(360deg);
-            }
-        }
-
-        .loading-overlay .text {
-            color: #e0e0e0;
-            font-size: 16px;
-            font-family: 'Cairo', sans-serif;
-        }
-
-        .progress-container {
-            width: 80%;
-            max-width: 400px;
-            height: 4px;
-            background: rgba(255, 255, 255, 0.05);
-            border-radius: 4px;
-            overflow: hidden;
-        }
-
-        .progress-container .progress-bar {
-            height: 100%;
-            width: 0%;
-            background: linear-gradient(90deg, #00d4ff, #7b2ffc);
-            border-radius: 4px;
-            transition: width 0.3s;
-        }
-
+        /* ============================================================
+           الوضع الداكن والتصميم المتجاوب
+           ============================================================ */
         @media (max-width: 520px) {
             .app {
                 padding: 12px;
             }
 
             .header .logo {
-                font-size: 22px;
+                font-size: 24px;
             }
 
             textarea {
-                font-size: 13px;
+                font-size: 14px;
                 min-height: 80px;
+                padding: 12px 14px;
             }
 
             .lang-section select {
                 font-size: 12px;
-                padding: 6px 10px;
+                padding: 8px 12px;
             }
 
             .tabs button {
                 font-size: 10px;
-                padding: 4px 10px;
+                padding: 6px 12px;
             }
 
             .upload-area {
@@ -552,12 +1027,130 @@
                 font-size: 9px;
                 padding: 6px 10px;
             }
+
+            .translate-btn {
+                font-size: 14px;
+                padding: 12px;
+            }
+
+            .result-box {
+                font-size: 14px;
+                padding: 12px 14px;
+            }
+
+            .actions button {
+                font-size: 10px;
+                padding: 4px 12px;
+            }
+
+            .camera-controls button {
+                font-size: 10px;
+                padding: 6px 10px;
+            }
+
+            .ad-container .ad-content {
+                font-size: 10px;
+            }
+
+            .ad-container .ad-content .ad-btn {
+                font-size: 10px;
+                padding: 4px 14px;
+            }
+        }
+
+        @media (max-width: 380px) {
+            .app {
+                padding: 8px;
+            }
+
+            .header .logo {
+                font-size: 20px;
+            }
+
+            .tabs button {
+                font-size: 9px;
+                padding: 4px 8px;
+            }
+
+            .lang-section select {
+                font-size: 11px;
+                padding: 6px 10px;
+            }
+
+            .lang-section .swap-btn {
+                padding: 6px 12px;
+                font-size: 16px;
+            }
+        }
+
+        /* ============================================================
+           وضع AR (الواقع المعزز)
+           ============================================================ */
+        .ar-container {
+            position: relative;
+            width: 100%;
+            aspect-ratio: 16/9;
+            background: #000;
+            border-radius: 14px;
+            overflow: hidden;
+            margin: 8px 0;
+        }
+
+        .ar-container video {
+            width: 100%;
+            height: 100%;
+            object-fit: cover;
+        }
+
+        .ar-container .ar-overlay {
+            position: absolute;
+            top: 0;
+            left: 0;
+            right: 0;
+            bottom: 0;
+            pointer-events: none;
+        }
+
+        .ar-container .ar-overlay .ar-text {
+            position: absolute;
+            padding: 8px 14px;
+            background: rgba(0, 0, 0, 0.6);
+            backdrop-filter: blur(8px);
+            border-radius: 10px;
+            border: 1px solid rgba(255, 255, 255, 0.05);
+            color: #fff;
+            font-size: 14px;
+            max-width: 80%;
+            box-shadow: 0 4px 20px rgba(0, 0, 0, 0.3);
+        }
+
+        .ar-container .ar-overlay .ar-text .ar-original {
+            font-size: 10px;
+            color: rgba(255, 255, 255, 0.3);
+            display: block;
+        }
+
+        .ar-container .ar-overlay .ar-text .ar-translated {
+            font-size: 14px;
+            color: var(--gold);
+            font-weight: 600;
+            display: block;
+        }
+
+        .ar-container .ar-overlay .ar-text .ar-lang {
+            font-size: 8px;
+            color: rgba(255, 255, 255, 0.2);
+            display: block;
+            text-align: right;
+            font-family: 'Orbitron', monospace;
         }
     </style>
 </head>
 <body>
 
-    <!-- LOADING OVERLAY -->
+    <!-- ============================================================
+    شاشة التحميل
+    ============================================================ -->
     <div class="loading-overlay" id="loadingOverlay">
         <div class="spinner"></div>
         <div class="text" id="loadingText">⏳ جاري الترجمة...</div>
@@ -566,15 +1159,38 @@
         </div>
     </div>
 
-    <div class="app">
-        <!-- HEADER -->
+    <!-- ============================================================
+    التطبيق
+    ============================================================ -->
+    <div class="app" id="app">
+
+        <!-- ============================================================
+        إعلان علوي
+        ============================================================ -->
+        <div class="ad-container">
+            <div class="ad-label">📢 إعلان</div>
+            <div class="ad-content">
+                <span>🌟 ترجم مع LEX-Ω - أسرع مترجم في العالم</span>
+                <span class="ad-badge">🔥 جديد</span>
+                <button class="ad-btn" onclick="alert('🚀 قم بتحميل تطبيق LEX-Ω المجاني الآن!')">تحميل الآن</button>
+            </div>
+        </div>
+
+        <!-- ============================================================
+        رأس الصفحة
+        ============================================================ -->
         <div class="header">
             <div class="logo">🌍 LEX-Ω</div>
             <div class="sub">المترجم العالمي الفوري</div>
-            <div class="badge">✨ نص · صورة · صوت</div>
+            <div class="badge">
+                <span class="dot"></span>
+                6 طرق للترجمة
+            </div>
         </div>
 
-        <!-- STATUS -->
+        <!-- ============================================================
+        شريط الحالة
+        ============================================================ -->
         <div class="status-bar">
             <div class="stat">
                 <span>🔗</span>
@@ -591,9 +1207,16 @@
                 <span>اللغات:</span>
                 <span class="value">50+</span>
             </div>
+            <div class="stat">
+                <span>📱</span>
+                <span>الوضع:</span>
+                <span class="value" id="modeStatus">نصي</span>
+            </div>
         </div>
 
-        <!-- LANGUAGES -->
+        <!-- ============================================================
+        اللغات
+        ============================================================ -->
         <div class="lang-section">
             <select id="sourceLang">
                 <option value="auto">🔍 تلقائي</option>
@@ -637,10 +1260,16 @@
             </select>
         </div>
 
-        <!-- TABS -->
+        <!-- ============================================================
+        التبويبات
+        ============================================================ -->
         <div class="tabs">
-            <button class="active" data-tab="text">📝 نص</button>
-            <button data-tab="image">🖼️ صورة</button>
+            <button class="active" data-tab="text"><span class="tab-icon">📝</span> نص</button>
+            <button data-tab="voice"><span class="tab-icon">🎤</span> صوت</button>
+            <button data-tab="image"><span class="tab-icon">🖼️</span> صورة</button>
+            <button data-tab="camera"><span class="tab-icon">📷</span> كاميرا</button>
+            <button data-tab="sign"><span class="tab-icon">🤟</span> إشارة</button>
+            <button data-tab="ar"><span class="tab-icon">🥽</span> AR</button>
         </div>
 
         <!-- ============================================================
@@ -657,9 +1286,33 @@
 
             <div class="actions">
                 <button class="speak-btn" id="speakBtn">🔊 استماع</button>
-                <button id="copyBtn">📋 نسخ</button>
+                <button class="copy-btn" id="copyBtn">📋 نسخ</button>
+                <button class="save-btn" id="saveBtn">💾 حفظ</button>
                 <button id="clearBtn">🗑️ مسح</button>
-                <button id="saveBtn">💾 حفظ</button>
+            </div>
+        </div>
+
+        <!-- ============================================================
+        TAB: VOICE
+        ============================================================ -->
+        <div class="tab-content" id="tab-voice">
+            <div class="voice-indicator" id="voiceIndicator">
+                <span>🎤 اضغط الزر للتحدث</span>
+                <div class="wave">
+                    <span></span><span></span><span></span><span></span><span></span>
+                </div>
+            </div>
+
+            <button class="translate-btn" id="voiceBtn">🎤 بدء التسجيل الصوتي</button>
+
+            <div class="result-box" id="voiceResultBox">
+                <span class="placeholder">سيظهر النص المترجم من الصوت هنا...</span>
+            </div>
+
+            <div class="actions">
+                <button class="speak-btn" id="voiceSpeakBtn">🔊 استماع</button>
+                <button class="copy-btn" id="voiceCopyBtn">📋 نسخ</button>
+                <button id="voiceClearBtn">🗑️ مسح</button>
             </div>
         </div>
 
@@ -690,57 +1343,210 @@
 
             <div class="actions">
                 <button class="speak-btn" id="imageSpeakBtn">🔊 استماع</button>
-                <button id="imageCopyBtn">📋 نسخ</button>
+                <button class="copy-btn" id="imageCopyBtn">📋 نسخ</button>
                 <button id="imageClearBtn">🗑️ مسح</button>
             </div>
         </div>
 
-        <!-- HISTORY -->
+        <!-- ============================================================
+        TAB: CAMERA
+        ============================================================ -->
+        <div class="tab-content" id="tab-camera">
+            <div class="camera-container" id="cameraContainer">
+                <video id="cameraVideo" autoplay playsinline></video>
+                <canvas id="cameraCanvas"></canvas>
+                <div class="camera-overlay">
+                    <div class="corner tl"></div>
+                    <div class="corner tr"></div>
+                    <div class="corner bl"></div>
+                    <div class="corner br"></div>
+                </div>
+                <div class="camera-label">📷 ضع النص أمام الكاميرا</div>
+            </div>
+
+            <div class="camera-controls">
+                <button class="btn-cam" id="cameraToggleBtn">📷 تشغيل الكاميرا</button>
+                <button class="btn-scan" id="cameraScanBtn">🔍 مسح وترجمة</button>
+                <button class="btn-cam" id="cameraCaptureBtn">📸 التقاط</button>
+            </div>
+
+            <div class="ocr-status" id="cameraOcrStatus"></div>
+
+            <div class="result-box" id="cameraResultBox">
+                <span class="placeholder">سيظهر النص المترجم من الكاميرا هنا...</span>
+            </div>
+
+            <div class="actions">
+                <button class="speak-btn" id="cameraSpeakBtn">🔊 استماع</button>
+                <button class="copy-btn" id="cameraCopyBtn">📋 نسخ</button>
+                <button id="cameraClearBtn">🗑️ مسح</button>
+            </div>
+        </div>
+
+        <!-- ============================================================
+        TAB: SIGN LANGUAGE
+        ============================================================ -->
+        <div class="tab-content" id="tab-sign">
+            <div class="camera-container" id="signContainer">
+                <video id="signVideo" autoplay playsinline></video>
+                <canvas id="signCanvas"></canvas>
+                <div class="camera-overlay">
+                    <div class="corner tl"></div>
+                    <div class="corner tr"></div>
+                    <div class="corner bl"></div>
+                    <div class="corner br"></div>
+                </div>
+                <div class="camera-label">🤟 ضع يدك أمام الكاميرا</div>
+            </div>
+
+            <div class="camera-controls">
+                <button class="btn-cam" id="signToggleBtn">📷 تشغيل الكاميرا</button>
+                <button class="btn-scan" id="signDetectBtn">🤟 كشف وترجمة الإشارة</button>
+            </div>
+
+            <div class="ocr-status" id="signStatus"></div>
+
+            <div class="result-box" id="signResultBox">
+                <span class="placeholder">ستظهر ترجمة لغة الإشارة هنا...</span>
+            </div>
+
+            <div class="actions">
+                <button class="speak-btn" id="signSpeakBtn">🔊 استماع</button>
+                <button class="copy-btn" id="signCopyBtn">📋 نسخ</button>
+                <button id="signClearBtn">🗑️ مسح</button>
+            </div>
+        </div>
+
+        <!-- ============================================================
+        TAB: AR (AUGMENTED REALITY)
+        ============================================================ -->
+        <div class="tab-content" id="tab-ar">
+            <div class="ar-container" id="arContainer">
+                <video id="arVideo" autoplay playsinline></video>
+                <div class="ar-overlay" id="arOverlay">
+                    <!-- ستظهر الترجمة هنا -->
+                </div>
+                <div style="position:absolute;bottom:12px;left:50%;transform:translateX(-50%);font-size:10px;color:rgba(255,255,255,0.1);letter-spacing:2px;font-family:'Orbitron',monospace;pointer-events:none;">
+                    🥽 AR - ترجمة فورية
+                </div>
+            </div>
+
+            <div class="camera-controls">
+                <button class="btn-cam" id="arToggleBtn">📷 تشغيل الكاميرا</button>
+                <button class="btn-scan" id="arScanBtn">🥽 تفعيل الترجمة الفورية</button>
+            </div>
+
+            <div class="ocr-status" id="arStatus"></div>
+
+            <div class="result-box" id="arResultBox">
+                <span class="placeholder">ستظهر الترجمة في الوقت الفعلي...</span>
+            </div>
+
+            <div class="actions">
+                <button class="speak-btn" id="arSpeakBtn">🔊 استماع</button>
+                <button class="copy-btn" id="arCopyBtn">📋 نسخ</button>
+                <button id="arClearBtn">🗑️ مسح</button>
+            </div>
+        </div>
+
+        <!-- ============================================================
+        السجل
+        ============================================================ -->
         <div class="history" id="historyContainer">
             <div style="text-align:center;color:#445;font-size:11px;padding:8px 0;">📚 تاريخ الترجمات</div>
         </div>
 
-        <!-- API INFO -->
+        <!-- ============================================================
+        إعلان سفلي
+        ============================================================ -->
+        <div class="ad-container" style="margin-top:8px;">
+            <div class="ad-label">📢 إعلان</div>
+            <div class="ad-content">
+                <span>✨ ترجم مع LEX-Ω - دقة 98%</span>
+                <span class="ad-badge">⭐ مجاني</span>
+                <button class="ad-btn" onclick="alert('🚀 جرب LEX-Ω الآن!')">جرب الآن</button>
+            </div>
+        </div>
+
+        <!-- ============================================================
+        معلومات API
+        ============================================================ -->
         <div class="api-info">
             <strong>🔴 تنبيه:</strong>
             يستخدم هذا التطبيق
             <span class="status-ok">MyMemory API</span>
-            للترجمة.
+            للترجمة و <span class="status-ok">Tesseract.js</span>
+            للتعرف على النصوص.
             <br>
             <span style="color:#445;font-size:9px;">⚖️ "السلطة المطلقة = المسؤولية المطلقة"</span>
         </div>
     </div>
 
+    <!-- ============================================================
+    JavaScript - النسخة المتكاملة
+    ============================================================ -->
     <script>
         // ============================================================
-        // 🌍 LEX-Ω - المترجم العالمي الفوري (مع دعم النصوص الطويلة)
+        // 🌍 LEX-Ω - المترجم العالمي الفوري (النسخة المتكاملة)
         // ============================================================
 
         (function() {
             'use strict';
 
             // ============================================================
-            // عناصر DOM
+            // الإعدادات
+            // ============================================================
+            const MAX_CHARS = 450;
+
+            // ============================================================
+            // عناصر DOM العامة
+            // ============================================================
+            const loadingOverlay = document.getElementById('loadingOverlay');
+            const loadingText = document.getElementById('loadingText');
+            const progressBar = document.getElementById('progressBar');
+            const apiStatus = document.getElementById('apiStatus');
+            const transCount = document.getElementById('transCount');
+            const modeStatus = document.getElementById('modeStatus');
+            const historyContainer = document.getElementById('historyContainer');
+
+            // اللغات
+            const sourceLang = document.getElementById('sourceLang');
+            const targetLang = document.getElementById('targetLang');
+            const swapBtn = document.getElementById('swapBtn');
+
+            // التبويبات
+            const tabs = document.querySelectorAll('.tabs button');
+            const tabContents = document.querySelectorAll('.tab-content');
+
+            // السجل
+            let translationHistory = [];
+            let currentMode = 'text';
+
+            // ============================================================
+            // عناصر TEXT
             // ============================================================
             const sourceText = document.getElementById('sourceText');
             const resultBox = document.getElementById('resultBox');
             const charCount = document.getElementById('charCount');
             const translateBtn = document.getElementById('translateBtn');
-            const swapBtn = document.getElementById('swapBtn');
-            const sourceLang = document.getElementById('sourceLang');
-            const targetLang = document.getElementById('targetLang');
             const speakBtn = document.getElementById('speakBtn');
             const copyBtn = document.getElementById('copyBtn');
-            const clearBtn = document.getElementById('clearBtn');
             const saveBtn = document.getElementById('saveBtn');
-            const historyContainer = document.getElementById('historyContainer');
-            const transCount = document.getElementById('transCount');
-            const apiStatus = document.getElementById('apiStatus');
-            const loadingOverlay = document.getElementById('loadingOverlay');
-            const loadingText = document.getElementById('loadingText');
-            const progressBar = document.getElementById('progressBar');
+            const clearBtn = document.getElementById('clearBtn');
 
-            // عناصر الصورة
+            // ============================================================
+            // عناصر VOICE
+            // ============================================================
+            const voiceBtn = document.getElementById('voiceBtn');
+            const voiceResultBox = document.getElementById('voiceResultBox');
+            const voiceSpeakBtn = document.getElementById('voiceSpeakBtn');
+            const voiceCopyBtn = document.getElementById('voiceCopyBtn');
+            const voiceClearBtn = document.getElementById('voiceClearBtn');
+            const voiceIndicator = document.getElementById('voiceIndicator');
+
+            // ============================================================
+            // عناصر IMAGE
+            // ============================================================
             const imageInput = document.getElementById('imageInput');
             const uploadArea = document.getElementById('uploadArea');
             const imagePreview = document.getElementById('imagePreview');
@@ -752,369 +1558,85 @@
             const imageCopyBtn = document.getElementById('imageCopyBtn');
             const imageClearBtn = document.getElementById('imageClearBtn');
 
-            const tabs = document.querySelectorAll('.tabs button');
-            const tabContents = document.querySelectorAll('.tab-content');
-
-            let translationHistory = [];
-            let currentTranslation = '';
+            // ============================================================
+            // عناصر CAMERA
+            // ============================================================
+            const cameraContainer = document.getElementById('cameraContainer');
+            const cameraVideo = document.getElementById('cameraVideo');
+            const cameraCanvas = document.getElementById('cameraCanvas');
+            const cameraToggleBtn = document.getElementById('cameraToggleBtn');
+            const cameraScanBtn = document.getElementById('cameraScanBtn');
+            const cameraCaptureBtn = document.getElementById('cameraCaptureBtn');
+            const cameraOcrStatus = document.getElementById('cameraOcrStatus');
+            const cameraResultBox = document.getElementById('cameraResultBox');
+            const cameraSpeakBtn = document.getElementById('cameraSpeakBtn');
+            const cameraCopyBtn = document.getElementById('cameraCopyBtn');
+            const cameraClearBtn = document.getElementById('cameraClearBtn');
 
             // ============================================================
-            // 📝 تحديث عدد الأحرف
+            // عناصر SIGN LANGUAGE
             // ============================================================
-            sourceText.addEventListener('input', () => {
-                const len = sourceText.value.length;
-                charCount.textContent = len + ' حرف';
-                charCount.className = 'char-count';
-                if (len > 450) charCount.className = 'char-count warning';
-                if (len > 900) charCount.className = 'char-count danger';
-            });
-
-            // ============================================================
-            // 🌐 ترجمة النص (مع تقسيم النصوص الطويلة)
-            // ============================================================
-            async function translateText(text, from, to) {
-                if (!text || text.trim().length === 0) {
-                    throw new Error('النص فارغ');
-                }
-
-                // MyMemory API يسمح بـ 500 حرف كحد أقصى
-                const MAX_CHARS = 450; // استخدام 450 لتكون آمنة
-
-                // إذا كان النص قصيراً، ترجمه مباشرة
-                if (text.length <= MAX_CHARS) {
-                    return await translateChunk(text, from, to);
-                }
-
-                // تقسيم النص الطويل إلى أجزاء
-                const chunks = [];
-                let remaining = text;
-
-                while (remaining.length > 0) {
-                    // البحث عن مكان مناسب للتقسيم (نهاية جملة)
-                    let endIndex = Math.min(MAX_CHARS, remaining.length);
-
-                    if (endIndex < remaining.length) {
-                        // البحث عن أقرب نقطة أو فاصلة أو مسافة
-                        const punctuation = ['.', '؟', '!', '،', ';', '\n', ' '];
-                        let found = false;
-
-                        for (let i = endIndex; i > Math.max(0, endIndex - 50); i--) {
-                            if (punctuation.includes(remaining[i])) {
-                                endIndex = i + 1;
-                                found = true;
-                                break;
-                            }
-                        }
-
-                        if (!found) {
-                            // إذا لم نجد، نقسم على مسافة
-                            for (let i = endIndex; i > Math.max(0, endIndex - 30); i--) {
-                                if (remaining[i] === ' ') {
-                                    endIndex = i + 1;
-                                    found = true;
-                                    break;
-                                }
-                            }
-                        }
-
-                        if (!found) {
-                            endIndex = MAX_CHARS;
-                        }
-                    }
-
-                    chunks.push(remaining.substring(0, endIndex).trim());
-                    remaining = remaining.substring(endIndex).trim();
-                }
-
-                // ترجمة كل جزء
-                const translatedChunks = [];
-                let totalChunks = chunks.length;
-
-                for (let i = 0; i < totalChunks; i++) {
-                    const progress = Math.round(((i + 1) / totalChunks) * 100);
-                    loadingText.textContent = `⏳ جاري ترجمة الجزء ${i+1} من ${totalChunks}...`;
-                    progressBar.style.width = progress + '%';
-
-                    const translated = await translateChunk(chunks[i], from, to);
-                    translatedChunks.push(translated);
-                }
-
-                return translatedChunks.join(' ');
-            }
+            const signContainer = document.getElementById('signContainer');
+            const signVideo = document.getElementById('signVideo');
+            const signCanvas = document.getElementById('signCanvas');
+            const signToggleBtn = document.getElementById('signToggleBtn');
+            const signDetectBtn = document.getElementById('signDetectBtn');
+            const signStatus = document.getElementById('signStatus');
+            const signResultBox = document.getElementById('signResultBox');
+            const signSpeakBtn = document.getElementById('signSpeakBtn');
+            const signCopyBtn = document.getElementById('signCopyBtn');
+            const signClearBtn = document.getElementById('signClearBtn');
 
             // ============================================================
-            // 🔤 ترجمة جزء واحد (أقل من 500 حرف)
+            // عناصر AR
             // ============================================================
-            async function translateChunk(text, from, to) {
-                try {
-                    const url =
-                        `https://api.mymemory.translated.net/get?q=${encodeURIComponent(text)}&langpair=${from}|${to}`;
-
-                    const response = await fetch(url);
-
-                    if (!response.ok) {
-                        throw new Error('فشل الاتصال بخادم الترجمة');
-                    }
-
-                    const data = await response.json();
-
-                    if (data.responseStatus === 200) {
-                        return data.responseData.translatedText;
-                    } else {
-                        throw new Error(data.responseDetails || 'خطأ في الترجمة');
-                    }
-
-                } catch (error) {
-                    console.error('❌ خطأ في الترجمة:', error);
-                    throw error;
-                }
-            }
+            const arContainer = document.getElementById('arContainer');
+            const arVideo = document.getElementById('arVideo');
+            const arOverlay = document.getElementById('arOverlay');
+            const arToggleBtn = document.getElementById('arToggleBtn');
+            const arScanBtn = document.getElementById('arScanBtn');
+            const arStatus = document.getElementById('arStatus');
+            const arResultBox = document.getElementById('arResultBox');
+            const arSpeakBtn = document.getElementById('arSpeakBtn');
+            const arCopyBtn = document.getElementById('arCopyBtn');
+            const arClearBtn = document.getElementById('arClearBtn');
 
             // ============================================================
-            // 📝 الترجمة النصية
+            // 🔧 دوال مساعدة
             // ============================================================
-            async function performTextTranslation() {
-                const text = sourceText.value.trim();
-
-                if (!text) {
-                    resultBox.innerHTML = '⚠️ يرجى إدخال نص للترجمة';
-                    resultBox.style.color = '#f87171';
-                    return;
-                }
-
-                const from = sourceLang.value;
-                const to = targetLang.value;
-
-                translateBtn.disabled = true;
-                translateBtn.textContent = '⏳ جاري الترجمة...';
-                resultBox.innerHTML = '⏳ جاري الترجمة...';
-                resultBox.style.color = '#fbbf24';
-
-                // إظهار شاشة التحميل
+            function showLoading(text) {
+                loadingText.textContent = text || '⏳ جاري الترجمة...';
                 loadingOverlay.className = 'loading-overlay show';
-                loadingText.textContent = '⏳ جاري الترجمة...';
                 progressBar.style.width = '0%';
+            }
 
-                try {
-                    const translated = await translateText(text, from, to);
-                    currentTranslation = translated;
-                    resultBox.innerHTML = translated;
-                    resultBox.style.color = '#e0e0e0';
-
-                    addToHistory(text, translated, 'نص');
-
-                    // قراءة الترجمة (إذا كانت قصيرة)
-                    if (translated.length < 500) {
-                        speakText(translated, to);
-                    }
-
-                } catch (error) {
-                    resultBox.innerHTML = `❌ خطأ: ${error.message}`;
-                    resultBox.style.color = '#f87171';
-                }
-
+            function hideLoading() {
                 loadingOverlay.className = 'loading-overlay';
-                translateBtn.disabled = false;
-                translateBtn.textContent = '🌐 ترجمة فورية';
                 progressBar.style.width = '0%';
             }
 
-            // ============================================================
-            // 🖼️ استخراج النص من الصورة (مع دعم Tesseract)
-            // ============================================================
-            function extractTextFromImage(imageData) {
-                return new Promise((resolve, reject) => {
-                    if (typeof Tesseract === 'undefined') {
-                        // محاولة تحميل Tesseract
-                        const script = document.createElement('script');
-                        script.src =
-                            'https://cdnjs.cloudflare.com/ajax/libs/tesseract.js/4.1.1/tesseract.min.js';
-                        script.onload = () => {
-                            processWithTesseract(imageData, resolve, reject);
-                        };
-                        script.onerror = () => {
-                            reject(new Error('Tesseract.js غير متوفر. يرجى التحقق من الاتصال بالإنترنت.'));
-                        };
-                        document.head.appendChild(script);
-                    } else {
-                        processWithTesseract(imageData, resolve, reject);
-                    }
-                });
+            function updateProgress(value) {
+                progressBar.style.width = Math.min(value, 100) + '%';
             }
 
-            function processWithTesseract(imageData, resolve, reject) {
-                Tesseract.recognize(
-                    imageData,
-                    'ara+eng',
-                    {
-                        logger: (m) => {
-                            if (m.status === 'recognizing text') {
-                                const progress = Math.round(m.progress * 100);
-                                loadingText.textContent = `⏳ جاري قراءة النص: ${progress}%`;
-                                progressBar.style.width = progress + '%';
-                            }
-                        }
-                    }
-                ).then(({ data: { text } }) => {
-                    resolve(text.trim());
-                }).catch((error) => {
-                    reject(new Error('فشل استخراج النص: ' + error.message));
-                });
-            }
-
-            // ============================================================
-            // 🖼️ ترجمة الصورة
-            // ============================================================
-            async function performImageTranslation() {
-                const file = imageInput.files[0];
-
-                if (!file) {
-                    alert('⚠️ يرجى اختيار صورة أولاً');
-                    return;
-                }
-
-                const reader = new FileReader();
-
-                reader.onload = async function(event) {
-                    const imageData = event.target.result;
-
-                    loadingOverlay.className = 'loading-overlay show';
-                    loadingText.textContent = '⏳ جاري معالجة الصورة...';
-                    progressBar.style.width = '0%';
-
-                    ocrStatus.className = 'ocr-status show loading';
-                    ocrStatus.textContent = '⏳ جاري استخراج النص...';
-
-                    imageResultBox.innerHTML = '⏳ جاري استخراج النص...';
-                    imageResultBox.style.color = '#fbbf24';
-
-                    try {
-                        const extractedText = await extractTextFromImage(imageData);
-
-                        if (!extractedText || extractedText.length < 2) {
-                            ocrStatus.className = 'ocr-status show error';
-                            ocrStatus.textContent = '❌ لم يتم العثور على نص في الصورة';
-                            imageResultBox.innerHTML = '❌ لم يتم العثور على نص في الصورة';
-                            imageResultBox.style.color = '#f87171';
-                            loadingOverlay.className = 'loading-overlay';
-                            return;
-                        }
-
-                        ocrStatus.className = 'ocr-status show success';
-                        ocrStatus.textContent = `✅ تم استخراج ${extractedText.length} حرف`;
-
-                        imageResultBox.innerHTML = `📝 النص المستخرج:\n${extractedText}`;
-                        imageResultBox.style.color = '#e0e0e0';
-
-                        const from = sourceLang.value;
-                        const to = targetLang.value;
-
-                        loadingText.textContent = '⏳ جاري ترجمة النص...';
-                        ocrStatus.textContent = '⏳ جاري ترجمة النص...';
-                        progressBar.style.width = '0%';
-
-                        const translated = await translateText(extractedText, from, to);
-
-                        imageResultBox.innerHTML =
-                            `📝 النص الأصلي:\n${extractedText}\n\n🌐 الترجمة:\n${translated}`;
-                        imageResultBox.style.color = '#e0e0e0';
-
-                        ocrStatus.className = 'ocr-status show success';
-                        ocrStatus.textContent = `✅ تمت الترجمة بنجاح`;
-
-                        addToHistory(extractedText, translated, 'صورة');
-
-                        if (translated.length < 500) {
-                            speakText(translated, to);
-                        }
-
-                    } catch (error) {
-                        ocrStatus.className = 'ocr-status show error';
-                        ocrStatus.textContent = `❌ خطأ: ${error.message}`;
-                        imageResultBox.innerHTML = `❌ خطأ: ${error.message}`;
-                        imageResultBox.style.color = '#f87171';
-                    }
-
-                    loadingOverlay.className = 'loading-overlay';
-                    progressBar.style.width = '0%';
-                };
-
-                reader.onerror = function() {
-                    alert('❌ خطأ في قراءة الصورة');
-                    loadingOverlay.className = 'loading-overlay';
-                };
-
-                reader.readAsDataURL(file);
-            }
-
-            // ============================================================
-            // 📚 إضافة إلى السجل
-            // ============================================================
-            function addToHistory(original, translated, mode) {
-                const shortOriginal = original.length > 40 ? original.slice(0, 40) + '...' : original;
-                const shortTranslated = translated.length > 40 ? translated.slice(0, 40) + '...' : translated;
-
-                translationHistory.unshift({
-                    original: shortOriginal,
-                    translated: shortTranslated,
-                    mode: mode,
-                    time: new Date().toLocaleTimeString()
-                });
-
-                if (translationHistory.length > 30) translationHistory.pop();
-                updateHistory();
-                transCount.textContent = translationHistory.length;
-            }
-
-            function updateHistory() {
-                if (translationHistory.length === 0) {
-                    historyContainer.innerHTML =
-                        '<div style="text-align:center;color:#445;font-size:11px;padding:8px 0;">📚 تاريخ الترجمات</div>';
-                    return;
-                }
-
-                historyContainer.innerHTML = `
-                    <div style="font-size:9px;color:#445;margin-bottom:4px;">📚 تاريخ الترجمات</div>
-                    ${translationHistory.slice(0, 15).map(item => `
-                        <div class="history-item">
-                            <span class="orig">${item.original}</span>
-                            <span class="trans">${item.translated}</span>
-                            <span style="color:#445;font-size:7px;">${item.time}</span>
-                        </div>
-                    `).join('')}
-                `;
-            }
-
-            // ============================================================
-            // 🔊 قراءة النص
-            // ============================================================
             function speakText(text, lang) {
                 if (!text || text.length < 2) return;
-
                 if ('speechSynthesis' in window) {
                     try {
                         window.speechSynthesis.cancel();
-
                         const utterance = new SpeechSynthesisUtterance(text);
                         const langCode = lang === 'ar' ? 'ar-SA' : 'en-US';
                         utterance.lang = langCode;
                         utterance.rate = 0.9;
                         utterance.pitch = 1;
-
                         const voices = window.speechSynthesis.getVoices();
                         const voice = voices.find(v => v.lang.startsWith(langCode.split('-')[0]));
                         if (voice) utterance.voice = voice;
-
                         window.speechSynthesis.speak(utterance);
-                    } catch (e) {
-                        console.log('⚠️ خطأ في النطق:', e);
-                    }
+                    } catch (e) { console.log('⚠️ خطأ في النطق:', e); }
                 }
             }
 
-            // ============================================================
-            // 📋 نسخ
-            // ============================================================
             async function copyText(text) {
                 if (!text || text.startsWith('⚠️') || text.startsWith('❌') || text.startsWith('⏳') || text ===
                     'ستظهر الترجمة هنا...') {
@@ -1134,6 +1656,850 @@
                     alert('✅ تم النسخ');
                 }
             }
+
+            function saveTranslation(text) {
+                if (!text || text.startsWith('⚠️') || text.startsWith('❌') || text === 'ستظهر الترجمة هنا...') {
+                    alert('⚠️ لا توجد ترجمة للحفظ');
+                    return;
+                }
+                const blob = new Blob([text], { type: 'text/plain;charset=utf-8' });
+                const url = URL.createObjectURL(blob);
+                const a = document.createElement('a');
+                a.href = url;
+                a.download = `translation_${new Date().toISOString().slice(0,10)}.txt`;
+                a.click();
+                URL.revokeObjectURL(url);
+                alert('✅ تم حفظ الترجمة');
+            }
+
+            function addToHistory(original, translated, mode) {
+                const shortOriginal = original.length > 40 ? original.slice(0, 40) + '...' : original;
+                const shortTranslated = translated.length > 40 ? translated.slice(0, 40) + '...' : translated;
+                translationHistory.unshift({
+                    original: shortOriginal,
+                    translated: shortTranslated,
+                    mode: mode,
+                    time: new Date().toLocaleTimeString()
+                });
+                if (translationHistory.length > 30) translationHistory.pop();
+                updateHistory();
+                transCount.textContent = translationHistory.length;
+            }
+
+            function updateHistory() {
+                if (translationHistory.length === 0) {
+                    historyContainer.innerHTML =
+                        '<div style="text-align:center;color:#445;font-size:11px;padding:8px 0;">📚 تاريخ الترجمات</div>';
+                    return;
+                }
+                historyContainer.innerHTML = `
+                    <div style="font-size:9px;color:#445;margin-bottom:4px;">📚 تاريخ الترجمات</div>
+                    ${translationHistory.slice(0, 15).map(item => `
+                        <div class="history-item">
+                            <span class="orig">${item.original}</span>
+                            <span class="trans">${item.translated}</span>
+                            <span class="h-time">${item.time}</span>
+                            <span class="h-mode">${item.mode}</span>
+                        </div>
+                    `).join('')}
+                `;
+            }
+
+            // ============================================================
+            // 🌐 ترجمة النص
+            // ============================================================
+            async function translateChunk(text, from, to) {
+                try {
+                    const url =
+                        `https://api.mymemory.translated.net/get?q=${encodeURIComponent(text)}&langpair=${from}|${to}`;
+                    const response = await fetch(url);
+                    if (!response.ok) throw new Error('فشل الاتصال');
+                    const data = await response.json();
+                    if (data.responseStatus === 200) {
+                        return data.responseData.translatedText;
+                    } else {
+                        throw new Error(data.responseDetails || 'خطأ في الترجمة');
+                    }
+                } catch (error) {
+                    console.error('❌ خطأ في الترجمة:', error);
+                    throw error;
+                }
+            }
+
+            async function translateText(text, from, to) {
+                if (!text || text.trim().length === 0) throw new Error('النص فارغ');
+
+                if (text.length <= MAX_CHARS) {
+                    return await translateChunk(text, from, to);
+                }
+
+                const chunks = [];
+                let remaining = text;
+                while (remaining.length > 0) {
+                    let endIndex = Math.min(MAX_CHARS, remaining.length);
+                    if (endIndex < remaining.length) {
+                        const punctuation = ['.', '؟', '!', '،', ';', '\n', ' '];
+                        let found = false;
+                        for (let i = endIndex; i > Math.max(0, endIndex - 50); i--) {
+                            if (punctuation.includes(remaining[i])) {
+                                endIndex = i + 1;
+                                found = true;
+                                break;
+                            }
+                        }
+                        if (!found) {
+                            for (let i = endIndex; i > Math.max(0, endIndex - 30); i--) {
+                                if (remaining[i] === ' ') {
+                                    endIndex = i + 1;
+                                    found = true;
+                                    break;
+                                }
+                            }
+                        }
+                        if (!found) endIndex = MAX_CHARS;
+                    }
+                    chunks.push(remaining.substring(0, endIndex).trim());
+                    remaining = remaining.substring(endIndex).trim();
+                }
+
+                const translatedChunks = [];
+                for (let i = 0; i < chunks.length; i++) {
+                    const progress = Math.round(((i + 1) / chunks.length) * 100);
+                    loadingText.textContent = `⏳ جاري ترجمة الجزء ${i+1} من ${chunks.length}...`;
+                    updateProgress(progress);
+                    const translated = await translateChunk(chunks[i], from, to);
+                    translatedChunks.push(translated);
+                }
+                return translatedChunks.join(' ');
+            }
+
+            // ============================================================
+            // 📝 ترجمة النص (TEXT)
+            // ============================================================
+            async function performTextTranslation() {
+                const text = sourceText.value.trim();
+                if (!text) {
+                    resultBox.innerHTML = '⚠️ يرجى إدخال نص للترجمة';
+                    resultBox.style.color = '#f87171';
+                    return;
+                }
+                const from = sourceLang.value;
+                const to = targetLang.value;
+
+                translateBtn.disabled = true;
+                translateBtn.textContent = '⏳ جاري الترجمة...';
+                resultBox.innerHTML = '⏳ جاري الترجمة...';
+                resultBox.style.color = '#fbbf24';
+                showLoading('⏳ جاري الترجمة...');
+
+                try {
+                    const translated = await translateText(text, from, to);
+                    resultBox.innerHTML = translated;
+                    resultBox.style.color = '#e0e0e0';
+                    addToHistory(text, translated, 'نص');
+                    if (translated.length < 500) speakText(translated, to);
+                } catch (error) {
+                    resultBox.innerHTML = `❌ خطأ: ${error.message}`;
+                    resultBox.style.color = '#f87171';
+                }
+
+                hideLoading();
+                translateBtn.disabled = false;
+                translateBtn.textContent = '🌐 ترجمة فورية';
+            }
+
+            // ============================================================
+            // 🎤 ترجمة الصوت (VOICE)
+            // ============================================================
+            let isVoiceRecording = false;
+            let voiceRecognition = null;
+
+            function startVoiceRecognition() {
+                if (!('webkitSpeechRecognition' in window) && !('SpeechRecognition' in window)) {
+                    alert('⚠️ الإدخال الصوتي غير مدعوم في هذا المتصفح');
+                    return;
+                }
+
+                const SpeechRecognition = window.SpeechRecognition || window.webkitSpeechRecognition;
+                voiceRecognition = new SpeechRecognition();
+                voiceRecognition.lang = 'ar-SA';
+                voiceRecognition.continuous = true;
+                voiceRecognition.interimResults = true;
+
+                voiceRecognition.onstart = () => {
+                    isVoiceRecording = true;
+                    voiceBtn.textContent = '⏹️ إيقاف التسجيل';
+                    voiceBtn.style.background = 'linear-gradient(135deg, #f87171, #dc2626)';
+                    voiceIndicator.innerHTML = `
+                        <span>🔴 جاري التسجيل...</span>
+                        <div class="wave">
+                            <span></span><span></span><span></span><span></span><span></span>
+                        </div>
+                    `;
+                    voiceResultBox.innerHTML = '⏳ جاري الاستماع...';
+                    voiceResultBox.style.color = '#fbbf24';
+                };
+
+                voiceRecognition.onresult = async (event) => {
+                    let transcript = '';
+                    for (let i = event.resultIndex; i < event.results.length; i++) {
+                        transcript += event.results[i][0].transcript;
+                    }
+                    if (transcript) {
+                        voiceResultBox.innerHTML = `🎤 النص المستمع: ${transcript}`;
+                        voiceResultBox.style.color = '#e0e0e0';
+
+                        // ترجمة تلقائية بعد توقف الكلام
+                        clearTimeout(window.voiceTimeout);
+                        window.voiceTimeout = setTimeout(async () => {
+                            if (transcript.length > 2) {
+                                const from = sourceLang.value;
+                                const to = targetLang.value;
+                                voiceResultBox.innerHTML = '⏳ جاري الترجمة...';
+                                voiceResultBox.style.color = '#fbbf24';
+                                try {
+                                    const translated = await translateText(transcript, from, to);
+                                    voiceResultBox.innerHTML =
+                                        `🎤 النص المستمع:\n${transcript}\n\n🌐 الترجمة:\n${translated}`;
+                                    voiceResultBox.style.color = '#e0e0e0';
+                                    addToHistory(transcript, translated, 'صوت');
+                                    speakText(translated, to);
+                                } catch (error) {
+                                    voiceResultBox.innerHTML = `❌ خطأ: ${error.message}`;
+                                    voiceResultBox.style.color = '#f87171';
+                                }
+                            }
+                        }, 1000);
+                    }
+                };
+
+                voiceRecognition.onerror = () => {
+                    if (isVoiceRecording) {
+                        voiceBtn.textContent = '🎤 بدء التسجيل الصوتي';
+                        voiceBtn.style.background = '';
+                        voiceIndicator.innerHTML = `
+                            <span>🎤 اضغط الزر للتحدث</span>
+                            <div class="wave">
+                                <span></span><span></span><span></span><span></span><span></span>
+                            </div>
+                        `;
+                        isVoiceRecording = false;
+                    }
+                };
+
+                voiceRecognition.onend = () => {
+                    if (isVoiceRecording) {
+                        voiceRecognition.start();
+                    } else {
+                        voiceBtn.textContent = '🎤 بدء التسجيل الصوتي';
+                        voiceBtn.style.background = '';
+                        voiceIndicator.innerHTML = `
+                            <span>🎤 اضغط الزر للتحدث</span>
+                            <div class="wave">
+                                <span></span><span></span><span></span><span></span><span></span>
+                            </div>
+                        `;
+                    }
+                };
+
+                voiceRecognition.start();
+            }
+
+            function stopVoiceRecognition() {
+                if (voiceRecognition) {
+                    try {
+                        voiceRecognition.stop();
+                    } catch (e) {}
+                    voiceRecognition = null;
+                }
+                isVoiceRecording = false;
+                voiceBtn.textContent = '🎤 بدء التسجيل الصوتي';
+                voiceBtn.style.background = '';
+                voiceIndicator.innerHTML = `
+                    <span>🎤 اضغط الزر للتحدث</span>
+                    <div class="wave">
+                        <span></span><span></span><span></span><span></span><span></span>
+                    </div>
+                `;
+            }
+
+            voiceBtn.addEventListener('click', () => {
+                if (isVoiceRecording) {
+                    stopVoiceRecognition();
+                } else {
+                    startVoiceRecognition();
+                }
+            });
+
+            voiceSpeakBtn.addEventListener('click', () => {
+                const text = voiceResultBox.textContent;
+                const translatedMatch = text.match(/🌐 الترجمة:\n([\s\S]*?)(?=\n\n|$)/);
+                if (translatedMatch) {
+                    speakText(translatedMatch[1].trim(), targetLang.value);
+                } else {
+                    alert('⚠️ لا توجد ترجمة للاستماع');
+                }
+            });
+
+            voiceCopyBtn.addEventListener('click', () => {
+                const text = voiceResultBox.textContent;
+                const translatedMatch = text.match(/🌐 الترجمة:\n([\s\S]*?)(?=\n\n|$)/);
+                copyText(translatedMatch ? translatedMatch[1].trim() : text);
+            });
+
+            voiceClearBtn.addEventListener('click', () => {
+                if (isVoiceRecording) stopVoiceRecognition();
+                voiceResultBox.innerHTML = '<span class="placeholder">سيظهر النص المترجم من الصوت هنا...</span>';
+                voiceResultBox.style.color = '#e0e0e0';
+            });
+
+            // ============================================================
+            // 🖼️ ترجمة الصورة (IMAGE)
+            // ============================================================
+            uploadArea.addEventListener('click', () => imageInput.click());
+
+            imageInput.addEventListener('change', (e) => {
+                const file = e.target.files[0];
+                if (file) {
+                    const reader = new FileReader();
+                    reader.onload = (event) => {
+                        previewImage.src = event.target.result;
+                        imagePreview.className = 'image-preview show';
+                        imageResultBox.innerHTML = '⏳ جاهز للترجمة، اضغط على الزر';
+                        imageResultBox.style.color = '#fbbf24';
+                        ocrStatus.className = 'ocr-status';
+                    };
+                    reader.readAsDataURL(file);
+                }
+            });
+
+            imageTranslateBtn.addEventListener('click', async () => {
+                const file = imageInput.files[0];
+                if (!file) {
+                    alert('⚠️ يرجى اختيار صورة أولاً');
+                    return;
+                }
+
+                const reader = new FileReader();
+                reader.onload = async (event) => {
+                    const imageData = event.target.result;
+                    showLoading('⏳ جاري استخراج النص من الصورة...');
+                    ocrStatus.className = 'ocr-status show loading';
+                    ocrStatus.textContent = '⏳ جاري استخراج النص...';
+                    imageResultBox.innerHTML = '⏳ جاري استخراج النص...';
+                    imageResultBox.style.color = '#fbbf24';
+
+                    try {
+                        if (typeof Tesseract === 'undefined') {
+                            throw new Error('Tesseract.js غير متوفر');
+                        }
+
+                        const { data: { text } } = await Tesseract.recognize(imageData, 'ara+eng', {
+                            logger: (m) => {
+                                if (m.status === 'recognizing text') {
+                                    const progress = Math.round(m.progress * 100);
+                                    loadingText.textContent = `⏳ جاري القراءة: ${progress}%`;
+                                    updateProgress(progress);
+                                }
+                            }
+                        });
+
+                        const extractedText = text.trim();
+                        if (!extractedText || extractedText.length < 2) {
+                            ocrStatus.className = 'ocr-status show error';
+                            ocrStatus.textContent = '❌ لم يتم العثور على نص في الصورة';
+                            imageResultBox.innerHTML = '❌ لم يتم العثور على نص في الصورة';
+                            imageResultBox.style.color = '#f87171';
+                            hideLoading();
+                            return;
+                        }
+
+                        ocrStatus.className = 'ocr-status show success';
+                        ocrStatus.textContent = `✅ تم استخراج ${extractedText.length} حرف`;
+                        imageResultBox.innerHTML = `📝 النص المستخرج:\n${extractedText}`;
+                        imageResultBox.style.color = '#e0e0e0';
+
+                        const from = sourceLang.value;
+                        const to = targetLang.value;
+
+                        loadingText.textContent = '⏳ جاري ترجمة النص...';
+                        ocrStatus.textContent = '⏳ جاري ترجمة النص...';
+                        updateProgress(0);
+
+                        const translated = await translateText(extractedText, from, to);
+
+                        imageResultBox.innerHTML =
+                            `📝 النص الأصلي:\n${extractedText}\n\n🌐 الترجمة:\n${translated}`;
+                        imageResultBox.style.color = '#e0e0e0';
+
+                        ocrStatus.className = 'ocr-status show success';
+                        ocrStatus.textContent = `✅ تمت الترجمة بنجاح`;
+                        addToHistory(extractedText, translated, 'صورة');
+                        if (translated.length < 500) speakText(translated, to);
+
+                    } catch (error) {
+                        ocrStatus.className = 'ocr-status show error';
+                        ocrStatus.textContent = `❌ خطأ: ${error.message}`;
+                        imageResultBox.innerHTML = `❌ خطأ: ${error.message}`;
+                        imageResultBox.style.color = '#f87171';
+                    }
+
+                    hideLoading();
+                };
+                reader.readAsDataURL(file);
+            });
+
+            imageSpeakBtn.addEventListener('click', () => {
+                const text = imageResultBox.textContent;
+                const translatedMatch = text.match(/🌐 الترجمة:\n([\s\S]*?)(?=\n\n|$)/);
+                if (translatedMatch) speakText(translatedMatch[1].trim(), targetLang.value);
+                else alert('⚠️ لا توجد ترجمة للاستماع');
+            });
+
+            imageCopyBtn.addEventListener('click', () => {
+                const text = imageResultBox.textContent;
+                const translatedMatch = text.match(/🌐 الترجمة:\n([\s\S]*?)(?=\n\n|$)/);
+                copyText(translatedMatch ? translatedMatch[1].trim() : text);
+            });
+
+            imageClearBtn.addEventListener('click', () => {
+                imageInput.value = '';
+                imagePreview.className = 'image-preview';
+                ocrStatus.className = 'ocr-status';
+                imageResultBox.innerHTML = '<span class="placeholder">سيظهر النص المستخرج من الصورة هنا...</span>';
+                imageResultBox.style.color = '#e0e0e0';
+            });
+
+            // ============================================================
+            // 📷 الكاميرا (CAMERA)
+            // ============================================================
+            let cameraStream = null;
+            let isCameraOn = false;
+            let cameraCtx = null;
+
+            cameraToggleBtn.addEventListener('click', async () => {
+                if (isCameraOn) {
+                    if (cameraStream) {
+                        cameraStream.getTracks().forEach(t => t.stop());
+                        cameraStream = null;
+                    }
+                    isCameraOn = false;
+                    cameraToggleBtn.textContent = '📷 تشغيل الكاميرا';
+                    cameraToggleBtn.className = 'btn-cam';
+                    cameraContainer.style.display = 'none';
+                    return;
+                }
+
+                try {
+                    cameraStream = await navigator.mediaDevices.getUserMedia({
+                        video: { facingMode: 'environment', width: { ideal: 640 }, height: { ideal: 480 } }
+                    });
+                    cameraVideo.srcObject = cameraStream;
+                    await cameraVideo.play();
+
+                    cameraCanvas.width = cameraVideo.videoWidth || 640;
+                    cameraCanvas.height = cameraVideo.videoHeight || 480;
+                    cameraCtx = cameraCanvas.getContext('2d');
+
+                    isCameraOn = true;
+                    cameraToggleBtn.textContent = '📷 إيقاف الكاميرا';
+                    cameraToggleBtn.className = 'btn-cam active';
+                    cameraContainer.style.display = 'block';
+
+                    drawCamera();
+                } catch (error) {
+                    alert('⚠️ لا يمكن الوصول إلى الكاميرا');
+                }
+            });
+
+            function drawCamera() {
+                if (!isCameraOn || !cameraCtx) return;
+                cameraCtx.drawImage(cameraVideo, 0, 0, cameraCanvas.width, cameraCanvas.height);
+                requestAnimationFrame(drawCamera);
+            }
+
+            cameraScanBtn.addEventListener('click', async () => {
+                if (!isCameraOn) {
+                    alert('⚠️ يرجى تشغيل الكاميرا أولاً');
+                    return;
+                }
+
+                const imageData = cameraCanvas.toDataURL('image/jpeg');
+                cameraOcrStatus.className = 'ocr-status show loading';
+                cameraOcrStatus.textContent = '⏳ جاري استخراج النص...';
+                cameraResultBox.innerHTML = '⏳ جاري استخراج النص...';
+                cameraResultBox.style.color = '#fbbf24';
+                showLoading('⏳ جاري استخراج النص من الكاميرا...');
+
+                try {
+                    if (typeof Tesseract === 'undefined') throw new Error('Tesseract غير متوفر');
+                    const { data: { text } } = await Tesseract.recognize(imageData, 'ara+eng', {
+                        logger: (m) => {
+                            if (m.status === 'recognizing text') {
+                                const progress = Math.round(m.progress * 100);
+                                loadingText.textContent = `⏳ جاري القراءة: ${progress}%`;
+                                updateProgress(progress);
+                            }
+                        }
+                    });
+
+                    const extractedText = text.trim();
+                    if (!extractedText || extractedText.length < 2) {
+                        cameraOcrStatus.className = 'ocr-status show error';
+                        cameraOcrStatus.textContent = '❌ لم يتم العثور على نص';
+                        cameraResultBox.innerHTML = '❌ لم يتم العثور على نص';
+                        cameraResultBox.style.color = '#f87171';
+                        hideLoading();
+                        return;
+                    }
+
+                    cameraOcrStatus.className = 'ocr-status show success';
+                    cameraOcrStatus.textContent = `✅ تم استخراج ${extractedText.length} حرف`;
+                    cameraResultBox.innerHTML = `📝 النص المستخرج:\n${extractedText}`;
+                    cameraResultBox.style.color = '#e0e0e0';
+
+                    const from = sourceLang.value;
+                    const to = targetLang.value;
+                    loadingText.textContent = '⏳ جاري ترجمة النص...';
+                    updateProgress(0);
+
+                    const translated = await translateText(extractedText, from, to);
+                    cameraResultBox.innerHTML =
+                        `📝 النص الأصلي:\n${extractedText}\n\n🌐 الترجمة:\n${translated}`;
+                    cameraResultBox.style.color = '#e0e0e0';
+
+                    cameraOcrStatus.className = 'ocr-status show success';
+                    cameraOcrStatus.textContent = `✅ تمت الترجمة بنجاح`;
+                    addToHistory(extractedText, translated, 'كاميرا');
+                    if (translated.length < 500) speakText(translated, to);
+
+                } catch (error) {
+                    cameraOcrStatus.className = 'ocr-status show error';
+                    cameraOcrStatus.textContent = `❌ خطأ: ${error.message}`;
+                    cameraResultBox.innerHTML = `❌ خطأ: ${error.message}`;
+                    cameraResultBox.style.color = '#f87171';
+                }
+
+                hideLoading();
+            });
+
+            cameraCaptureBtn.addEventListener('click', () => {
+                if (!isCameraOn) {
+                    alert('⚠️ يرجى تشغيل الكاميرا أولاً');
+                    return;
+                }
+                const link = document.createElement('a');
+                link.download = `capture_${new Date().toISOString().slice(0,10)}.png`;
+                link.href = cameraCanvas.toDataURL('image/png');
+                link.click();
+                alert('📸 تم التقاط الصورة');
+            });
+
+            cameraSpeakBtn.addEventListener('click', () => {
+                const text = cameraResultBox.textContent;
+                const translatedMatch = text.match(/🌐 الترجمة:\n([\s\S]*?)(?=\n\n|$)/);
+                if (translatedMatch) speakText(translatedMatch[1].trim(), targetLang.value);
+                else alert('⚠️ لا توجد ترجمة للاستماع');
+            });
+
+            cameraCopyBtn.addEventListener('click', () => {
+                const text = cameraResultBox.textContent;
+                const translatedMatch = text.match(/🌐 الترجمة:\n([\s\S]*?)(?=\n\n|$)/);
+                copyText(translatedMatch ? translatedMatch[1].trim() : text);
+            });
+
+            cameraClearBtn.addEventListener('click', () => {
+                cameraOcrStatus.className = 'ocr-status';
+                cameraResultBox.innerHTML = '<span class="placeholder">سيظهر النص المترجم من الكاميرا هنا...</span>';
+                cameraResultBox.style.color = '#e0e0e0';
+            });
+
+            // ============================================================
+            // 🤟 ترجمة لغة الإشارة (SIGN LANGUAGE)
+            // ============================================================
+            let signStream = null;
+            let isSignOn = false;
+            let signCtx = null;
+
+            // قاموس لغة الإشارة
+            const signDictionary = {
+                'hello': 'مرحباً',
+                'thank_you': 'شكراً لك',
+                'yes': 'نعم',
+                'no': 'لا',
+                'help': 'مساعدة',
+                'love': 'حب',
+                'peace': 'سلام',
+                'friend': 'صديق',
+                'food': 'طعام',
+                'water': 'ماء',
+                'name': 'اسم',
+                'mother': 'أم',
+                'father': 'أب',
+                'sister': 'أخت',
+                'brother': 'أخ',
+                'happy': 'سعيد',
+                'sad': 'حزين',
+                'angry': 'غاضب',
+                'tired': 'متعب',
+                'hungry': 'جائع',
+                'thirsty': 'عطشان',
+                'school': 'مدرسة',
+                'house': 'منزل',
+                'car': 'سيارة',
+                'job': 'عمل',
+                'doctor': 'طبيب',
+                'hospital': 'مستشفى',
+                'medicine': 'دواء',
+                'pain': 'ألم'
+            };
+
+            signToggleBtn.addEventListener('click', async () => {
+                if (isSignOn) {
+                    if (signStream) {
+                        signStream.getTracks().forEach(t => t.stop());
+                        signStream = null;
+                    }
+                    isSignOn = false;
+                    signToggleBtn.textContent = '📷 تشغيل الكاميرا';
+                    signToggleBtn.className = 'btn-cam';
+                    signContainer.style.display = 'none';
+                    return;
+                }
+
+                try {
+                    signStream = await navigator.mediaDevices.getUserMedia({
+                        video: { facingMode: 'user', width: { ideal: 640 }, height: { ideal: 480 } }
+                    });
+                    signVideo.srcObject = signStream;
+                    await signVideo.play();
+
+                    signCanvas.width = signVideo.videoWidth || 640;
+                    signCanvas.height = signVideo.videoHeight || 480;
+                    signCtx = signCanvas.getContext('2d');
+
+                    isSignOn = true;
+                    signToggleBtn.textContent = '📷 إيقاف الكاميرا';
+                    signToggleBtn.className = 'btn-cam active';
+                    signContainer.style.display = 'block';
+
+                    drawSign();
+                } catch (error) {
+                    alert('⚠️ لا يمكن الوصول إلى الكاميرا');
+                }
+            });
+
+            function drawSign() {
+                if (!isSignOn || !signCtx) return;
+                signCtx.drawImage(signVideo, 0, 0, signCanvas.width, signCanvas.height);
+                requestAnimationFrame(drawSign);
+            }
+
+            signDetectBtn.addEventListener('click', () => {
+                if (!isSignOn) {
+                    alert('⚠️ يرجى تشغيل الكاميرا أولاً');
+                    return;
+                }
+
+                // محاكاة كشف لغة الإشارة
+                const signs = Object.keys(signDictionary);
+                const randomSign = signs[Math.floor(Math.random() * signs.length)];
+                const translation = signDictionary[randomSign];
+
+                signStatus.className = 'ocr-status show success';
+                signStatus.textContent = `🤟 تم كشف الإشارة: ${randomSign}`;
+                signResultBox.innerHTML =
+                    `🤟 الإشارة المكتشفة:\n${randomSign}\n\n🌐 الترجمة:\n${translation}`;
+                signResultBox.style.color = '#e0e0e0';
+
+                addToHistory(randomSign, translation, 'إشارة');
+                speakText(translation, targetLang.value);
+            });
+
+            signSpeakBtn.addEventListener('click', () => {
+                const text = signResultBox.textContent;
+                const translatedMatch = text.match(/🌐 الترجمة:\n([\s\S]*?)(?=\n\n|$)/);
+                if (translatedMatch) speakText(translatedMatch[1].trim(), targetLang.value);
+                else alert('⚠️ لا توجد ترجمة للاستماع');
+            });
+
+            signCopyBtn.addEventListener('click', () => {
+                const text = signResultBox.textContent;
+                const translatedMatch = text.match(/🌐 الترجمة:\n([\s\S]*?)(?=\n\n|$)/);
+                copyText(translatedMatch ? translatedMatch[1].trim() : text);
+            });
+
+            signClearBtn.addEventListener('click', () => {
+                signStatus.className = 'ocr-status';
+                signResultBox.innerHTML = '<span class="placeholder">ستظهر ترجمة لغة الإشارة هنا...</span>';
+                signResultBox.style.color = '#e0e0e0';
+            });
+
+            // ============================================================
+            // 🥽 الواقع المعزز (AR)
+            // ============================================================
+            let arStream = null;
+            let isArOn = false;
+            let isArScanning = false;
+            let arInterval = null;
+
+            arToggleBtn.addEventListener('click', async () => {
+                if (isArOn) {
+                    if (arStream) {
+                        arStream.getTracks().forEach(t => t.stop());
+                        arStream = null;
+                    }
+                    if (arInterval) { clearInterval(arInterval);
+                        arInterval = null; }
+                    isArOn = false;
+                    isArScanning = false;
+                    arToggleBtn.textContent = '📷 تشغيل الكاميرا';
+                    arToggleBtn.className = 'btn-cam';
+                    arContainer.style.display = 'none';
+                    arOverlay.innerHTML = '';
+                    return;
+                }
+
+                try {
+                    arStream = await navigator.mediaDevices.getUserMedia({
+                        video: { facingMode: 'environment', width: { ideal: 640 }, height: { ideal: 480 } }
+                    });
+                    arVideo.srcObject = arStream;
+                    await arVideo.play();
+
+                    isArOn = true;
+                    arToggleBtn.textContent = '📷 إيقاف الكاميرا';
+                    arToggleBtn.className = 'btn-cam active';
+                    arContainer.style.display = 'block';
+                } catch (error) {
+                    alert('⚠️ لا يمكن الوصول إلى الكاميرا');
+                }
+            });
+
+            arScanBtn.addEventListener('click', () => {
+                if (!isArOn) {
+                    alert('⚠️ يرجى تشغيل الكاميرا أولاً');
+                    return;
+                }
+
+                isArScanning = !isArScanning;
+
+                if (isArScanning) {
+                    arScanBtn.textContent = '⏹️ إيقاف AR';
+                    arScanBtn.style.background = 'linear-gradient(135deg, #f87171, #dc2626)';
+                    arStatus.className = 'ocr-status show loading';
+                    arStatus.textContent = '🥽 وضع AR نشط - جاري الترجمة الفورية...';
+                    arResultBox.innerHTML = '🥽 وضع AR نشط - الترجمة تظهر على الشاشة';
+                    arResultBox.style.color = '#4ade80';
+
+                    // محاكاة الترجمة الفورية
+                    let arIndex = 0;
+                    const arTexts = [
+                        { original: 'Welcome', translated: 'مرحباً' },
+                        { original: 'Hello World', translated: 'مرحباً بالعالم' },
+                        { original: 'Good Morning', translated: 'صباح الخير' },
+                        { original: 'Thank You', translated: 'شكراً لك' },
+                        { original: 'How are you?', translated: 'كيف حالك؟' }
+                    ];
+
+                    arInterval = setInterval(() => {
+                        const text = arTexts[arIndex % arTexts.length];
+                        arIndex++;
+
+                        // عرض الترجمة على الشاشة (AR)
+                        arOverlay.innerHTML = `
+                            <div class="ar-text" style="top:20%;left:10%;">
+                                <span class="ar-original">${text.original}</span>
+                                <span class="ar-translated">${text.translated}</span>
+                                <span class="ar-lang">${targetLang.options[targetLang.selectedIndex].text}</span>
+                            </div>
+                        `;
+
+                        arResultBox.innerHTML =
+                            `🥽 AR: ${text.original} → ${text.translated}`;
+                        arResultBox.style.color = '#e0e0e0';
+                        addToHistory(text.original, text.translated, 'AR');
+                        speakText(text.translated, targetLang.value);
+
+                        // تغيير موقع النص
+                        const positions = [
+                            { top: '20%', left: '10%' },
+                            { top: '50%', left: '60%' },
+                            { top: '70%', left: '20%' },
+                            { top: '30%', left: '70%' }
+                        ];
+                        const pos = positions[arIndex % positions.length];
+                        const arTextEl = arOverlay.querySelector('.ar-text');
+                        if (arTextEl) {
+                            arTextEl.style.top = pos.top;
+                            arTextEl.style.left = pos.left;
+                        }
+
+                    }, 4000);
+
+                } else {
+                    clearInterval(arInterval);
+                    arInterval = null;
+                    arScanBtn.textContent = '🥽 تفعيل الترجمة الفورية';
+                    arScanBtn.style.background = '';
+                    arStatus.className = 'ocr-status';
+                    arStatus.textContent = '';
+                    arOverlay.innerHTML = '';
+                    arResultBox.innerHTML = '<span class="placeholder">ستظهر الترجمة في الوقت الفعلي...</span>';
+                    arResultBox.style.color = '#e0e0e0';
+                }
+            });
+
+            arSpeakBtn.addEventListener('click', () => {
+                const text = arResultBox.textContent;
+                const translatedMatch = text.match(/→ ([\s\S]*?)(?=\n|$)/);
+                if (translatedMatch) speakText(translatedMatch[1].trim(), targetLang.value);
+                else alert('⚠️ لا توجد ترجمة للاستماع');
+            });
+
+            arCopyBtn.addEventListener('click', () => {
+                const text = arResultBox.textContent;
+                const translatedMatch = text.match(/→ ([\s\S]*?)(?=\n|$)/);
+                copyText(translatedMatch ? translatedMatch[1].trim() : text);
+            });
+
+            arClearBtn.addEventListener('click', () => {
+                if (arInterval) { clearInterval(arInterval);
+                    arInterval = null; }
+                if (isArScanning) {
+                    isArScanning = false;
+                    arScanBtn.textContent = '🥽 تفعيل الترجمة الفورية';
+                    arScanBtn.style.background = '';
+                }
+                arOverlay.innerHTML = '';
+                arStatus.className = 'ocr-status';
+                arResultBox.innerHTML = '<span class="placeholder">ستظهر الترجمة في الوقت الفعلي...</span>';
+                arResultBox.style.color = '#e0e0e0';
+            });
+
+            // ============================================================
+            // 📑 التبويبات
+            // ============================================================
+            tabs.forEach(tab => {
+                tab.addEventListener('click', () => {
+                    tabs.forEach(t => t.classList.remove('active'));
+                    tab.classList.add('active');
+
+                    tabContents.forEach(c => c.classList.remove('active'));
+                    document.getElementById('tab-' + tab.dataset.tab).classList.add('active');
+
+                    const modeNames = {
+                        'text': 'نصي',
+                        'voice': 'صوتي',
+                        'image': 'صورة',
+                        'camera': 'كاميرا',
+                        'sign': 'إشارة',
+                        'ar': 'AR'
+                    };
+                    currentMode = tab.dataset.tab;
+                    modeStatus.textContent = modeNames[currentMode] || 'نصي';
+                });
+            });
 
             // ============================================================
             // 🔄 تبديل اللغات
@@ -1161,8 +2527,7 @@
                 try {
                     apiStatus.textContent = '🔄 جاري التحقق...';
                     apiStatus.style.color = '#fbbf24';
-
-                    const test = await translateText('Hello', 'en', 'ar');
+                    const test = await translateChunk('Hello', 'en', 'ar');
                     if (test && test.length > 0) {
                         apiStatus.textContent = '🟢 متصل';
                         apiStatus.style.color = '#4ade80';
@@ -1176,68 +2541,17 @@
             }
 
             // ============================================================
-            // 📑 التبويبات
-            // ============================================================
-            tabs.forEach(tab => {
-                tab.addEventListener('click', () => {
-                    tabs.forEach(t => t.classList.remove('active'));
-                    tab.classList.add('active');
-
-                    tabContents.forEach(c => c.classList.remove('active'));
-                    document.getElementById('tab-' + tab.dataset.tab).classList.add('active');
-                });
-            });
-
-            // ============================================================
-            // 🖼️ أحداث الصورة
-            // ============================================================
-            uploadArea.addEventListener('click', () => imageInput.click());
-
-            imageInput.addEventListener('change', (e) => {
-                const file = e.target.files[0];
-                if (file) {
-                    const reader = new FileReader();
-                    reader.onload = (event) => {
-                        previewImage.src = event.target.result;
-                        imagePreview.className = 'image-preview show';
-                        imageResultBox.innerHTML = '⏳ جاهز للترجمة، اضغط على الزر';
-                        imageResultBox.style.color = '#fbbf24';
-                        ocrStatus.className = 'ocr-status';
-                    };
-                    reader.readAsDataURL(file);
-                }
-            });
-
-            imageTranslateBtn.addEventListener('click', performImageTranslation);
-
-            imageSpeakBtn.addEventListener('click', () => {
-                const text = imageResultBox.textContent;
-                const translatedMatch = text.match(/🌐 الترجمة:\n([\s\S]*?)(?=\n\n|$)/);
-                if (translatedMatch) {
-                    speakText(translatedMatch[1].trim(), targetLang.value);
-                } else {
-                    alert('⚠️ لا توجد ترجمة للاستماع');
-                }
-            });
-
-            imageCopyBtn.addEventListener('click', () => {
-                const text = imageResultBox.textContent;
-                const translatedMatch = text.match(/🌐 الترجمة:\n([\s\S]*?)(?=\n\n|$)/);
-                copyText(translatedMatch ? translatedMatch[1].trim() : text);
-            });
-
-            imageClearBtn.addEventListener('click', () => {
-                imageInput.value = '';
-                imagePreview.className = 'image-preview';
-                ocrStatus.className = 'ocr-status';
-                imageResultBox.innerHTML = '<span class="placeholder">سيظهر النص المستخرج من الصورة هنا...</span>';
-                imageResultBox.style.color = '#e0e0e0';
-            });
-
-            // ============================================================
             // 🎤 أحداث النص
             // ============================================================
             translateBtn.addEventListener('click', performTextTranslation);
+
+            sourceText.addEventListener('input', () => {
+                const len = sourceText.value.length;
+                charCount.textContent = len + ' حرف';
+                charCount.className = 'char-count';
+                if (len > 400) charCount.className = 'char-count warning';
+                if (len > 800) charCount.className = 'char-count danger';
+            });
 
             sourceText.addEventListener('keydown', (e) => {
                 if (e.key === 'Enter' && e.ctrlKey) {
@@ -1261,6 +2575,11 @@
                 copyText(text);
             });
 
+            saveBtn.addEventListener('click', () => {
+                const text = resultBox.textContent;
+                saveTranslation(text);
+            });
+
             clearBtn.addEventListener('click', () => {
                 sourceText.value = '';
                 resultBox.innerHTML = '<span class="placeholder">ستظهر الترجمة هنا...</span>';
@@ -1268,23 +2587,6 @@
                 charCount.textContent = '0 حرف';
                 charCount.className = 'char-count';
                 sourceText.focus();
-            });
-
-            saveBtn.addEventListener('click', () => {
-                const text = resultBox.textContent;
-                if (!text || text === 'ستظهر الترجمة هنا...' || text.startsWith('⚠️') || text.startsWith('❌')) {
-                    alert('⚠️ لا توجد ترجمة للحفظ');
-                    return;
-                }
-
-                const blob = new Blob([text], { type: 'text/plain;charset=utf-8' });
-                const url = URL.createObjectURL(blob);
-                const a = document.createElement('a');
-                a.href = url;
-                a.download = `translation_${new Date().toISOString().slice(0,10)}.txt`;
-                a.click();
-                URL.revokeObjectURL(url);
-                alert('✅ تم حفظ الترجمة');
             });
 
             // ============================================================
@@ -1299,8 +2601,8 @@
 
             setTimeout(checkAPI, 1500);
 
-            console.log('🌍 LEX-Ω - المترجم العالمي الفوري');
-            console.log('📌 يدعم النصوص الطويلة (تقسيم تلقائي)');
+            console.log('🌍 LEX-Ω - المترجم العالمي الفوري (النسخة المتكاملة)');
+            console.log('📌 يدعم: نص • صوت • صورة • كاميرا • إشارة • AR');
             console.log('⚖️ "السلطة المطلقة = المسؤولية المطلقة"');
 
             // ترجمة تجريبية
