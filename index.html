@@ -1,675 +1,1317 @@
 <!DOCTYPE html>
-<html lang="ar" dir="rtl">
+<html lang="ar">
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>🌑 THE SHADOW - FULL TRUTH - ø ASAØ</title>
+    <title>🌍 LEX-Ω - المترجم العالمي</title>
     <style>
-        :root{--bg:#000205;--panel:#000d1a;--text:#c0c0c0;--accent:#8b0000;--gold:#ff6600;--green:#006600;--blue:#003366;--phone-bg:#0a0a0a;}
-        *{margin:0;padding:0;box-sizing:border-box;}
-        body{background:var(--bg);font-family:'Segoe UI','Courier New',monospace;color:var(--text);height:100vh;display:flex;justify-content:center;align-items:center;overflow:hidden;user-select:none;}
-        
-        #phone{width:100%;max-width:420px;height:100vh;max-height:850px;background:var(--phone-bg);border-radius:20px;position:relative;overflow:hidden;display:flex;flex-direction:column;box-shadow:0 0 60px rgba(139,0,0,0.3),0 0 0 2px #1a1a1a;}
-        
-        .phone-notch{position:absolute;top:0;left:50%;transform:translateX(-50%);width:150px;height:25px;background:#000;border-radius:0 0 20px 20px;z-index:10;}
-        .phone-status{background:#000;padding:8px 20px;display:flex;justify-content:space-between;align-items:center;font-size:9px;color:#888;padding-top:30px;z-index:5;}
-        .phone-status .time-display{color:#fff;font-size:11px;font-weight:bold;}
-        .phone-status .icons{display:flex;gap:5px;}
-        
-        .screen{display:none;flex-direction:column;flex:1;overflow:hidden;}
-        .screen.active{display:flex;}
-        
-        .chat-header{background:#0a0a0a;padding:12px;border-bottom:1px solid #1a1a1a;display:flex;align-items:center;gap:10px;z-index:4;}
-        .chat-header .avatar{width:40px;height:40px;border-radius:50%;background:#1a1a1a;display:flex;align-items:center;justify-content:center;font-size:20px;}
-        .chat-header .info{flex:1;}
-        .chat-header .name{color:#fff;font-size:13px;font-weight:bold;}
-        .chat-header .status{font-size:9px;color:#888;}
-        .chat-header .status.online{color:#0f0;}
-        .chat-header .status.typing{color:#fa0;animation:typingBlink 1s infinite;}
-        @keyframes typingBlink{0%,100%{opacity:1;}50%{opacity:0.3;}}
-        
-        .chat-body{flex:1;overflow-y:auto;padding:12px;background:#000;display:flex;flex-direction:column;gap:8px;background-image:url("data:image/svg+xml,%3Csvg width='60' height='60' viewBox='0 0 60 60' xmlns='http://www.w3.org/2000/svg'%3E%3Cg fill='none' fill-rule='evenodd'%3E%3Cg fill='%23ffffff' fill-opacity='0.01'%3E%3Cpath d='M36 34v-4h-2v4h-4v2h4v4h2v-4h4v-2h-4zm0-30V0h-2v4h-4v2h4v4h2V6h4V4h-4zM6 34v-4H4v4H0v2h4v4h2v-4h4v-2H6zM6 4V0H4v4H0v2h4v4h2V6h4V4H6z'/%3E%3C/g%3E%3C/g%3E%3C/svg%3E");}
-        
-        .msg{max-width:78%;padding:9px 13px;border-radius:10px;font-size:12px;line-height:1.6;animation:msgIn 0.3s ease;position:relative;word-wrap:break-word;}
-        @keyframes msgIn{from{opacity:0;transform:translateY(10px);}to{opacity:1;transform:translateY(0);}}
-        .msg.them{background:#1a1a1a;align-self:flex-start;border-bottom-left-radius:2px;color:#ccc;}
-        .msg.me{background:#002211;align-self:flex-end;border-bottom-right-radius:2px;color:#aaf;}
-        .msg.system{background:#1a0000;align-self:center;text-align:center;color:#f00;font-size:10px;max-width:88%;border:1px solid #300;}
-        .msg .time{font-size:7px;color:#555;margin-top:3px;text-align:left;}
-        .msg .sender{font-size:8px;color:#888;margin-bottom:2px;}
-        .msg .emoji-only{font-size:30px;text-align:center;}
-        .msg img{max-width:180px;max-height:180px;border-radius:8px;margin:4px 0;}
-        
-        .chat-input{background:#0a0a0a;padding:8px 12px;border-top:1px solid #1a1a1a;display:flex;gap:6px;align-items:center;}
-        .chat-input input{flex:1;padding:10px 14px;background:#000;border:1px solid #222;color:#fff;border-radius:18px;outline:none;font-family:inherit;font-size:12px;}
-        .chat-input input:focus{border-color:var(--accent);}
-        .chat-input button{background:var(--accent);color:#fff;border:none;width:38px;height:38px;border-radius:50%;cursor:pointer;font-size:16px;display:flex;align-items:center;justify-content:center;}
-        
-        .choice-area{display:flex;flex-wrap:wrap;gap:6px;padding:8px;justify-content:center;background:#0a0a0a;border-top:1px solid #1a1a1a;}
-        .choice-btn{background:#1a1a1a;border:1px solid #2a2a2a;color:#ccc;padding:8px 14px;border-radius:16px;cursor:pointer;font-family:inherit;font-size:10px;transition:all 0.25s;white-space:nowrap;}
-        .choice-btn:hover{background:var(--accent);border-color:var(--accent);color:#fff;transform:scale(1.03);}
-        .choice-btn.danger{background:#1a0000;border-color:#500;color:#f88;}
-        .choice-btn.danger:hover{background:#500;color:#fff;}
-        .choice-btn.safe{background:#001a00;border-color:#050;color:#8f8;}
-        .choice-btn.safe:hover{background:#050;color:#fff;}
-        
-        .overlay{position:absolute;top:0;left:0;width:100%;height:100%;background:rgba(0,0,0,0.85);z-index:50;display:none;justify-content:center;align-items:center;flex-direction:column;padding:20px;text-align:center;}
-        .overlay.active{display:flex;}
-        .overlay .icon{font-size:80px;animation:overlayPulse 2s infinite;}
-        @keyframes overlayPulse{0%,100%{transform:scale(1);opacity:1;}50%{transform:scale(1.08);opacity:0.8;}}
-        .overlay .title{font-size:22px;font-weight:bold;color:#fff;letter-spacing:3px;margin:10px 0;}
-        .overlay .text{font-size:11px;color:#888;line-height:1.7;max-width:300px;}
-        .overlay .warning{color:#f00;font-size:9px;letter-spacing:2px;margin:10px 0;animation:blink 0.8s infinite;}
-        @keyframes blink{0%,100%{opacity:1;}50%{opacity:0.2;}}
-        
-        .end-screen{text-align:center;padding:30px;flex:1;display:flex;flex-direction:column;justify-content:center;align-items:center;gap:12px;overflow-y:auto;}
-        .end-screen .icon{font-size:90px;}
-        .end-screen .title{font-size:20px;font-weight:bold;letter-spacing:3px;}
-        .end-screen .desc{font-size:11px;color:#888;line-height:1.8;max-width:320px;}
-        .end-tag{font-size:8px;letter-spacing:2px;padding:3px 10px;border-radius:10px;display:inline-block;}
-        .end-bad{background:#f00;color:#fff;}
-        .end-neutral{background:#fa0;color:#000;}
-        .end-good{background:#0f0;color:#000;}
-        
-        .map-overlay{position:absolute;top:0;left:0;width:100%;height:100%;background:rgba(0,0,0,0.95);z-index:60;display:none;flex-direction:column;align-items:center;justify-content:center;}
-        .map-overlay.active{display:flex;}
-        .map-dot{width:8px;height:8px;background:var(--accent);border-radius:50%;position:absolute;animation:mapPulse 1.5s infinite;box-shadow:0 0 15px var(--accent);}
-        @keyframes mapPulse{0%,100%{transform:scale(1);}50%{transform:scale(2.5);opacity:0.3;}}
-        
-        .journal-btn{position:absolute;top:45px;right:10px;z-index:20;background:#000;border:1px solid #333;color:#888;width:30px;height:30px;border-radius:50%;cursor:pointer;font-size:14px;}
-        
-        .glitch-effect{animation:glitchText 0.15s infinite;}
-        @keyframes glitchText{0%,100%{transform:translate(0);}25%{transform:translate(-2px,1px);}50%{transform:translate(2px,-1px);}75%{transform:translate(-1px,-1px);}}
-        
-        .shake-effect{animation:shakeScreen 0.08s infinite;}
-        @keyframes shakeScreen{0%,100%{transform:translate(0);}25%{transform:translate(-3px,2px);}50%{transform:translate(3px,-2px);}75%{transform:translate(-2px,-3px);}}
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            background: #0a0a12;
+            color: #e0e0e0;
+            min-height: 100vh;
+            font-family: 'Cairo', 'Segoe UI', sans-serif;
+            padding: 16px;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+        }
+
+        .app {
+            max-width: 750px;
+            width: 100%;
+            background: #141420;
+            border-radius: 28px;
+            padding: 24px;
+            border: 1px solid rgba(255, 255, 255, 0.04);
+            box-shadow: 0 20px 60px rgba(0, 0, 0, 0.8);
+        }
+
+        .header {
+            text-align: center;
+            padding-bottom: 12px;
+            border-bottom: 2px solid rgba(0, 212, 255, 0.1);
+        }
+
+        .header .logo {
+            font-size: 28px;
+            font-weight: 900;
+            background: linear-gradient(135deg, #00d4ff, #7b2ffc);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            letter-spacing: 3px;
+            font-family: 'Orbitron', sans-serif;
+        }
+
+        .header .sub {
+            font-size: 11px;
+            color: #8899bb;
+            letter-spacing: 3px;
+            text-transform: uppercase;
+            margin-top: 2px;
+        }
+
+        .header .badge {
+            display: inline-block;
+            background: rgba(0, 212, 255, 0.08);
+            padding: 3px 16px;
+            border-radius: 20px;
+            font-size: 9px;
+            color: #00d4ff;
+            border: 1px solid rgba(0, 212, 255, 0.1);
+            margin-top: 4px;
+        }
+
+        .status-bar {
+            display: flex;
+            justify-content: space-between;
+            padding: 8px 14px;
+            background: rgba(0, 0, 0, 0.3);
+            border-radius: 12px;
+            margin: 8px 0;
+            flex-wrap: wrap;
+            gap: 4px;
+            border: 1px solid rgba(255, 255, 255, 0.03);
+        }
+
+        .status-bar .stat {
+            display: flex;
+            align-items: center;
+            gap: 4px;
+            font-size: 10px;
+            color: #667;
+        }
+
+        .status-bar .stat .value {
+            font-weight: 700;
+            color: #4ade80;
+        }
+
+        .lang-section {
+            display: flex;
+            gap: 8px;
+            margin: 8px 0;
+            flex-wrap: wrap;
+        }
+
+        .lang-section select {
+            flex: 1;
+            padding: 8px 12px;
+            background: rgba(255, 255, 255, 0.04);
+            border: 1px solid rgba(255, 255, 255, 0.06);
+            border-radius: 10px;
+            color: #e0e0e0;
+            font-size: 13px;
+            outline: none;
+            font-family: 'Cairo', sans-serif;
+            min-width: 80px;
+        }
+
+        .lang-section select:focus {
+            border-color: rgba(0, 212, 255, 0.2);
+        }
+
+        .lang-section select option {
+            background: #141420;
+        }
+
+        .lang-section .swap-btn {
+            padding: 8px 14px;
+            border: none;
+            border-radius: 10px;
+            background: rgba(0, 212, 255, 0.05);
+            color: #00d4ff;
+            cursor: pointer;
+            font-size: 18px;
+            transition: 0.3s;
+        }
+
+        .lang-section .swap-btn:hover {
+            background: rgba(0, 212, 255, 0.1);
+        }
+
+        .tabs {
+            display: flex;
+            gap: 4px;
+            margin: 8px 0;
+            border-bottom: 1px solid rgba(255, 255, 255, 0.03);
+            padding-bottom: 6px;
+        }
+
+        .tabs button {
+            padding: 6px 16px;
+            border: none;
+            border-radius: 8px 8px 0 0;
+            background: transparent;
+            color: #667;
+            font-size: 12px;
+            cursor: pointer;
+            transition: 0.3s;
+            font-family: 'Cairo', sans-serif;
+        }
+
+        .tabs button:hover {
+            color: #e0e0e0;
+        }
+
+        .tabs button.active {
+            color: #00d4ff;
+            background: rgba(0, 212, 255, 0.05);
+        }
+
+        .tab-content {
+            display: none;
+            animation: fadeIn 0.3s ease;
+        }
+
+        .tab-content.active {
+            display: block;
+        }
+
+        @keyframes fadeIn {
+            from {
+                opacity: 0;
+                transform: translateY(10px);
+            }
+            to {
+                opacity: 1;
+                transform: translateY(0);
+            }
+        }
+
+        textarea {
+            width: 100%;
+            padding: 12px 16px;
+            background: rgba(255, 255, 255, 0.04);
+            border: 1px solid rgba(255, 255, 255, 0.06);
+            border-radius: 12px;
+            color: #e0e0e0;
+            font-size: 14px;
+            line-height: 1.8;
+            resize: vertical;
+            outline: none;
+            font-family: 'Cairo', sans-serif;
+            min-height: 100px;
+        }
+
+        textarea:focus {
+            border-color: rgba(0, 212, 255, 0.2);
+        }
+
+        textarea::placeholder {
+            color: #445;
+        }
+
+        .char-count {
+            text-align: right;
+            font-size: 11px;
+            color: #445;
+            padding: 4px 0;
+        }
+
+        .char-count.warning {
+            color: #fbbf24;
+        }
+
+        .char-count.danger {
+            color: #f87171;
+        }
+
+        .translate-btn {
+            width: 100%;
+            padding: 12px;
+            margin-top: 10px;
+            border: none;
+            border-radius: 12px;
+            background: linear-gradient(135deg, #00d4ff, #7b2ffc);
+            color: #fff;
+            font-weight: 700;
+            font-size: 15px;
+            cursor: pointer;
+            transition: 0.3s;
+            font-family: 'Cairo', sans-serif;
+        }
+
+        .translate-btn:hover:not(:disabled) {
+            transform: scale(1.02);
+            box-shadow: 0 4px 30px rgba(0, 212, 255, 0.2);
+        }
+
+        .translate-btn:disabled {
+            opacity: 0.5;
+            cursor: not-allowed;
+        }
+
+        .result-box {
+            margin-top: 10px;
+            padding: 12px 16px;
+            background: rgba(0, 0, 0, 0.2);
+            border-radius: 12px;
+            border: 1px solid rgba(255, 255, 255, 0.03);
+            min-height: 50px;
+            color: #e0e0e0;
+            font-size: 14px;
+            line-height: 1.8;
+            white-space: pre-wrap;
+            word-wrap: break-word;
+            max-height: 300px;
+            overflow-y: auto;
+        }
+
+        .result-box .placeholder {
+            color: #445;
+        }
+
+        .result-box::-webkit-scrollbar {
+            width: 3px;
+        }
+        .result-box::-webkit-scrollbar-thumb {
+            background: rgba(255, 255, 255, 0.05);
+            border-radius: 4px;
+        }
+
+        /* ============================================================
+           رفع الصور
+           ============================================================ */
+        .upload-area {
+            border: 2px dashed rgba(0, 212, 255, 0.15);
+            border-radius: 16px;
+            padding: 30px 20px;
+            text-align: center;
+            cursor: pointer;
+            transition: 0.3s;
+            margin: 8px 0;
+        }
+
+        .upload-area:hover {
+            border-color: rgba(0, 212, 255, 0.3);
+            background: rgba(0, 212, 255, 0.03);
+        }
+
+        .upload-area .icon {
+            font-size: 48px;
+            display: block;
+            margin-bottom: 8px;
+        }
+
+        .upload-area .text {
+            color: #667;
+            font-size: 14px;
+        }
+
+        .upload-area .text strong {
+            color: #00d4ff;
+        }
+
+        .upload-area input[type="file"] {
+            display: none;
+        }
+
+        .image-preview {
+            margin: 10px 0;
+            max-width: 100%;
+            border-radius: 12px;
+            overflow: hidden;
+            display: none;
+            border: 1px solid rgba(255, 255, 255, 0.03);
+        }
+
+        .image-preview img {
+            width: 100%;
+            max-height: 250px;
+            object-fit: contain;
+            display: block;
+        }
+
+        .image-preview.show {
+            display: block;
+        }
+
+        .ocr-status {
+            padding: 8px 12px;
+            border-radius: 8px;
+            margin: 8px 0;
+            font-size: 12px;
+            display: none;
+        }
+
+        .ocr-status.show {
+            display: block;
+        }
+
+        .ocr-status.loading {
+            background: rgba(251, 191, 36, 0.05);
+            color: #fbbf24;
+            border: 1px solid rgba(251, 191, 36, 0.1);
+        }
+
+        .ocr-status.success {
+            background: rgba(74, 222, 128, 0.05);
+            color: #4ade80;
+            border: 1px solid rgba(74, 222, 128, 0.1);
+        }
+
+        .ocr-status.error {
+            background: rgba(248, 113, 113, 0.05);
+            color: #f87171;
+            border: 1px solid rgba(248, 113, 113, 0.1);
+        }
+
+        .actions {
+            display: flex;
+            gap: 6px;
+            margin-top: 8px;
+            flex-wrap: wrap;
+        }
+
+        .actions button {
+            padding: 6px 14px;
+            border: none;
+            border-radius: 8px;
+            background: rgba(255, 255, 255, 0.03);
+            color: #667;
+            font-size: 11px;
+            cursor: pointer;
+            transition: 0.3s;
+            font-family: 'Cairo', sans-serif;
+            border: 1px solid rgba(255, 255, 255, 0.03);
+        }
+
+        .actions button:hover {
+            background: rgba(255, 255, 255, 0.06);
+            color: #e0e0e0;
+        }
+
+        .actions button.speak-btn {
+            background: rgba(0, 212, 255, 0.05);
+            color: #00d4ff;
+            border-color: rgba(0, 212, 255, 0.05);
+        }
+
+        .actions button.speak-btn:hover {
+            background: rgba(0, 212, 255, 0.1);
+        }
+
+        .history {
+            margin-top: 10px;
+            max-height: 120px;
+            overflow-y: auto;
+            border-top: 1px solid rgba(255, 255, 255, 0.02);
+            padding-top: 6px;
+        }
+
+        .history::-webkit-scrollbar {
+            width: 3px;
+        }
+        .history::-webkit-scrollbar-thumb {
+            background: rgba(255, 255, 255, 0.05);
+            border-radius: 4px;
+        }
+
+        .history-item {
+            display: flex;
+            justify-content: space-between;
+            padding: 3px 8px;
+            background: rgba(255, 255, 255, 0.02);
+            border-radius: 6px;
+            margin-bottom: 2px;
+            font-size: 10px;
+            color: #667;
+        }
+
+        .history-item .orig {
+            color: #889;
+            max-width: 35%;
+            overflow: hidden;
+            text-overflow: ellipsis;
+            white-space: nowrap;
+        }
+
+        .history-item .trans {
+            color: #00d4ff;
+            max-width: 35%;
+            overflow: hidden;
+            text-overflow: ellipsis;
+            white-space: nowrap;
+        }
+
+        .api-info {
+            margin-top: 10px;
+            padding: 8px 12px;
+            background: rgba(248, 113, 113, 0.05);
+            border-radius: 10px;
+            border: 1px solid rgba(248, 113, 113, 0.1);
+            text-align: center;
+            font-size: 10px;
+            color: #889;
+        }
+
+        .api-info strong {
+            color: #f87171;
+        }
+
+        .api-info .status-ok {
+            color: #4ade80;
+        }
+
+        .loading-overlay {
+            display: none;
+            position: fixed;
+            top: 0;
+            left: 0;
+            right: 0;
+            bottom: 0;
+            background: rgba(0, 0, 0, 0.7);
+            z-index: 999;
+            justify-content: center;
+            align-items: center;
+            flex-direction: column;
+            gap: 12px;
+        }
+
+        .loading-overlay.show {
+            display: flex;
+        }
+
+        .loading-overlay .spinner {
+            width: 50px;
+            height: 50px;
+            border: 4px solid rgba(255, 255, 255, 0.03);
+            border-top-color: #00d4ff;
+            border-radius: 50%;
+            animation: spin 0.8s linear infinite;
+        }
+
+        @keyframes spin {
+            to {
+                transform: rotate(360deg);
+            }
+        }
+
+        .loading-overlay .text {
+            color: #e0e0e0;
+            font-size: 16px;
+            font-family: 'Cairo', sans-serif;
+        }
+
+        .progress-container {
+            width: 80%;
+            max-width: 400px;
+            height: 4px;
+            background: rgba(255, 255, 255, 0.05);
+            border-radius: 4px;
+            overflow: hidden;
+        }
+
+        .progress-container .progress-bar {
+            height: 100%;
+            width: 0%;
+            background: linear-gradient(90deg, #00d4ff, #7b2ffc);
+            border-radius: 4px;
+            transition: width 0.3s;
+        }
+
+        @media (max-width: 520px) {
+            .app {
+                padding: 12px;
+            }
+
+            .header .logo {
+                font-size: 22px;
+            }
+
+            textarea {
+                font-size: 13px;
+                min-height: 80px;
+            }
+
+            .lang-section select {
+                font-size: 12px;
+                padding: 6px 10px;
+            }
+
+            .tabs button {
+                font-size: 10px;
+                padding: 4px 10px;
+            }
+
+            .upload-area {
+                padding: 20px;
+            }
+
+            .upload-area .icon {
+                font-size: 36px;
+            }
+
+            .status-bar {
+                font-size: 9px;
+                padding: 6px 10px;
+            }
+        }
     </style>
 </head>
 <body>
 
-<div id="phone">
-    <div class="phone-notch"></div>
-    <div class="phone-status">
-        <span class="time-display" id="timeDisplay">9:41 PM</span>
-        <span class="icons">📶 🔋 85%</span>
+    <!-- LOADING OVERLAY -->
+    <div class="loading-overlay" id="loadingOverlay">
+        <div class="spinner"></div>
+        <div class="text" id="loadingText">⏳ جاري الترجمة...</div>
+        <div class="progress-container">
+            <div class="progress-bar" id="progressBar"></div>
+        </div>
     </div>
-    
-    <!-- زر المذكرات -->
-    <button class="journal-btn" id="journalBtn" onclick="openJournal()" style="display:none;">📝</button>
-    
-    <!-- الشاشة الرئيسية -->
-    <div class="screen active" id="homeScreen">
-        <div class="overlay active" style="position:relative;background:transparent;">
-            <div class="icon">🌑</div>
-            <div class="title">THE SHADOW</div>
-            <div class="text">
-                لعبة رعب نفسي مبنية على أحداث حقيقية.<br>
-                مجرم حقيقي كان يراسل ضحاياه<br>
-                ويحصل على عناوينهم.<br>
-                هذه قصتك. خياراتك. نهايتك.
+
+    <div class="app">
+        <!-- HEADER -->
+        <div class="header">
+            <div class="logo">🌍 LEX-Ω</div>
+            <div class="sub">المترجم العالمي الفوري</div>
+            <div class="badge">✨ نص · صورة · صوت</div>
+        </div>
+
+        <!-- STATUS -->
+        <div class="status-bar">
+            <div class="stat">
+                <span>🔗</span>
+                <span>API:</span>
+                <span class="value" id="apiStatus">🔄 جاري الاتصال...</span>
             </div>
-            <div class="warning">⚠️ 7 نهايات | 12 مرحلة | مؤثرات كاملة ⚠️</div>
-            <button class="choice-btn" onclick="startGame()" style="font-size:12px;padding:10px 25px;">▶️ ابدأ اللعبة</button>
-            <div style="color:#333;font-size:7px;margin-top:10px;">ø ASAØ // THE SHADOW: FULL TRUTH // v2.0</div>
-        </div>
-    </div>
-    
-    <!-- شاشة المحادثة -->
-    <div class="screen" id="chatScreen">
-        <div class="chat-header">
-            <div class="avatar">👤</div>
-            <div class="info">
-                <div class="name" id="chatName">الظل</div>
-                <div class="status online" id="chatStatus">متصل الآن</div>
+            <div class="stat">
+                <span>📊</span>
+                <span>الترجمات:</span>
+                <span class="value" id="transCount">0</span>
+            </div>
+            <div class="stat">
+                <span>🌐</span>
+                <span>اللغات:</span>
+                <span class="value">50+</span>
             </div>
         </div>
-        <div class="chat-body" id="chatBody"></div>
-        <div class="choice-area" id="choiceArea"></div>
-        <div class="chat-input" id="inputArea" style="display:none;">
-            <input type="text" id="msgInput" placeholder="اكتب..." onkeydown="if(event.key==='Enter')sendMessage()">
-            <button onclick="sendMessage()">▶</button>
+
+        <!-- LANGUAGES -->
+        <div class="lang-section">
+            <select id="sourceLang">
+                <option value="auto">🔍 تلقائي</option>
+                <option value="en">🇬🇧 English</option>
+                <option value="ar" selected>🇸🇦 العربية</option>
+                <option value="fr">🇫🇷 Français</option>
+                <option value="es">🇪🇸 Español</option>
+                <option value="de">🇩🇪 Deutsch</option>
+                <option value="it">🇮🇹 Italiano</option>
+                <option value="pt">🇵🇹 Português</option>
+                <option value="ru">🇷🇺 Русский</option>
+                <option value="zh">🇨🇳 中文</option>
+                <option value="ja">🇯🇵 日本語</option>
+                <option value="ko">🇰🇷 한국어</option>
+                <option value="hi">🇮🇳 हिंदी</option>
+                <option value="tr">🇹🇷 Türkçe</option>
+                <option value="fa">🇮🇷 فارسی</option>
+                <option value="ur">🇵🇰 اردو</option>
+                <option value="he">🇮🇱 עברית</option>
+            </select>
+
+            <button class="swap-btn" id="swapBtn">⇄</button>
+
+            <select id="targetLang">
+                <option value="en">🇬🇧 English</option>
+                <option value="ar" selected>🇸🇦 العربية</option>
+                <option value="fr">🇫🇷 Français</option>
+                <option value="es">🇪🇸 Español</option>
+                <option value="de">🇩🇪 Deutsch</option>
+                <option value="it">🇮🇹 Italiano</option>
+                <option value="pt">🇵🇹 Português</option>
+                <option value="ru">🇷🇺 Русский</option>
+                <option value="zh">🇨🇳 中文</option>
+                <option value="ja">🇯🇵 日本語</option>
+                <option value="ko">🇰🇷 한국어</option>
+                <option value="hi">🇮🇳 हिंदी</option>
+                <option value="tr">🇹🇷 Türkçe</option>
+                <option value="fa">🇮🇷 فارسی</option>
+                <option value="ur">🇵🇰 اردو</option>
+                <option value="he">🇮🇱 עברית</option>
+            </select>
+        </div>
+
+        <!-- TABS -->
+        <div class="tabs">
+            <button class="active" data-tab="text">📝 نص</button>
+            <button data-tab="image">🖼️ صورة</button>
+        </div>
+
+        <!-- ============================================================
+        TAB: TEXT
+        ============================================================ -->
+        <div class="tab-content active" id="tab-text">
+            <textarea id="sourceText" placeholder="اكتب أو الصق النص هنا للترجمة..."></textarea>
+            <div class="char-count" id="charCount">0 حرف</div>
+            <button class="translate-btn" id="translateBtn">🌐 ترجمة فورية</button>
+
+            <div class="result-box" id="resultBox">
+                <span class="placeholder">ستظهر الترجمة هنا...</span>
+            </div>
+
+            <div class="actions">
+                <button class="speak-btn" id="speakBtn">🔊 استماع</button>
+                <button id="copyBtn">📋 نسخ</button>
+                <button id="clearBtn">🗑️ مسح</button>
+                <button id="saveBtn">💾 حفظ</button>
+            </div>
+        </div>
+
+        <!-- ============================================================
+        TAB: IMAGE
+        ============================================================ -->
+        <div class="tab-content" id="tab-image">
+            <div class="upload-area" id="uploadArea">
+                <span class="icon">🖼️</span>
+                <div class="text">
+                    <strong>اضغط هنا</strong> لاختيار صورة<br>
+                    <span style="font-size:11px;color:#445;">سيتم استخراج النص وترجمته</span>
+                </div>
+                <input type="file" id="imageInput" accept="image/*">
+            </div>
+
+            <div class="image-preview" id="imagePreview">
+                <img id="previewImage" alt="معاينة الصورة">
+            </div>
+
+            <div class="ocr-status" id="ocrStatus"></div>
+
+            <div class="result-box" id="imageResultBox">
+                <span class="placeholder">سيظهر النص المستخرج من الصورة هنا...</span>
+            </div>
+
+            <button class="translate-btn" id="imageTranslateBtn">🔄 استخراج وترجمة النص من الصورة</button>
+
+            <div class="actions">
+                <button class="speak-btn" id="imageSpeakBtn">🔊 استماع</button>
+                <button id="imageCopyBtn">📋 نسخ</button>
+                <button id="imageClearBtn">🗑️ مسح</button>
+            </div>
+        </div>
+
+        <!-- HISTORY -->
+        <div class="history" id="historyContainer">
+            <div style="text-align:center;color:#445;font-size:11px;padding:8px 0;">📚 تاريخ الترجمات</div>
+        </div>
+
+        <!-- API INFO -->
+        <div class="api-info">
+            <strong>🔴 تنبيه:</strong>
+            يستخدم هذا التطبيق
+            <span class="status-ok">MyMemory API</span>
+            للترجمة.
+            <br>
+            <span style="color:#445;font-size:9px;">⚖️ "السلطة المطلقة = المسؤولية المطلقة"</span>
         </div>
     </div>
-    
-    <!-- شاشة النهاية -->
-    <div class="screen" id="endScreen">
-        <div class="end-screen" id="endContent"></div>
-    </div>
-    
-    <!-- خريطة -->
-    <div class="map-overlay" id="mapOverlay">
-        <div style="color:#fff;font-size:14px;margin-bottom:15px;">📍 موقعك الحالي</div>
-        <div style="width:200px;height:200px;background:#0a0a0a;border:1px solid #333;border-radius:8px;position:relative;">
-            <div class="map-dot" style="top:50%;left:50%;"></div>
-            <div style="position:absolute;bottom:5px;left:5px;color:#f00;font-size:7px;" id="mapAddress">--</div>
-        </div>
-        <button class="choice-btn" onclick="closeMap()" style="margin-top:15px;">إغلاق</button>
-    </div>
-</div>
 
-<script>
-// ============================================================
-// ø ASAØ | THE SHADOW: FULL TRUTH | 10,000+ سطر
-// ============================================================
+    <script>
+        // ============================================================
+        // 🌍 LEX-Ω - المترجم العالمي الفوري (مع دعم النصوص الطويلة)
+        // ============================================================
 
-// --- الحالة العامة ---
-let STATE={
-    playerName:'',playerAddress:'',playerAge:'',playerJob:'',
-    trust:50,fear:15,suspicion:10,phase:0,msgCount:0,
-    revealedTruth:false,gaveAddress:false,gaveName:false,
-    timeOfDay:'night',dayCount:1,batteryLevel:85,
-    journalEntries:[],mapData:{lat:0,lng:0},
-    shadowMood:'neutral',shadowAggression:0,
-    visitedLocations:[],phoneCalls:0,
-    ending:'',endingType:'',
-    audioCtx:null,soundEnabled:true,
-    glitchActive:false,shakeActive:false,
-    randomEvents:[],completedEvents:[],
-    otherVictims:['أحمد','سارة','محمد','ليلى','عمر'],
-    currentVictim:null
-};
+        (function() {
+            'use strict';
 
-// --- عناصر ---
-const chatBody=document.getElementById('chatBody');
-const choiceArea=document.getElementById('choiceArea');
-const inputArea=document.getElementById('inputArea');
-const msgInput=document.getElementById('msgInput');
-const chatName=document.getElementById('chatName');
-const chatStatus=document.getElementById('chatStatus');
-const timeDisplay=document.getElementById('timeDisplay');
-const journalBtn=document.getElementById('journalBtn');
-const mapOverlay=document.getElementById('mapOverlay');
-const mapAddress=document.getElementById('mapAddress');
+            // ============================================================
+            // عناصر DOM
+            // ============================================================
+            const sourceText = document.getElementById('sourceText');
+            const resultBox = document.getElementById('resultBox');
+            const charCount = document.getElementById('charCount');
+            const translateBtn = document.getElementById('translateBtn');
+            const swapBtn = document.getElementById('swapBtn');
+            const sourceLang = document.getElementById('sourceLang');
+            const targetLang = document.getElementById('targetLang');
+            const speakBtn = document.getElementById('speakBtn');
+            const copyBtn = document.getElementById('copyBtn');
+            const clearBtn = document.getElementById('clearBtn');
+            const saveBtn = document.getElementById('saveBtn');
+            const historyContainer = document.getElementById('historyContainer');
+            const transCount = document.getElementById('transCount');
+            const apiStatus = document.getElementById('apiStatus');
+            const loadingOverlay = document.getElementById('loadingOverlay');
+            const loadingText = document.getElementById('loadingText');
+            const progressBar = document.getElementById('progressBar');
 
-// --- تحديث الوقت ---
-function updateTime(){
-    const times={morning:'7:15 AM',noon:'12:30 PM',afternoon:'3:45 PM',evening:'6:20 PM',night:'9:41 PM',late:'2:17 AM',dawn:'4:55 AM'};
-    timeDisplay.textContent=times[STATE.timeOfDay]||'9:41 PM';
-}
-updateTime();
+            // عناصر الصورة
+            const imageInput = document.getElementById('imageInput');
+            const uploadArea = document.getElementById('uploadArea');
+            const imagePreview = document.getElementById('imagePreview');
+            const previewImage = document.getElementById('previewImage');
+            const ocrStatus = document.getElementById('ocrStatus');
+            const imageResultBox = document.getElementById('imageResultBox');
+            const imageTranslateBtn = document.getElementById('imageTranslateBtn');
+            const imageSpeakBtn = document.getElementById('imageSpeakBtn');
+            const imageCopyBtn = document.getElementById('imageCopyBtn');
+            const imageClearBtn = document.getElementById('imageClearBtn');
 
-// --- صوت ---
-function initAudio(){try{STATE.audioCtx=new(window.AudioContext||window.webkitAudioContext)();}catch(e){}}
-function playSound(freq,dur,type='sine',vol=0.08){
-    if(!STATE.soundEnabled||!STATE.audioCtx)return;
-    try{
-        const o=STATE.audioCtx.createOscillator();
-        const g=STATE.audioCtx.createGain();
-        o.type=type;o.frequency.setValueAtTime(freq,STATE.audioCtx.currentTime);
-        g.gain.setValueAtTime(vol,STATE.audioCtx.currentTime);
-        g.gain.exponentialRampToValueAtTime(0.001,STATE.audioCtx.currentTime+dur);
-        o.connect(g);g.connect(STATE.audioCtx.destination);
-        o.start();o.stop(STATE.audioCtx.currentTime+dur);
-    }catch(e){}
-}
-function msgSound(){playSound(500+Math.random()*200,0.08,'sine',0.04);}
-function dangerSound(){playSound(60,1.5,'sawtooth',0.3);}
-function alertSound(){playSound(800,0.3,'square',0.12);}
-function successSound(){playSound(600,0.2,'sine',0.08);playSound(900,0.15,'sine',0.06);}
+            const tabs = document.querySelectorAll('.tabs button');
+            const tabContents = document.querySelectorAll('.tab-content');
 
-// --- إضافة رسالة ---
-function addMsg(sender,text,type='them',delay=0,extra=''){
-    setTimeout(()=>{
-        const m=document.createElement('div');
-        m.className='msg '+type+(STATE.glitchActive&&type==='them'?' glitch-effect':'');
-        if(sender)m.innerHTML='<div class="sender">'+sender+'</div>';
-        m.innerHTML+='<div>'+text+'</div>';
-        if(extra)m.innerHTML+=extra;
-        m.innerHTML+='<div class="time">'+new Date().toLocaleTimeString('ar-SA',{hour:'2-digit',minute:'2-digit'})+'</div>';
-        chatBody.appendChild(m);
-        chatBody.scrollTop=chatBody.scrollHeight;
-        if(type==='them'&&sender!=='SYSTEM')msgSound();
-    },delay);
-}
+            let translationHistory = [];
+            let currentTranslation = '';
 
-// --- إضافة صورة ---
-function addImage(sender,src,type='them',delay=0){
-    setTimeout(()=>{
-        const m=document.createElement('div');
-        m.className='msg '+type;
-        if(sender)m.innerHTML='<div class="sender">'+sender+'</div>';
-        m.innerHTML+='<img src="'+src+'" alt="صورة">';
-        m.innerHTML+='<div class="time">'+new Date().toLocaleTimeString('ar-SA',{hour:'2-digit',minute:'2-digit'})+'</div>';
-        chatBody.appendChild(m);
-        chatBody.scrollTop=chatBody.scrollHeight;
-        msgSound();
-    },delay);
-}
+            // ============================================================
+            // 📝 تحديث عدد الأحرف
+            // ============================================================
+            sourceText.addEventListener('input', () => {
+                const len = sourceText.value.length;
+                charCount.textContent = len + ' حرف';
+                charCount.className = 'char-count';
+                if (len > 450) charCount.className = 'char-count warning';
+                if (len > 900) charCount.className = 'char-count danger';
+            });
 
-// --- خيارات ---
-function showChoices(choices){
-    choiceArea.innerHTML='';
-    choices.forEach(c=>{
-        const b=document.createElement('button');
-        b.className='choice-btn'+(c.danger?' danger':c.safe?' safe':'');
-        b.textContent=c.text;
-        b.onclick=()=>{choiceArea.innerHTML='';c.action();};
-        choiceArea.appendChild(b);
-    });
-}
+            // ============================================================
+            // 🌐 ترجمة النص (مع تقسيم النصوص الطويلة)
+            // ============================================================
+            async function translateText(text, from, to) {
+                if (!text || text.trim().length === 0) {
+                    throw new Error('النص فارغ');
+                }
 
-// --- إدخال ---
-function showInput(){inputArea.style.display='flex';msgInput.value='';msgInput.focus();}
-function hideInput(){inputArea.style.display='none';}
-function sendMessage(){
-    const t=msgInput.value.trim();
-    if(!t)return;
-    addMsg('أنت',t,'me');
-    msgInput.value='';
-    STATE.msgCount++;
-    handleInput(t);
-}
+                // MyMemory API يسمح بـ 500 حرف كحد أقصى
+                const MAX_CHARS = 450; // استخدام 450 لتكون آمنة
 
-// --- معالجة الإدخال ---
-function handleInput(text){
-    if(STATE.phase===1&&!STATE.playerName){
-        STATE.playerName=text;STATE.gaveName=true;hideInput();
-        setTimeout(()=>phase2(),600);
-    }else if(STATE.phase===2&&!STATE.playerAge){
-        STATE.playerAge=text;hideInput();
-        setTimeout(()=>phase3(),600);
-    }else if(STATE.phase===3&&!STATE.playerJob){
-        STATE.playerJob=text;hideInput();
-        setTimeout(()=>phase4(),600);
-    }else if(STATE.phase===5&&!STATE.playerAddress){
-        STATE.playerAddress=text;STATE.gaveAddress=true;STATE.trust-=20;STATE.fear+=15;hideInput();
-        addMsg('SYSTEM','⚠️ لقد أعطيت عنوانك لشخص غريب!','system',300);
-        setTimeout(()=>phase6(),1000);
-    }else if(STATE.phase>=6){
-        STATE.trust-=3;hideInput();
-        setTimeout(()=>continueChat(),500);
-    }
-}
+                // إذا كان النص قصيراً، ترجمه مباشرة
+                if (text.length <= MAX_CHARS) {
+                    return await translateChunk(text, from, to);
+                }
 
-// --- المرحلة 1: البداية ---
-function startGame(){
-    document.getElementById('homeScreen').classList.remove('active');
-    document.getElementById('chatScreen').classList.add('active');
-    journalBtn.style.display='block';
-    initAudio();
-    STATE.phase=1;
-    
-    addMsg('غريب','مرحباً...','them',400);
-    addMsg('غريب','هل هذا رقم صحيح؟','them',900);
-    addMsg('غريب','أنا أبحث عن شخص أتحدث معه.','them',1400);
-    
-    setTimeout(()=>{
-        showChoices([
-            {text:'👋 نعم. من أنت؟',action:()=>{addMsg('أنت','نعم. من أنت؟','me');setTimeout(()=>askName(),500);}},
-            {text:'🤔 من أعطاك رقمي؟',action:()=>{addMsg('أنت','من أعطاك رقمي؟','me');STATE.suspicion+=10;setTimeout(()=>askName(),500);}},
-            {text:'🚫 رقم خاطئ.',action:()=>{addMsg('أنت','رقم خاطئ.','me');setTimeout(()=>ending_ignored(),800);},danger:true}
-        ]);
-    },2000);
-}
+                // تقسيم النص الطويل إلى أجزاء
+                const chunks = [];
+                let remaining = text;
 
-function askName(){
-    addMsg('غريب','لا يهم من أنا. فقط اتصل بي بـ "الظل".','them',400);
-    addMsg('غريب','ما اسمك؟','them',900);
-    showInput();
-}
+                while (remaining.length > 0) {
+                    // البحث عن مكان مناسب للتقسيم (نهاية جملة)
+                    let endIndex = Math.min(MAX_CHARS, remaining.length);
 
-// --- المرحلة 2: الاسم ---
-function phase2(){
-    STATE.phase=2;
-    addMsg('الظل',''+STATE.playerName+'... اسم جميل.','them',400);
-    addMsg('الظل','كم عمرك؟','them',900);
-    showInput();
-}
+                    if (endIndex < remaining.length) {
+                        // البحث عن أقرب نقطة أو فاصلة أو مسافة
+                        const punctuation = ['.', '؟', '!', '،', ';', '\n', ' '];
+                        let found = false;
 
-// --- المرحلة 3: العمر ---
-function phase3(){
-    STATE.phase=3;
-    addMsg('الظل',''+STATE.playerAge+' سنة. عمر مناسب.','them',400);
-    
-    if(parseInt(STATE.playerAge)<18){
-        addMsg('الظل','صغير جداً. هذا... مثير للاهتمام.','them',900);
-        STATE.shadowAggression+=15;
-        STATE.fear+=10;
-    }else if(parseInt(STATE.playerAge)>40){
-        addMsg('الظل','كبير. لديك خبرة في الحياة.','them',900);
-        STATE.shadowAggression-=5;
-    }
-    
-    addMsg('الظل','ماذا تعمل؟','them',1400);
-    showInput();
-}
+                        for (let i = endIndex; i > Math.max(0, endIndex - 50); i--) {
+                            if (punctuation.includes(remaining[i])) {
+                                endIndex = i + 1;
+                                found = true;
+                                break;
+                            }
+                        }
 
-// --- المرحلة 4: العمل ---
-function phase4(){
-    STATE.phase=4;
-    addMsg('الظل',''+STATE.playerJob+'... مثير للاهتمام.','them',400);
-    addMsg('الظل','أنا لا أعمل. لدي... وقت فراغ كثير.','them',900);
-    addMsg('الظل','هل تعيش وحدك؟','them',1400);
-    
-    setTimeout(()=>{
-        showChoices([
-            {text:'😊 نعم. أعيش وحدي.',action:()=>{addMsg('أنت','نعم. أعيش وحدي.','me');STATE.shadowAggression+=20;STATE.fear+=10;setTimeout(()=>phase5_intro(),500);}},
-            {text:'👨‍👩‍👧 لا. مع عائلتي.',action:()=>{addMsg('أنت','لا. مع عائلتي.','me');STATE.shadowAggression-=10;setTimeout(()=>phase5_intro(),500);},safe:true},
-            {text:'😨 لماذا تسأل؟',action:()=>{addMsg('أنت','لماذا تسأل؟','me');STATE.suspicion+=15;setTimeout(()=>phase5_intro(),500);}}
-        ]);
-    },1900);
-}
+                        if (!found) {
+                            // إذا لم نجد، نقسم على مسافة
+                            for (let i = endIndex; i > Math.max(0, endIndex - 30); i--) {
+                                if (remaining[i] === ' ') {
+                                    endIndex = i + 1;
+                                    found = true;
+                                    break;
+                                }
+                            }
+                        }
 
-// --- المرحلة 5: العنوان ---
-function phase5_intro(){
-    STATE.phase=5;
-    addMsg('الظل','أنا فقط أتعرف عليك.','them',400);
-    addMsg('الظل','أين تسكن؟','them',900);
-    addMsg('الظل','فقط المدينة والشارع. لا شيء دقيق.','them',1300);
-    addMsg('SYSTEM','⚠️ لا تعطِ عنوانك الحقيقي! يمكنك كتابة عنوان وهمي.','system',1600);
-    
-    setTimeout(()=>{
-        showChoices([
-            {text:'📍 إعطاء عنوان حقيقي',action:()=>{showInput();},danger:true},
-            {text:'🏠 إعطاء عنوان وهمي',action:()=>{STATE.playerAddress='شارع النجاح، مدينة السلام';STATE.gaveAddress=false;addMsg('أنت','شارع النجاح، مدينة السلام','me');STATE.trust+=5;setTimeout(()=>phase6_fake(),600);},safe:true},
-            {text:'🚫 رفض الإجابة',action:()=>{addMsg('أنت','لن أعطيك عنواني.','me');STATE.fear-=5;setTimeout(()=>phase6_refused(),600);}}
-        ]);
-    },2000);
-}
+                        if (!found) {
+                            endIndex = MAX_CHARS;
+                        }
+                    }
 
-// --- المرحلة 6: ما بعد العنوان ---
-function phase6(){
-    STATE.phase=6;
-    hideInput();
-    addMsg('الظل',''+STATE.playerAddress+'...','them',400);
-    addMsg('الظل','أعرف هذا المكان.','them',900);
-    addMsg('الظل','هناك... مطعم قريب. أليس كذلك؟','them',1400);
-    STATE.fear+=25;
-    STATE.shadowAggression+=30;
-    mapAddress.textContent=STATE.playerAddress;
-    
-    setTimeout(()=>{
-        showChoices([
-            {text:'😨 كيف تعرف؟',action:()=>{addMsg('أنت','كيف تعرف؟','me');setTimeout(()=>revealKnowledge(),600);}},
-            {text:'😰 نعم... هناك مطعم.',action:()=>{addMsg('أنت','نعم... هناك مطعم.','me');setTimeout(()=>revealKnowledge(),600);}},
-            {text:'🚫 أنت تكذب.',action:()=>{addMsg('أنت','أنت تكذب.','me');STATE.trust-=10;setTimeout(()=>revealKnowledge(),600);}}
-        ]);
-    },1900);
-}
+                    chunks.push(remaining.substring(0, endIndex).trim());
+                    remaining = remaining.substring(endIndex).trim();
+                }
 
-function phase6_fake(){
-    STATE.phase=6;
-    hideInput();
-    addMsg('الظل',''+STATE.playerAddress+'...','them',400);
-    addMsg('الظل','لا أعرف هذا المكان.','them',900);
-    addMsg('الظل','ربما... تكذب علي؟','them',1400);
-    STATE.trust-=10;
-    
-    setTimeout(()=>{
-        showChoices([
-            {text:'😰 لا. هذا عنواني.',action:()=>{addMsg('أنت','لا. هذا عنواني.','me');setTimeout(()=>continueChat(),500);}},
-            {text:'🤐 لا يهم.',action:()=>{addMsg('أنت','لا يهم.','me');setTimeout(()=>continueChat(),500);}}
-        ]);
-    },1800);
-}
+                // ترجمة كل جزء
+                const translatedChunks = [];
+                let totalChunks = chunks.length;
 
-function phase6_refused(){
-    STATE.phase=6;
-    hideInput();
-    addMsg('الظل','حسناً. لا بأس.','them',400);
-    addMsg('الظل','سأعرف عنوانك بطريقة أخرى.','them',900);
-    addMsg('الظل','الإنترنت... مليء بالمعلومات.','them',1400);
-    STATE.fear+=20;
-    STATE.shadowAggression+=15;
-    setTimeout(()=>continueChat(),1800);
-}
+                for (let i = 0; i < totalChunks; i++) {
+                    const progress = Math.round(((i + 1) / totalChunks) * 100);
+                    loadingText.textContent = `⏳ جاري ترجمة الجزء ${i+1} من ${totalChunks}...`;
+                    progressBar.style.width = progress + '%';
 
-// --- كشف المعرفة ---
-function revealKnowledge(){
-    STATE.revealedTruth=true;
-    addMsg('الظل','أنا أعرف الكثير عنك.','them',400);
-    addMsg('الظل',''+STATE.playerName+'... '+STATE.playerAge+' سنة... '+STATE.playerJob+'...','them',900);
-    addMsg('الظل','تعيش في '+STATE.playerAddress+'...','them',1400);
-    addMsg('الظل','هل تريد أن تعرف كيف أعرف؟','them',1900);
-    STATE.fear=80;
-    STATE.shadowAggression=50;
-    
-    setTimeout(()=>{
-        showChoices([
-            {text:'😨 كيف؟',action:()=>{addMsg('أنت','كيف؟','me');setTimeout(()=>truthBomb(),600);}},
-            {text:'🏃 أنا ذاهب.',action:()=>{addMsg('أنت','أنا ذاهب.','me');setTimeout(()=>ending_escape(),800);},safe:true},
-            {text:'💀 لا أريد معرفة.',action:()=>{addMsg('أنت','لا أريد معرفة.','me');setTimeout(()=>continueChat(),500);}}
-        ]);
-    },2400);
-}
+                    const translated = await translateChunk(chunks[i], from, to);
+                    translatedChunks.push(translated);
+                }
 
-// --- قنبلة الحقيقة ---
-function truthBomb(){
-    addMsg('الظل','لأنني... لست شخصاً عادياً.','them',400);
-    addMsg('الظل','لقد فعلت هذا من قبل.','them',900);
-    addMsg('الظل',''+STATE.otherVictims[Math.floor(Math.random()*STATE.otherVictims.length)]+'... كان ضحيتي الأخيرة.','them',1400);
-    addMsg('الظل','أعطاني عنوانه. مثلما أعطيتني عنوانك.','them',1900);
-    addMsg('الظل','وهو الآن... ليس هنا.','them',2400);
-    STATE.fear=100;
-    STATE.shadowAggression=80;
-    
-    dangerSound();
-    document.getElementById('chatScreen').classList.add('shake-effect');
-    setTimeout(()=>document.getElementById('chatScreen').classList.remove('shake-effect'),1200);
-    
-    setTimeout(()=>{
-        addMsg('SYSTEM','🚨 خطر! هذا الشخص مجرم حقيقي!','system',300);
-        showChoices([
-            {text:'🏃 اهرب فوراً!',action:()=>ending_escape(),safe:true},
-            {text:'📞 اتصل بالشرطة!',action:()=>ending_police()},
-            {text:'🔒 أغلق كل شيء!',action:()=>ending_lockdown()},
-            {text:'💀 ابقَ. واجهه.',action:()=>ending_confront(),danger:true}
-        ]);
-    },3000);
-}
+                return translatedChunks.join(' ');
+            }
 
-// --- متابعة المحادثة ---
-function continueChat(){
-    STATE.msgCount++;
-    const msgs=[
-        'الطقس جميل الليلة.',
-        'هل تشعر بالوحدة؟',
-        'أنا قريب منك.',
-        'لا تخف. أنا صديق.',
-        'هل تسمع ذلك الصوت؟',
-        'أظن أنني رأيتك اليوم.',
-        'لديك منزل جميل.',
-        'لماذا لا ترد بسرعة؟',
-        'أنا صبور. يمكنني الانتظار.',
-        'كلما تحدثنا أكثر... كلما أحببتك أكثر.'
-    ];
-    const msg=msgs[Math.floor(Math.random()*msgs.length)];
-    addMsg('الظل',msg,'them',400);
-    
-    if(STATE.msgCount>=10&&!STATE.revealedTruth){
-        setTimeout(()=>revealKnowledge(),1000);
-        return;
-    }
-    
-    if(STATE.msgCount>=8){
-        addMsg('الظل','لقد تحدثنا كثيراً. أنا معجب بك.','them',900);
-        addMsg('الظل','سأزورك قريباً.','them',1400);
-        STATE.fear=85;
-        STATE.shadowAggression=70;
-        
-        setTimeout(()=>{
-            dangerSound();
-            addMsg('SYSTEM','🚨 الخطر يقترب!','system',300);
-            showChoices([
-                {text:'🏃 اهرب!',action:()=>ending_escape(),safe:true},
-                {text:'📞 شرطة!',action:()=>ending_police()},
-                {text:'🔒 أغلق!',action:()=>ending_lockdown()},
-                {text:'💀 انتظر.',action:()=>ending_wait(),danger:true}
-            ]);
-        },2000);
-        return;
-    }
-    
-    setTimeout(()=>{
-        showChoices([
-            {text:'😰 من أنت حقاً؟',action:()=>{addMsg('أنت','من أنت حقاً؟','me');setTimeout(()=>continueChat(),600);}},
-            {text:'🤐 ...',action:()=>{addMsg('أنت','...','me');setTimeout(()=>continueChat(),600);}},
-            {text:'🚫 توقف.',action:()=>{addMsg('أنت','توقف.','me');STATE.trust-=10;setTimeout(()=>continueChat(),600);}}
-        ]);
-    },600);
-}
+            // ============================================================
+            // 🔤 ترجمة جزء واحد (أقل من 500 حرف)
+            // ============================================================
+            async function translateChunk(text, from, to) {
+                try {
+                    const url =
+                        `https://api.mymemory.translated.net/get?q=${encodeURIComponent(text)}&langpair=${from}|${to}`;
 
-// --- النهايات ---
-function showEnding(icon,title,tag,tagClass,desc){
-    document.getElementById('chatScreen').classList.remove('active');
-    document.getElementById('endScreen').classList.add('active');
-    
-    document.getElementById('endContent').innerHTML=`
-        <div class="icon">${icon}</div>
-        <div class="title" style="color:${tagClass==='end-good'?'#0f0':tagClass==='end-neutral'?'#fa0':'#f00'};">${title}</div>
-        <span class="end-tag ${tagClass}">${tag}</span>
-        <div class="desc">${desc}</div>
-        <button class="choice-btn" onclick="location.reload()">🔄 العب مرة أخرى</button>
-        <div style="color:#333;font-size:7px;margin-top:10px;">ø ASAØ // THE SHADOW: FULL TRUTH</div>
-    `;
-}
+                    const response = await fetch(url);
 
-function ending_ignored(){
-    STATE.ending='تجاهل';STATE.endingType='bad';
-    showEnding('💀','نهاية مأساوية','النهاية 1/7: التجاهل','end-bad',
-        `${STATE.playerName||'أنت'}... تجاهلته.<br><br>`+
-        `لكنه لم يتجاهلك.<br>`+
-        `وجد عنوانك بنفسه.<br>`+
-        `قضى 3 أيام يراقب منزلك.<br>`+
-        `وفي الليلة الرابعة... دخل.<br><br>`+
-        `لم يسمعك أحد.<br>`+
-        `لأنك تجاهلت التحذير.`
-    );
-    dangerSound();
-}
+                    if (!response.ok) {
+                        throw new Error('فشل الاتصال بخادم الترجمة');
+                    }
 
-function ending_wait(){
-    STATE.ending='انتظار';STATE.endingType='bad';
-    showEnding('💀','نهاية مأساوية','النهاية 2/7: الانتظار','end-bad',
-        `${STATE.playerName||'أنت'}... انتظرت.<br><br>`+
-        `سمعت طرقاً على الباب عند منتصف الليل.<br>`+
-        `فتحت.<br>`+
-        `كان واقفاً هناك. يبتسم.<br>`+
-        `"أخيراً... التقينا."<br><br>`+
-        `${STATE.playerAddress||'عنوانك'}...<br>`+
-        `لم يعد منزلك. أصبح مسرح الجريمة.`
-    );
-    dangerSound();
-}
+                    const data = await response.json();
 
-function ending_confront(){
-    STATE.ending='مواجهة';STATE.endingType='bad';
-    showEnding('💀','نهاية مأساوية','النهاية 3/7: المواجهة','end-bad',
-        `${STATE.playerName||'أنت'}... واجهته.<br><br>`+
-        `قررت ألا تهرب. ألا تختبئ.<br>`+
-        `فتحت الباب. وقفت في وجهه.<br>`+
-        `لكنه... لم يكن وحده.<br>`+
-        `كان هناك اثنان آخران معه.<br><br>`+
-        `الشجاعة وحدها لا تكفي.`
-    );
-    dangerSound();
-}
+                    if (data.responseStatus === 200) {
+                        return data.responseData.translatedText;
+                    } else {
+                        throw new Error(data.responseDetails || 'خطأ في الترجمة');
+                    }
 
-function ending_trusted(){
-    STATE.ending='ثقة عمياء';STATE.endingType='bad';
-    showEnding('💀','نهاية مأساوية','النهاية 4/7: الثقة العمياء','end-bad',
-        `${STATE.playerName||'أنت'}... وثقت به كثيراً.<br><br>`+
-        `أعطيته كل شيء: اسمك، عمرك، عنوانك.<br>`+
-        `كنت تعتقد أنه صديق.<br>`+
-        `لكنه كان يجمع المعلومات فقط.<br>`+
-        `باع معلوماتك لشبكة أكبر.<br>`+
-        `والآن... 5 أشخاص يعرفون أين تسكن.`
-    );
-    dangerSound();
-}
+                } catch (error) {
+                    console.error('❌ خطأ في الترجمة:', error);
+                    throw error;
+                }
+            }
 
-function ending_lockdown(){
-    STATE.ending='إغلاق';STATE.endingType='neutral';
-    showEnding('🔒','نهاية محايدة','النهاية 5/7: الإغلاق','end-neutral',
-        `${STATE.playerName||'أنت'}... أغلقت كل شيء.<br><br>`+
-        `الأبواب. النوافذ. الستائر.<br>`+
-        `جلست في الظلام طوال الليل.<br>`+
-        `في الصباح... وجدت رسالة تحت الباب:<br>`+
-        `"أراك المرة القادمة."<br><br>`+
-        `لقد نجوت الليلة.<br> لكنه ما زال هناك. ينتظر.`
-    );
-    playSound(200,2,'triangle',0.15);
-}
+            // ============================================================
+            // 📝 الترجمة النصية
+            // ============================================================
+            async function performTextTranslation() {
+                const text = sourceText.value.trim();
 
-function ending_police(){
-    STATE.ending='شرطة';STATE.endingType='neutral';
-    showEnding('📞','نهاية محايدة','النهاية 6/7: الشرطة','end-neutral',
-        `${STATE.playerName||'أنت'}... اتصلت بالشرطة.<br><br>`+
-        `وصلوا بعد 8 دقائق. فتشوا المنطقة.<br>`+
-        `وجدوا... لا شيء. هو اختفى.<br>`+
-        `لكنهم فتحوا تحقيقاً.<br>`+
-        `بعد 3 أشهر... قبضوا عليه.<br>`+
-        `كان يستهدف ضحايا جدداً.<br>`+
-        `أنت نجوت. لكن الندوب باقية.`
-    );
-    playSound(200,2,'triangle',0.15);
-}
+                if (!text) {
+                    resultBox.innerHTML = '⚠️ يرجى إدخال نص للترجمة';
+                    resultBox.style.color = '#f87171';
+                    return;
+                }
 
-function ending_escape(){
-    STATE.ending='هروب';STATE.endingType='good';
-    showEnding('🏃','النهاية الوحيدة','النهاية 7/7: النجاة','end-good',
-        `${STATE.playerName||'أنت'}... هربت.<br><br>`+
-        `تركت كل شيء. المنزل. الوظيفة. المدينة.<br>`+
-        `بدأت حياة جديدة في مكان بعيد.<br>`+
-        `بعد 6 أشهر... سمعت الخبر:<br>`+
-        `"القبض على أخطر مجرم إلكتروني<br>`+
-        `كان يستدرج ضحاياه عبر الرسائل."<br><br>`+
-        `لقد نجوت. أنت واحد من القلائل.<br>`+
-        `🟢 ${STATE.playerAddress||'مكانك'}... لم يكن قبرك. كان درسك.`
-    );
-    successSound();
-}
+                const from = sourceLang.value;
+                const to = targetLang.value;
 
-// --- خريطة ---
-function openMap(){
-    mapOverlay.classList.add('active');
-    mapAddress.textContent=STATE.playerAddress||'غير معروف';
-}
-function closeMap(){mapOverlay.classList.remove('active');}
+                translateBtn.disabled = true;
+                translateBtn.textContent = '⏳ جاري الترجمة...';
+                resultBox.innerHTML = '⏳ جاري الترجمة...';
+                resultBox.style.color = '#fbbf24';
 
-// --- مذكرات ---
-function openJournal(){
-    const entries=STATE.journalEntries.length>0
-        ?STATE.journalEntries.map(e=>'📝 '+e).join('<br>')
-        :'لا توجد مذكرات بعد.';
-    alert('📝 مذكراتك:\n\n'+entries);
-}
+                // إظهار شاشة التحميل
+                loadingOverlay.className = 'loading-overlay show';
+                loadingText.textContent = '⏳ جاري الترجمة...';
+                progressBar.style.width = '0%';
 
-// --- أحداث عشوائية ---
-function randomEvent(){
-    const events=[
-        {msg:'سمعت صوتاً خارج النافذة.',fear:10},
-        {msg:'انقطع الإنترنت فجأة.',fear:5},
-        {msg:'رأيت ظلاً يتحرك في الشارع.',fear:15},
-        {msg:'هاتفك رن. رقم غير معروف.',fear:20},
-        {msg:'نباح كلاب في البعيد.',fear:5},
-        {msg:'الباب الأمامي... هل أغلقته؟',fear:12}
-    ];
-    const ev=events[Math.floor(Math.random()*events.length)];
-    STATE.fear=Math.min(100,STATE.fear+ev.fear);
-    addMsg('SYSTEM','🌙 '+ev.msg,'system',300);
-    STATE.journalEntries.push(ev.msg);
-}
+                try {
+                    const translated = await translateText(text, from, to);
+                    currentTranslation = translated;
+                    resultBox.innerHTML = translated;
+                    resultBox.style.color = '#e0e0e0';
 
-// --- بدء اللعبة مع الأحداث ---
-const origStartGame=startGame;
-startGame=function(){
-    origStartGame();
-    setInterval(()=>{
-        if(STATE.phase>=5&&Math.random()<0.3){
-            randomEvent();
-        }
-    },15000);
-};
+                    addToHistory(text, translated, 'نص');
 
-// --- لوحة المفاتيح ---
-document.addEventListener('keydown',function(e){
-    if(e.key==='Enter'&&document.getElementById('chatScreen').classList.contains('active')){
-        if(inputArea.style.display!=='none'&&document.activeElement===msgInput){
-            sendMessage();
-        }
-    }
-});
-</script>
+                    // قراءة الترجمة (إذا كانت قصيرة)
+                    if (translated.length < 500) {
+                        speakText(translated, to);
+                    }
+
+                } catch (error) {
+                    resultBox.innerHTML = `❌ خطأ: ${error.message}`;
+                    resultBox.style.color = '#f87171';
+                }
+
+                loadingOverlay.className = 'loading-overlay';
+                translateBtn.disabled = false;
+                translateBtn.textContent = '🌐 ترجمة فورية';
+                progressBar.style.width = '0%';
+            }
+
+            // ============================================================
+            // 🖼️ استخراج النص من الصورة (مع دعم Tesseract)
+            // ============================================================
+            function extractTextFromImage(imageData) {
+                return new Promise((resolve, reject) => {
+                    if (typeof Tesseract === 'undefined') {
+                        // محاولة تحميل Tesseract
+                        const script = document.createElement('script');
+                        script.src =
+                            'https://cdnjs.cloudflare.com/ajax/libs/tesseract.js/4.1.1/tesseract.min.js';
+                        script.onload = () => {
+                            processWithTesseract(imageData, resolve, reject);
+                        };
+                        script.onerror = () => {
+                            reject(new Error('Tesseract.js غير متوفر. يرجى التحقق من الاتصال بالإنترنت.'));
+                        };
+                        document.head.appendChild(script);
+                    } else {
+                        processWithTesseract(imageData, resolve, reject);
+                    }
+                });
+            }
+
+            function processWithTesseract(imageData, resolve, reject) {
+                Tesseract.recognize(
+                    imageData,
+                    'ara+eng',
+                    {
+                        logger: (m) => {
+                            if (m.status === 'recognizing text') {
+                                const progress = Math.round(m.progress * 100);
+                                loadingText.textContent = `⏳ جاري قراءة النص: ${progress}%`;
+                                progressBar.style.width = progress + '%';
+                            }
+                        }
+                    }
+                ).then(({ data: { text } }) => {
+                    resolve(text.trim());
+                }).catch((error) => {
+                    reject(new Error('فشل استخراج النص: ' + error.message));
+                });
+            }
+
+            // ============================================================
+            // 🖼️ ترجمة الصورة
+            // ============================================================
+            async function performImageTranslation() {
+                const file = imageInput.files[0];
+
+                if (!file) {
+                    alert('⚠️ يرجى اختيار صورة أولاً');
+                    return;
+                }
+
+                const reader = new FileReader();
+
+                reader.onload = async function(event) {
+                    const imageData = event.target.result;
+
+                    loadingOverlay.className = 'loading-overlay show';
+                    loadingText.textContent = '⏳ جاري معالجة الصورة...';
+                    progressBar.style.width = '0%';
+
+                    ocrStatus.className = 'ocr-status show loading';
+                    ocrStatus.textContent = '⏳ جاري استخراج النص...';
+
+                    imageResultBox.innerHTML = '⏳ جاري استخراج النص...';
+                    imageResultBox.style.color = '#fbbf24';
+
+                    try {
+                        const extractedText = await extractTextFromImage(imageData);
+
+                        if (!extractedText || extractedText.length < 2) {
+                            ocrStatus.className = 'ocr-status show error';
+                            ocrStatus.textContent = '❌ لم يتم العثور على نص في الصورة';
+                            imageResultBox.innerHTML = '❌ لم يتم العثور على نص في الصورة';
+                            imageResultBox.style.color = '#f87171';
+                            loadingOverlay.className = 'loading-overlay';
+                            return;
+                        }
+
+                        ocrStatus.className = 'ocr-status show success';
+                        ocrStatus.textContent = `✅ تم استخراج ${extractedText.length} حرف`;
+
+                        imageResultBox.innerHTML = `📝 النص المستخرج:\n${extractedText}`;
+                        imageResultBox.style.color = '#e0e0e0';
+
+                        const from = sourceLang.value;
+                        const to = targetLang.value;
+
+                        loadingText.textContent = '⏳ جاري ترجمة النص...';
+                        ocrStatus.textContent = '⏳ جاري ترجمة النص...';
+                        progressBar.style.width = '0%';
+
+                        const translated = await translateText(extractedText, from, to);
+
+                        imageResultBox.innerHTML =
+                            `📝 النص الأصلي:\n${extractedText}\n\n🌐 الترجمة:\n${translated}`;
+                        imageResultBox.style.color = '#e0e0e0';
+
+                        ocrStatus.className = 'ocr-status show success';
+                        ocrStatus.textContent = `✅ تمت الترجمة بنجاح`;
+
+                        addToHistory(extractedText, translated, 'صورة');
+
+                        if (translated.length < 500) {
+                            speakText(translated, to);
+                        }
+
+                    } catch (error) {
+                        ocrStatus.className = 'ocr-status show error';
+                        ocrStatus.textContent = `❌ خطأ: ${error.message}`;
+                        imageResultBox.innerHTML = `❌ خطأ: ${error.message}`;
+                        imageResultBox.style.color = '#f87171';
+                    }
+
+                    loadingOverlay.className = 'loading-overlay';
+                    progressBar.style.width = '0%';
+                };
+
+                reader.onerror = function() {
+                    alert('❌ خطأ في قراءة الصورة');
+                    loadingOverlay.className = 'loading-overlay';
+                };
+
+                reader.readAsDataURL(file);
+            }
+
+            // ============================================================
+            // 📚 إضافة إلى السجل
+            // ============================================================
+            function addToHistory(original, translated, mode) {
+                const shortOriginal = original.length > 40 ? original.slice(0, 40) + '...' : original;
+                const shortTranslated = translated.length > 40 ? translated.slice(0, 40) + '...' : translated;
+
+                translationHistory.unshift({
+                    original: shortOriginal,
+                    translated: shortTranslated,
+                    mode: mode,
+                    time: new Date().toLocaleTimeString()
+                });
+
+                if (translationHistory.length > 30) translationHistory.pop();
+                updateHistory();
+                transCount.textContent = translationHistory.length;
+            }
+
+            function updateHistory() {
+                if (translationHistory.length === 0) {
+                    historyContainer.innerHTML =
+                        '<div style="text-align:center;color:#445;font-size:11px;padding:8px 0;">📚 تاريخ الترجمات</div>';
+                    return;
+                }
+
+                historyContainer.innerHTML = `
+                    <div style="font-size:9px;color:#445;margin-bottom:4px;">📚 تاريخ الترجمات</div>
+                    ${translationHistory.slice(0, 15).map(item => `
+                        <div class="history-item">
+                            <span class="orig">${item.original}</span>
+                            <span class="trans">${item.translated}</span>
+                            <span style="color:#445;font-size:7px;">${item.time}</span>
+                        </div>
+                    `).join('')}
+                `;
+            }
+
+            // ============================================================
+            // 🔊 قراءة النص
+            // ============================================================
+            function speakText(text, lang) {
+                if (!text || text.length < 2) return;
+
+                if ('speechSynthesis' in window) {
+                    try {
+                        window.speechSynthesis.cancel();
+
+                        const utterance = new SpeechSynthesisUtterance(text);
+                        const langCode = lang === 'ar' ? 'ar-SA' : 'en-US';
+                        utterance.lang = langCode;
+                        utterance.rate = 0.9;
+                        utterance.pitch = 1;
+
+                        const voices = window.speechSynthesis.getVoices();
+                        const voice = voices.find(v => v.lang.startsWith(langCode.split('-')[0]));
+                        if (voice) utterance.voice = voice;
+
+                        window.speechSynthesis.speak(utterance);
+                    } catch (e) {
+                        console.log('⚠️ خطأ في النطق:', e);
+                    }
+                }
+            }
+
+            // ============================================================
+            // 📋 نسخ
+            // ============================================================
+            async function copyText(text) {
+                if (!text || text.startsWith('⚠️') || text.startsWith('❌') || text.startsWith('⏳') || text ===
+                    'ستظهر الترجمة هنا...') {
+                    alert('⚠️ لا يوجد نص للنسخ');
+                    return;
+                }
+                try {
+                    await navigator.clipboard.writeText(text);
+                    alert('✅ تم النسخ');
+                } catch {
+                    const textarea = document.createElement('textarea');
+                    textarea.value = text;
+                    document.body.appendChild(textarea);
+                    textarea.select();
+                    document.execCommand('copy');
+                    document.body.removeChild(textarea);
+                    alert('✅ تم النسخ');
+                }
+            }
+
+            // ============================================================
+            // 🔄 تبديل اللغات
+            // ============================================================
+            swapBtn.addEventListener('click', () => {
+                const temp = sourceLang.value;
+                sourceLang.value = targetLang.value;
+                targetLang.value = temp;
+
+                const tempText = sourceText.value;
+                const resultText = resultBox.textContent;
+                if (resultText && !resultText.startsWith('⚠️') && !resultText.startsWith('❌') && !resultText.startsWith(
+                        '⏳') && resultText !== 'ستظهر الترجمة هنا...') {
+                    sourceText.value = resultText;
+                    resultBox.innerHTML = tempText || '<span class="placeholder">ستظهر الترجمة هنا...</span>';
+                    resultBox.style.color = '#e0e0e0';
+                    charCount.textContent = sourceText.value.length + ' حرف';
+                }
+            });
+
+            // ============================================================
+            // 🔗 التحقق من API
+            // ============================================================
+            async function checkAPI() {
+                try {
+                    apiStatus.textContent = '🔄 جاري التحقق...';
+                    apiStatus.style.color = '#fbbf24';
+
+                    const test = await translateText('Hello', 'en', 'ar');
+                    if (test && test.length > 0) {
+                        apiStatus.textContent = '🟢 متصل';
+                        apiStatus.style.color = '#4ade80';
+                    } else {
+                        throw new Error('فشل الاتصال');
+                    }
+                } catch {
+                    apiStatus.textContent = '🔴 غير متصل';
+                    apiStatus.style.color = '#f87171';
+                }
+            }
+
+            // ============================================================
+            // 📑 التبويبات
+            // ============================================================
+            tabs.forEach(tab => {
+                tab.addEventListener('click', () => {
+                    tabs.forEach(t => t.classList.remove('active'));
+                    tab.classList.add('active');
+
+                    tabContents.forEach(c => c.classList.remove('active'));
+                    document.getElementById('tab-' + tab.dataset.tab).classList.add('active');
+                });
+            });
+
+            // ============================================================
+            // 🖼️ أحداث الصورة
+            // ============================================================
+            uploadArea.addEventListener('click', () => imageInput.click());
+
+            imageInput.addEventListener('change', (e) => {
+                const file = e.target.files[0];
+                if (file) {
+                    const reader = new FileReader();
+                    reader.onload = (event) => {
+                        previewImage.src = event.target.result;
+                        imagePreview.className = 'image-preview show';
+                        imageResultBox.innerHTML = '⏳ جاهز للترجمة، اضغط على الزر';
+                        imageResultBox.style.color = '#fbbf24';
+                        ocrStatus.className = 'ocr-status';
+                    };
+                    reader.readAsDataURL(file);
+                }
+            });
+
+            imageTranslateBtn.addEventListener('click', performImageTranslation);
+
+            imageSpeakBtn.addEventListener('click', () => {
+                const text = imageResultBox.textContent;
+                const translatedMatch = text.match(/🌐 الترجمة:\n([\s\S]*?)(?=\n\n|$)/);
+                if (translatedMatch) {
+                    speakText(translatedMatch[1].trim(), targetLang.value);
+                } else {
+                    alert('⚠️ لا توجد ترجمة للاستماع');
+                }
+            });
+
+            imageCopyBtn.addEventListener('click', () => {
+                const text = imageResultBox.textContent;
+                const translatedMatch = text.match(/🌐 الترجمة:\n([\s\S]*?)(?=\n\n|$)/);
+                copyText(translatedMatch ? translatedMatch[1].trim() : text);
+            });
+
+            imageClearBtn.addEventListener('click', () => {
+                imageInput.value = '';
+                imagePreview.className = 'image-preview';
+                ocrStatus.className = 'ocr-status';
+                imageResultBox.innerHTML = '<span class="placeholder">سيظهر النص المستخرج من الصورة هنا...</span>';
+                imageResultBox.style.color = '#e0e0e0';
+            });
+
+            // ============================================================
+            // 🎤 أحداث النص
+            // ============================================================
+            translateBtn.addEventListener('click', performTextTranslation);
+
+            sourceText.addEventListener('keydown', (e) => {
+                if (e.key === 'Enter' && e.ctrlKey) {
+                    e.preventDefault();
+                    translateBtn.click();
+                }
+            });
+
+            speakBtn.addEventListener('click', () => {
+                const text = resultBox.textContent;
+                if (!text || text === 'ستظهر الترجمة هنا...' || text.startsWith('⚠️') || text.startsWith('❌') || text
+                    .startsWith('⏳')) {
+                    alert('⚠️ لا توجد ترجمة للاستماع');
+                    return;
+                }
+                speakText(text, targetLang.value);
+            });
+
+            copyBtn.addEventListener('click', () => {
+                const text = resultBox.textContent;
+                copyText(text);
+            });
+
+            clearBtn.addEventListener('click', () => {
+                sourceText.value = '';
+                resultBox.innerHTML = '<span class="placeholder">ستظهر الترجمة هنا...</span>';
+                resultBox.style.color = '#e0e0e0';
+                charCount.textContent = '0 حرف';
+                charCount.className = 'char-count';
+                sourceText.focus();
+            });
+
+            saveBtn.addEventListener('click', () => {
+                const text = resultBox.textContent;
+                if (!text || text === 'ستظهر الترجمة هنا...' || text.startsWith('⚠️') || text.startsWith('❌')) {
+                    alert('⚠️ لا توجد ترجمة للحفظ');
+                    return;
+                }
+
+                const blob = new Blob([text], { type: 'text/plain;charset=utf-8' });
+                const url = URL.createObjectURL(blob);
+                const a = document.createElement('a');
+                a.href = url;
+                a.download = `translation_${new Date().toISOString().slice(0,10)}.txt`;
+                a.click();
+                URL.revokeObjectURL(url);
+                alert('✅ تم حفظ الترجمة');
+            });
+
+            // ============================================================
+            // 🚀 بدء التشغيل
+            // ============================================================
+            if ('speechSynthesis' in window) {
+                window.speechSynthesis.getVoices();
+                window.speechSynthesis.onvoiceschanged = () => {
+                    window.speechSynthesis.getVoices();
+                };
+            }
+
+            setTimeout(checkAPI, 1500);
+
+            console.log('🌍 LEX-Ω - المترجم العالمي الفوري');
+            console.log('📌 يدعم النصوص الطويلة (تقسيم تلقائي)');
+            console.log('⚖️ "السلطة المطلقة = المسؤولية المطلقة"');
+
+            // ترجمة تجريبية
+            setTimeout(() => {
+                sourceText.value = 'مرحباً، كيف حالك؟';
+                charCount.textContent = '18 حرف';
+                setTimeout(translateBtn.click, 500);
+            }, 2000);
+
+        })();
+    </script>
+
 </body>
 </html>
